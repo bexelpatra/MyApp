@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import org.json.JSONObject
+import org.json.JSONStringer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -71,8 +72,9 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     }
 
     @JavascriptInterface
-    fun getCurrentLocation():Map<String,String> {
-        return  getLocationSynchronously()
+    fun getCurrentLocation():String {
+        var map = getLocationSynchronously()
+        return  JSONObject.wrap(map).toString()
     }
     @SuppressLint("MissingPermission")
     suspend fun getLocation() : () -> Task<Location> {

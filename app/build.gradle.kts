@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -39,6 +39,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-play-services
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+// https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation("commons-codec:commons-codec:1.15")
 
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.androidx.core.ktx)
