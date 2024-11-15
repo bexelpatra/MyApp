@@ -69,6 +69,11 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
         return "[${arr}]"
     }
+
+    @JavascriptInterface
+    fun getCurrentLocation():Map<String,String> {
+        return  getLocationSynchronously()
+    }
     @SuppressLint("MissingPermission")
     suspend fun getLocation() : () -> Task<Location> {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
