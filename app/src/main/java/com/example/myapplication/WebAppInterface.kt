@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import org.json.JSONObject
-import org.json.JSONStringer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -58,14 +57,15 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         var timeString = dataObject.getString("time").split(" ")
         var time = timeString[0]
         var fileName = "${time}-${type}-.txt"
-        fileIo.writeFileToExternalStorage(fileName,"${dataObject.toString()},")
+        fileIo.writeFileCrypto(fileName,"${dataObject.toString()},")
     }
+
     // {"data":{"time":"2024-11-08","type":0}}"
     @JavascriptInterface
     fun readFile(time:String,type :String):String?{
         var year = time.split("-")[0]
         var fileName = "${fileIo.externalStorageDir.absolutePath}/${year}/${time}-${type}-.txt"
-        val fileContent = fileIo.readFileFromExternalStorage(fileName)
+        val fileContent = fileIo.readFileCrypto(fileName)
         var arr = fileContent?.subSequence(0,fileContent.length-1)
 
         return "[${arr}]"

@@ -136,7 +136,7 @@ class RequestPermissionsUtil(mContext: Context) {
                     Uri.parse("package:" + context.applicationContext.packageName))
                 context.startActivity(intent)
             }else{
-                Toast.makeText(context,"Manage External Storage permission is already granted ",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,"Manage External Storage permission is already granted ",Toast.LENGTH_SHORT).show()
             }
         } else {
             // Fallback for older Android versions, request WRITE_EXTERNAL_STORAGE permission
