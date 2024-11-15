@@ -227,11 +227,11 @@
     let bottom = "hidden";
 
     window.onload = function() {
-                openTab('Tab2');
                 document.querySelector('.bottom-list-container').classList.toggle(bottom);
+                readFile();
             }
 
-    function openTab(tabName) {
+    function openTab(tabName, evt) {
         let i, tabcontent, tablinks;
 
         // 모든 탭 콘텐츠를 숨기기
@@ -247,28 +247,30 @@
         }
 
         // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
-        let docTab = document.getElementById(tabName);
-        docTab.style.display = "block";
-        docTab.className += " active";
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
 
         if(tabName == 'Tab2'){
-            //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
-            initMap();
-
-            let returnData = Android.readFile(now(1), 1);
-            //console.log("##### tab returnData : ", returnData);
-            let locInfo = JSON.parse(returnData);
-
-            if(locInfo != ""){
-                createLiTag(locInfo);
-            }
-            currentLocation();
-            initFg = "N";
+            readFile();
         }
     }
 
-    function initMap(locInfo){
+    function readFile(){
+         //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
+        initMap();
 
+        let returnData = Android.readFile(now(1), 1);
+        //console.log("##### tab returnData : ", returnData);
+        let locInfo = JSON.parse(returnData);
+
+        if(locInfo != ""){
+            createLiTag(locInfo);
+        }
+        currentLocation();
+        initFg = "N";
+    }
+
+    function initMap(locInfo){
         if(initFg == 'Y'){
             let currentLocation = JSON.parse(Android.getCurrentLocation());
 
@@ -465,11 +467,11 @@
 </script>
 <body>
 <div class="tab">
-    <button class="tablinks" onclick="openTab(Tab2')">현재 장소 저장</button>
-    <button class="tablinks" onclick="openTab(Tab1')">자동 저장</button>
+    <button id="tabBt2" class="tablinks active" onclick="openTab('Tab2',event)">현재 장소 저장</button>
+    <button id="tabBt1" class="tablinks" onclick="openTab('Tab1',event)">자동 저장</button>
 </div>
 
-<div id="Tab1" class="tabcontent">
+<div id="Tab1" class="tabcontent" style="display:none">
     <h3> 자동 저장</h3>
     <p id="currentLoction">
     </P>
