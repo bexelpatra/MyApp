@@ -15,7 +15,7 @@
             width: 100%;
         }
         #autoMap {
-            height: 600px;
+            height: 500px;
             width: 100%;
         }
 
@@ -44,13 +44,7 @@
             background-color: #6b95ff;
         }
 
-        .tabcontent {
-            display: none;
-            padding: 6px 12px;
-            border: 1px solid #b3e5fc;
-            border-top: 1px solid #b3e5fc;
-            border-radius: 0 0 15px 15px;
-        }
+
 
         /* 방문 장소 스타일 정의 */
         body, html {
@@ -69,7 +63,6 @@
             background-color: #F9FFFF;
             border-top: 2px solid #FFFFFF;
             border-radius: 15px 15px 0 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
             transition: bottom 1s;
             z-index: 1000; /* z-index를 추가하여 항상 위에 표시되도록 설정 */
             font-family: "Stylish", serif;
@@ -212,6 +205,21 @@
         .hamburger span:after{
             top:10px;
         }
+
+        /* TextArea 스타일 정의 */
+        textarea {
+            width: 300px;
+            height: 20px;
+			border-radius: 7px 7px 7px 7px;
+            transition: width 0.3s ease, height 0.3s ease;
+			outline-color: #FE6B8B;
+        }
+
+        textarea:focus {
+            width: 100%;
+            height: 100px;
+        }
+
     </style>
 </head>
 <script>
@@ -220,7 +228,7 @@
     let initFg = "Y";
 
     window.onload = function() {
-                openTab(event, 'Tab1');
+                openTab(event, 'Tab2');
                 document.querySelector('.bottom-list-container').classList.toggle('hidden');
             }
 
@@ -244,18 +252,14 @@
         evt.currentTarget.className += " active";
 
         if(tabName == 'Tab2'){
-            param = {};
-            data = {};
-            data.time = now(1);
-            data.type = 0;
-            param.data = data;
-            console.log(JSON.stringify(param));
-            let returnData = Android.readFile(now(1),1);
-            //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","option":"4","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","option":"3","time":"2024-11-08  13:35:10"}]';
-            console.log(returnData)
-            let locInfo = JSON.parse(returnData);
-            initMap(locInfo);
-            createLiTag(locInfo);
+            let returnData = Android.readFile(now(1), 1);
+            //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
+            console.log("##### returnData : ", returnData);
+            if(returnData != null){
+                let locInfo = JSON.parse(returnData);
+                initMap(locInfo);
+                createLiTag(locInfo);
+            }
         }
     }
 
@@ -275,7 +279,6 @@
             locInfo.forEach(location => {
                 let popup = '방문 장소 ' + i + ' ( ' + location.time + ' )'
                     + '<br>위도 : ' + location.lat + ' / 경도 : ' + location.lon
-                    + '<br>장소 : ' + optionConvert(location.option)
                     + '<br>메모 : ' + location.memo;
 
                 L.marker([location.lat, location.lon]).addTo(map).bindPopup(popup).openPopup();
@@ -289,26 +292,16 @@
 
     async function save(lat, lon, autoFg){
         let memo;
-        let option;
 
         if(!autoFg){
             memo = document.getElementById('memo').value
         }
 
-        let radios = document.getElementsByName('options');
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                option = radios[i].value;
-                break;
-            }
-        }
-
         newInfo = {};
+        newInfo.time = now(3);
         newInfo.lat = lat??"";
         newInfo.lon = lon??"";
         newInfo.memo = memo;
-        newInfo.option = option??"4";
-        newInfo.time = now(3);
 
         let saveData = {};
         saveData.data = newInfo;
@@ -316,9 +309,8 @@
         console.log("####### save Data : " , JSON.stringify(saveData));
 
         let returnData = Android.save(JSON.stringify(saveData));
-        //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","option":"4","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","option":"3","time":"2024-11-08  13:35:10"},{"lat":"37.122","lon":"127.124","memo":"123","option":"2","time":"2024-11-08  13:38:42"},{"lat":"37.121","lon":"127.121","memo":"ㅂㅈㄷ","option":"1","time":"2024-11-08  13:42:05"}]';
+        //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"},{"lat":"37.122","lon":"127.124","memo":"123","time":"2024-11-08  13:38:42"},{"lat":"37.121","lon":"127.121","memo":"ㅂㅈㄷ","time":"2024-11-08  13:42:05"}]';
         console.log("####### Return Data : " , returnData);
-        console.log("####### Return Data : " , JSON.parse(returnData));
 
         let locInfo = JSON.parse(returnData);
         console.log("####### locInfo Data : " , locInfo);
@@ -332,7 +324,7 @@
     }
 
     function createLiTag(locInfo){
-
+        console.log("####### locInfo.length : " , locInfo.length);
         let list = document.getElementById("visitList");
         while (list.firstChild) {
             list.removeChild(list.firstChild);
@@ -341,7 +333,6 @@
         for(let i=0; i<locInfo.length; i++){
             let visit = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
                         + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
-                        + '<br>장소 : ' + optionConvert(locInfo[i].option)
                         + '<br>메모 : ' + locInfo[i].memo;
 
             let visitList = document.getElementById('visitList');
@@ -393,20 +384,7 @@
         }
     }
 
-    function optionConvert(param){
-        let returnValue;
-        if(param == '1') returnValue = '공원';
-        else if(param == '2') returnValue = '식당';
-        else if(param == '3') returnValue = '랜드마크';
-        else if(param == '4') returnValue = '기타';
-        return returnValue;
-    }
-
     function reset() {
-        let radios = document.getElementsByName('options');
-        for (let i = 0; i < radios.length; i++) {
-            radios[i].checked = false;
-        }
         document.getElementById('memo').value = "";
     }
 
@@ -461,10 +439,9 @@
     }
 </script>
 <body>
-<h3>My Visit Location</h3>
 <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Tab1')">자동 저장</button>
     <button class="tablinks" onclick="openTab(event, 'Tab2')">현재 장소 저장</button>
+    <button class="tablinks" onclick="openTab(event, 'Tab1')">자동 저장</button>
 </div>
 
 <div id="Tab1" class="tabcontent">
@@ -484,23 +461,8 @@
     <div id="currntLocationSaveDiv">
         <p>
             메모 :
-            <input type="text" class="text-input" id="memo" name="메모">
-        </p>
-        <p>
-            장소 :
-        <form>
-            <input type="radio" id="option1" name="options" value="1">
-            <label for="option1">공원</label>
-
-            <input type="radio" id="option2" name="options" value="2">
-            <label for="option2">식당</label>
-
-            <input type="radio" id="option3" name="options" value="3">
-            <label for="option3">랜드마크</label>
-
-            <input type="radio" id="option4" name="options" value="4">
-            <label for="option4">기타</label>
-        </form>
+            <!--<input type="text" class="text-input" id="memo" name="메모">-->
+            <textarea id="memo" name="메모" placeholder=""></textarea>
         </p>
         <p>
             <button class="button" id="mapBt" onClick='save()'>저장</button>
