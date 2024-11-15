@@ -44,8 +44,6 @@
             background-color: #6b95ff;
         }
 
-
-
         /* 방문 장소 스타일 정의 */
         body, html {
             margin: 0;
@@ -229,11 +227,11 @@
     let bottom = "hidden";
 
     window.onload = function() {
-                openTab(event, 'Tab2');
+                openTab('Tab2');
                 document.querySelector('.bottom-list-container').classList.toggle(bottom);
             }
 
-    function openTab(evt, tabName) {
+    function openTab(tabName) {
         let i, tabcontent, tablinks;
 
         // 모든 탭 콘텐츠를 숨기기
@@ -249,8 +247,9 @@
         }
 
         // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
+        let docTab = document.getElementById(tabName);
+        docTab.style.display = "block";
+        docTab.className += " active";
 
         if(tabName == 'Tab2'){
             //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
@@ -466,8 +465,8 @@
 </script>
 <body>
 <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Tab2')">현재 장소 저장</button>
-    <button class="tablinks" onclick="openTab(event, 'Tab1')">자동 저장</button>
+    <button class="tablinks" onclick="openTab(Tab2')">현재 장소 저장</button>
+    <button class="tablinks" onclick="openTab(Tab1')">자동 저장</button>
 </div>
 
 <div id="Tab1" class="tabcontent">
@@ -492,6 +491,7 @@
         </p>
         <p>
             <button class="button" id="mapBt" onClick='save()'>저장</button>
+            <button class="button" id="currntBt" onClick='currentLocation()'>현재위치</button>
         </p>
     </div>
     <div id="loc_div"></div>
@@ -507,20 +507,10 @@
     let handle = document.getElementById('handle');
     let container = document.getElementById('bottomListContainer');
     let list = document.getElementById('visitList');
-    let isDragging = false;
 
-    handle.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        document.body.style.cursor = 'ns-resize';
+    handle.addEventListener('mouseup', function(e) {
         list.style.display = 'block'; // 목록을 보이게 합니다.
-    });
-
-    document.addEventListener('mouseup', function() {
-        if (isDragging) {
-            container.classList.toggle('full-height');
-        }
-        isDragging = false;
-        document.body.style.cursor = 'default';
+        container.classList.toggle('full-height');
     });
 </script>
 </body>
