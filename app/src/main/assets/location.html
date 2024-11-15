@@ -216,7 +216,7 @@
         }
 
         textarea:focus {
-            width: 100%;
+            width: 85%;
             height: 100px;
         }
 
@@ -226,10 +226,11 @@
     let map;
     let locationInterval;
     let initFg = "Y";
+    let bottom = "hidden";
 
     window.onload = function() {
                 openTab(event, 'Tab2');
-                document.querySelector('.bottom-list-container').classList.toggle('hidden');
+                document.querySelector('.bottom-list-container').classList.toggle(bottom);
             }
 
     function openTab(evt, tabName) {
@@ -252,42 +253,62 @@
         evt.currentTarget.className += " active";
 
         if(tabName == 'Tab2'){
-            let returnData = Android.readFile(now(1), 1);
             //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
-            console.log("##### returnData : ", returnData);
-            if(returnData != null){
-                let locInfo = JSON.parse(returnData);
-                initMap(locInfo);
+            initMap();
+
+            let returnData = Android.readFile(now(1), 1);
+            //console.log("##### tab returnData : ", returnData);
+            let locInfo = JSON.parse(returnData);
+
+            if(locInfo != ""){
                 createLiTag(locInfo);
             }
+            currentLocation();
+            initFg = "N";
         }
     }
 
     function initMap(locInfo){
+
         if(initFg == 'Y'){
+            let currentLocation = JSON.parse(Android.getCurrentLocation());
+
             // 지도 초기화
-            map = L.map('map').setView([locInfo[0].lat, locInfo[0].lon], 18);
+            map = L.map('map').setView([currentLocation.lat, currentLocation.lon], 18);
 
             // OpenStreetMap 타일 레이어 추가
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
+
+        }else{
+            if(locInfo != null){
+                if (navigator.geolocation) {
+                    let i = 1;
+                    locInfo.forEach(location => {
+
+                        let popup = '방문 장소 ' + i + ' ( ' + location.time + ' )'
+                            + '<br>위도 : ' + location.lat + ' / 경도 : ' + location.lon
+                            + '<br>메모 : ' + location.memo;
+
+                        L.marker([location.lat, location.lon]).addTo(map).bindPopup(popup).openPopup();
+                        map.setView([location.lat, location.lon], 18);
+                    });
+                } else {
+                    alert('Your browser does not support Geolocation.');
+                }
+            }
         }
+    }
 
-        if (navigator.geolocation) {
-            let i = 1;
-            locInfo.forEach(location => {
-                let popup = '방문 장소 ' + i + ' ( ' + location.time + ' )'
-                    + '<br>위도 : ' + location.lat + ' / 경도 : ' + location.lon
-                    + '<br>메모 : ' + location.memo;
+    function currentLocation(){
+        let currentLocation = JSON.parse(Android.getCurrentLocation());
 
-                L.marker([location.lat, location.lon]).addTo(map).bindPopup(popup).openPopup();
-                map.setView([location.lat, location.lon], 18);
-            });
-        } else {
-            alert('Your browser does not support Geolocation.');
-        }
+        let popup = '현재 위치 ' + ' ( ' + now(3) + ' )'
+            + '<br>위도 : ' + currentLocation.lat + ' / 경도 : ' + currentLocation.lon
 
+        L.marker([currentLocation.lat, currentLocation.lon]).addTo(map).bindPopup(popup).openPopup();
+        map.setView([currentLocation.lat, currentLocation.lon], 18);
     }
 
     async function save(lat, lon, autoFg){
@@ -306,14 +327,17 @@
         let saveData = {};
         saveData.data = newInfo;
         saveData.type = autoFg == true ? 0 : 1;
-        console.log("####### save Data : " , JSON.stringify(saveData));
+        //console.log("####### save Data : " , JSON.stringify(saveData));
 
-        let returnData = Android.save(JSON.stringify(saveData));
+        let saveReturnData = Android.save(JSON.stringify(saveData));
+        //console.log("####### saveReturn Data : " , saveReturnData);
+
+        let returnData = Android.readFile(now(1), 1);
         //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"},{"lat":"37.122","lon":"127.124","memo":"123","time":"2024-11-08  13:38:42"},{"lat":"37.121","lon":"127.121","memo":"ㅂㅈㄷ","time":"2024-11-08  13:42:05"}]';
-        console.log("####### Return Data : " , returnData);
+        //console.log("####### Return Data : " , returnData);
 
         let locInfo = JSON.parse(returnData);
-        console.log("####### locInfo Data : " , locInfo);
+        //console.log("####### locInfo Data : " , locInfo);
 
         createLiTag(locInfo);
 
@@ -324,10 +348,9 @@
     }
 
     function createLiTag(locInfo){
-        console.log("####### locInfo.length : " , locInfo.length);
-        let list = document.getElementById("visitList");
-        while (list.firstChild) {
-            list.removeChild(list.firstChild);
+        let visitList = document.getElementById("visitList");
+        while (visitList.firstChild) {
+            visitList.removeChild(list.firstChild);
         }
 
         for(let i=0; i<locInfo.length; i++){
@@ -335,7 +358,6 @@
                         + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
                         + '<br>메모 : ' + locInfo[i].memo;
 
-            let visitList = document.getElementById('visitList');
             let li = document.createElement('li');
             li.innerHTML = visit;
             li.onclick = function() {
@@ -349,10 +371,14 @@
 
         }
 
-        if(initFg == 'Y'){
+        listToggle("show");
+    }
+
+    function listToggle(param){
+        if(param != bottom){
             let listContainer = document.querySelector('.bottom-list-container');
-            listContainer.classList.toggle('show');
-            initFg = "N";
+            listContainer.classList.toggle(param);
+            bottom = param;
         }
     }
 
