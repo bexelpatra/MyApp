@@ -4,86 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Visit Location on Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 <script>
+    console.log("##########################################################################");
     window.onload = function() {
-                document.getElementById("Tab1").style.display = "none";
-                document.getElementById("Tab3").style.display = "none";
-                includeHTML();
-            }
+        includeHTML();
+        document.getElementById("Tab1").style.display = "none";
+        document.getElementById("Tab3").style.display = "none";
+    }
+
     function openTab(tabName, evt) {
-        let i, tabcontent, tablinks;
+    let i, tabcontent, tablinks;
 
-        // 모든 탭 콘텐츠를 숨기기
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // 모든 탭 링크에서 'active' 클래스를 제거하기
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
+    // 모든 탭 콘텐츠를 숨기기
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
     }
 
-    function now(param){
-        /*
-            param : return
-            1 : 년월일
-            2 : 시분초
-            3 : 년월일  시분초
-        */
-        let today = new Date();
-
-        let year = today.getFullYear();
-        let month = ('0' + (today.getMonth() + 1)).slice(-2);
-        let day = ('0' + today.getDate()).slice(-2);
-        let hours = ('0' + today.getHours()).slice(-2);
-        let minutes = ('0' + today.getMinutes()).slice(-2);
-        let seconds = ('0' + today.getSeconds()).slice(-2);
-
-        let dateString;
-        if(param == 1) dateString = year + '-' + month  + '-' + day;
-        if(param == 2) dateString = hours + ':' + minutes  + ':' + seconds;
-        if(param == 3) dateString = year + '-' + month  + '-' + day + '  ' + hours + ':' + minutes  + ':' + seconds;
-
-        return dateString;
+    // 모든 탭 링크에서 'active' 클래스를 제거하기
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
+    // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+    }
 </script>
 <body>
-<!-- Tab -->
-<div class="tab">
-    <button id="tabBt2" class="tablinks active" onclick="openTab('Tab2',event)">현재 장소 저장</button>
-    <button id="tabBt1" class="tablinks" onclick="openTab('Tab1',event)">자동 저장</button>
-    <button id="tabBt3" class="tablinks" onclick="openTab('Tab3',event)">기록 보기</button>
-</div>
+    <!-- Tab -->
+    <div class="tab">
+        <button id="tabBt2" class="tablinks active" onclick="openTab('Tab2',event)">현재 장소 저장</button>
+        <button id="tabBt1" class="tablinks" onclick="openTab('Tab1',event)">자동 저장</button>
+        <button id="tabBt3" class="tablinks" onclick="openTab('Tab3',event)">기록 보기</button>
+    </div>
 
-<!-- tab1 : 자동 저장 -->
-<div id="Tab1" class="tabcontent" include-html="./tab1.html">
-</div>
+    <!-- tab1 : 자동 저장 -->
+    <div id="Tab1" class="tabcontent" include-html="./tab/tab1.html">
+    </div>
 
-<!-- tab2 : 현재 장소 저장 -->
-<div id="Tab2" class="tabcontent" include-html="./tab2.html">
-    <!--
-    <iframe src="./tab2.html" style="width:100%;height:700px"></iframe>
-    -->
-</div>
+    <!-- tab2 : 현재 장소 저장 -->
+    <div id="Tab2" class="tabcontent" include-html="./tab/tab2.html">
+    </div>
 
-<!-- tab3 : 기록 보기 -->
-<div id="Tab3" class="tabcontent" include-html="./tab3.html"></div>
+    <!-- tab3 : 기록 보기 -->
+    <div id="Tab3" class="tabcontent" include-html="./tab/tab3.html">
+    </div>
+
+
 </body>
+<script src="./js/tab1.js"></script>
+<script src="./js/tab2.js"></script>
+<script src="./js/tab3.js"></script>
 <script>
     function includeHTML(callback) {
       var z, i, elmnt, file, xhr;
@@ -100,6 +80,7 @@
           xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
               if (this.status == 200) {
+
                 elmnt.innerHTML = this.responseText;
               }
               if (this.status == 404) {
@@ -117,7 +98,8 @@
         }
       }
       setTimeout(function() {
-        //callback();
+          document.querySelector('.bottom-list-container').classList.toggle("hidden");
+          readFile();
       }, 0);
     }
 </script>
