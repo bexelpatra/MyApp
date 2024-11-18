@@ -14,7 +14,7 @@
 <script>
     console.log("##########################################################################");
     window.onload = function() {
-        includeHTML();
+
         document.getElementById("Tab1").style.display = "none";
         document.getElementById("Tab3").style.display = "none";
     }
@@ -61,9 +61,6 @@
 
 
 </body>
-<script src="./js/tab1.js"></script>
-<script src="./js/tab2.js"></script>
-<script src="./js/tab3.js"></script>
 <script>
     function includeHTML(callback) {
       var z, i, elmnt, file, xhr;
@@ -80,7 +77,6 @@
           xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
               if (this.status == 200) {
-
                 elmnt.innerHTML = this.responseText;
               }
               if (this.status == 404) {
@@ -99,8 +95,12 @@
       }
       setTimeout(function() {
           document.querySelector('.bottom-list-container').classList.toggle("hidden");
-          readFile();
+          //readFile();
       }, 0);
     }
+    includeHTML();
 </script>
+<script src="./js/tab1.js"></script>
+<script src="./js/tab2.js"></script>
+<script src="./js/tab3.js"></script>
 </html>
