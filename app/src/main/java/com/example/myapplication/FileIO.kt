@@ -6,16 +6,44 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
+fun main(){
+//    val file = FileIO()
+    var temp = File("/timeandplace")
+    var resultFiles = ArrayList<File>()
+    findAllFiles(temp,resultFiles)
+    println(resultFiles.size)
+//    resultFiles.filter { file -> file.name.startsWith(""); }.map { file-> return mapof("path":file.name) }
+    resultFiles = ArrayList<File>()
+    var result = resultFiles.joinToString(prefix = "[", postfix = "]", separator = ",")
+    println(result)
+    var x = "abccddd"
+    println(x.startsWith(""))
+}
+fun findAllFiles(dir: File, fileList :ArrayList<File>) {
+    for (file :File in dir.listFiles()){
+        if(file.isDirectory) findAllFiles(file,fileList)
+        if(file.isFile) {
+            fileList.add(file)
+        }
+    }
+}
 class FileIO {
 
-    val externalStorageDir = Environment.getExternalStorageDirectory()
-    val cryptoUtil = CryptoUtil()
+    private val cryptoUtil = CryptoUtil()
 
+    lateinit var rootDir :File
+
+    init {
+        rootDir = File(Environment.getExternalStorageDirectory(),"TimeAndPlace")
+        if(!rootDir.exists()){
+            rootDir.mkdirs()
+        }
+    }
     fun writeFile(fileName: String, content: String) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             // Get the external storage directory
             var time = fileName.split("-")[0]
-            val fileDir = File(externalStorageDir, time)
+            val fileDir = File(rootDir, time)
 
             if(!fileDir.exists()){
                 fileDir.mkdirs()
@@ -69,7 +97,7 @@ class FileIO {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             // Get the external storage directory
             var time = fileName.split("-")[0]
-            val fileDir = File(externalStorageDir, time)
+            val fileDir = File(rootDir, time)
 
             if(!fileDir.exists()){
                 fileDir.mkdirs()
@@ -121,5 +149,14 @@ class FileIO {
             println("File does not exist.")
         }
         return null
+    }
+
+    fun findAllFiles(dir: File, fileList :ArrayList<File>) {
+        for (file :File in dir.listFiles()){
+            if(file.isDirectory) findAllFiles(file,fileList)
+            if(file.isFile) {
+                fileList.add(file)
+            }
+        }
     }
 }
