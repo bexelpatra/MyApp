@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import org.json.JSONObject
+import java.io.File
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -29,8 +30,14 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         // Handle data received from JavaScript
         var json = JSONObject(data)
         println(json)
-        println("Data from WebView: $data")
-        return "good"
+        var searchTerm = json.getString("searchTerm")
+
+        var allFiles = ArrayList<File>()
+        fileIo.findAllFiles(fileIo.rootDir,allFiles)
+        var fileNames = allFiles.filter { file: File -> file.name.startsWith(data) }.map { file: File -> file.name }
+        var result = fileNames.joinToString(prefix = "[", postfix = "]", separator = ",")
+
+        return result
     }
 
     @JavascriptInterface
@@ -64,7 +71,7 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     @JavascriptInterface
     fun readFile(time:String,type :String):String?{
         var year = time.split("-")[0]
-        var fileName = "${fileIo.externalStorageDir.absolutePath}/${year}/${time}-${type}-.txt"
+        var fileName = "${fileIo.rootDir.absolutePath}/${year}/${time}-${type}-.txt"
         val fileContent = fileIo.readFileCrypto(fileName)
         var arr = fileContent?.subSequence(0,fileContent.length-1)
 
