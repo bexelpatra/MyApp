@@ -33,6 +33,7 @@ class FileIO {
                     writer.write(fileContent)
                 }
                 writer.write(content)
+                writer.write("\n")
                 writer.close()
                 println("File written to external storage: ${file.absolutePath}")
             } catch (e: IOException) {
@@ -75,7 +76,7 @@ class FileIO {
             }
             var file = File(fileDir,fileName)
 
-            val fileContent = readFileCrypto(file.absolutePath)
+            val fileContent = readFile(file.absolutePath)
 
             var encryptedContent =cryptoUtil.encrypt(content)
             println(encryptedContent)
@@ -86,6 +87,7 @@ class FileIO {
                     writer.write(fileContent)
                 }
                 writer.write(encryptedContent)
+                writer.write(System.lineSeparator())
                 writer.close()
                 println("File written to external storage: ${file.absolutePath}")
             } catch (e: IOException) {
@@ -108,6 +110,7 @@ class FileIO {
                         println(line) // Process each line as needed
                         stringBuilder.append(line?.let { cryptoUtil.decrypt(it) })
                     }
+                    reader.close()
                 }
                 return stringBuilder.toString()
             } catch (e: IOException) {
