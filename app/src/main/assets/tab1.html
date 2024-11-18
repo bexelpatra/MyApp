@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Visit Location on Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #autoMap {
+            height: 500px;
+            width: 100%;
+        }
+
+        /* 탭 스타일 정의 */
+        .tab {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .tab button {
+            background-color: #b3e5fc;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-family: "Stylish", serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 17px;
+            border-radius: 15px 15px 0 0;
+            margin-right: 0; /* 탭 사이 간격*/
+        }
+
+        .tab button.active {
+            background-color: #6b95ff;
+        }
+
+        /* 방문 장소 스타일 정의 */
+        /*
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }*/
+        .bottom-list-container {
+            position: fixed;
+            bottom: 0%;
+            width: 80%;
+            height: 30px;
+            background-color: #F9FFFF;
+            border-top: 2px solid #FFFFFF;
+            border-radius: 15px 15px 0 0;
+            transition: bottom 1s;
+            z-index: 1000;
+            font-family: "Stylish", serif;
+            font-weight: 400;
+            font-style: normal;
+            cursor:pointer;
+        }
+
+        .bottom-list {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px;
+            display: none;
+            overflow-y: auto;
+            height: 90%;
+        }
+        .full-height {
+            height: 33% !important;
+        }
+        .default-height {
+            height: 30px !important;
+        }
+        .bottom-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #BEEFFF;
+        }
+        .hidden {
+            height: 0;
+        }
+        .show {
+            height: 30px;
+        }
+        .toggle-button {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 버튼 스타일 정의 */
+        .button {
+            background-color: #b3e5fc;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: "Stylish", serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 16px;
+            color: black;
+            margin: 4px 2px;
+            transition-duration: 0.2s;
+            cursor: pointer;
+            border-radius: 12px; /* 둥근 모서리 */
+        }
+
+        .button:active {
+            background-color: #6b95ff;
+            color: black;
+        }
+
+        /* Text 스타일 정의 */
+        .text-input {
+            border: 2px solid #b3e5fc; /* 테두리 색상 */
+            color: #333; /* 텍스트 색상 */
+            padding: 10px 20px;
+            border-radius: 25px; /* 둥근 모서리 */
+            font-family: "Stylish", serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            outline: none; /* 포커스 시 생기는 기본 테두리 제거 */
+            transition: border 0.3s ease;
+        }
+        .text-input:focus {
+            border-color: #FF69B4; /* 포커스 시 테두리 색상 변경 */
+        }
+
+        h3, p, label {
+            font-family: "Stylish", serif;
+            font-style: normal;
+        }
+
+        li:active {
+            background-color: #6b95ff;
+            color: black;
+        }
+
+        /* 햄버거 스타일 정의 */
+        .hamburger{
+            background: #FFFFFF;
+            border-bottom: 1px solid #BEEFFF;
+            border-radius: 15px 15px 0 0;
+            position:relative;
+            display:block;
+            width: 100%;
+            height: 30px;
+            cursor:pointer;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hamburger span,
+        .hamburger span:before,
+        .hamburger span:after{
+            display:block;
+            position:absolute;
+            width:30px;
+            height:5px;
+            background:#2d2d2d;
+            border-radius: 15px 15px 15px 15px;
+        }
+        .hamburger span{
+            top:50%;
+        }
+        .hamburger span:before,
+        .hamburger span:after{
+            content:'';
+        }
+        .hamburger span:before{
+            top:-10px;
+        }
+        .hamburger span:after{
+            top:10px;
+        }
+
+        /* TextArea 스타일 정의 */
+        textarea {
+            width: 300px;
+            height: 20px;
+            border-radius: 7px 7px 7px 7px;
+            transition: width 0.3s ease, height 0.3s ease;
+            outline-color: #FE6B8B;
+        }
+
+        textarea:focus {
+            width: 85%;
+            height: 100px;
+        }
+
+        /* 플로팅 버튼 스타일 정의 */
+        .float-button-container {
+            z-index: 1000;
+            position: fixed;
+            transform: translate(-50%, 0%);
+            background-color: transparent;
+            left: 90%;
+            bottom: 20px;
+            display: flex;
+        }
+
+        .float-button {
+            display: flex;
+            background-color: transparent; opacity:0.3;
+            height: 45px;
+            width: 45px;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 25px 25px 25px 25px;
+            transition: 0.5s;
+        }
+
+        .float-button:hover {
+            transform: translate(0%, -20%);
+        }
+
+        .float-button-image {
+            height: 28px;
+        }
+
+        /* 방문 list 스타일 정의 */
+        #actionSheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 90%;
+            /*background-color: rgba(0, 0, 0, 0.5);*/
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            transition: 1s;
+
+            /* 서서히 나타나는 효과 */
+            visibility: hidden;
+            opacity: 0;
+        }
+        #actionSheet.active {
+            /* 서서히 나타나는 효과 */
+            visibility: visible;
+            opacity: 1;
+        }
+        .action-options {
+            background-color: #fff;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            /* 세로 컨텐츠가 늘어나는 경우 스크롤이 생기도록 설정 */
+            overflow: auto;
+
+            max-height: 300px;
+            /* 아래에서 위로 나타나는 효과, max-height과 동일하게 작성 */
+            position: relative;
+            bottom: -300px;
+
+            transition: 1s;
+        }
+
+        #actionSheet.active .action-options {
+            /* 아래에서 위로 나타나는 효과, max-height과 동일하게 작성 */
+            bottom: 0;
+        }
+        .option {
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option.close {
+            text-align: center;
+        }
+        .option:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<script>
+    let map;
+    let locationInterval;
+    let initFg = "Y";
+    let bottom = "hidden";
+
+    function readFile(){
+         //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"}]';
+        initMap();
+
+        let returnData = Android.readFile(now(1), 1);
+        //console.log("##### tab returnData : ", returnData);
+        let locInfo = JSON.parse(returnData);
+
+        if(locInfo != ""){
+            createLiTag(locInfo);
+        }
+        currentLocation();
+        initFg = "N";
+    }
+
+    function initMap(locInfo){
+        if(initFg == 'Y'){
+            let currentLocation = JSON.parse(Android.getCurrentLocation());
+
+            // 지도 초기화
+            map = L.map('map').setView([currentLocation.lat, currentLocation.lon], 18);
+
+            // OpenStreetMap 타일 레이어 추가
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+        }else{
+            if(locInfo != null){
+                if (navigator.geolocation) {
+                    let i = 1;
+                    locInfo.forEach(location => {
+
+                        let popup = '방문 장소 ' + i + ' ( ' + location.time + ' )'
+                            + '<br>위도 : ' + location.lat + ' / 경도 : ' + location.lon
+                            + '<br>메모 : ' + location.memo;
+
+                        L.marker([location.lat, location.lon]).addTo(map).bindPopup(popup).openPopup();
+                        map.setView([location.lat, location.lon], 18);
+                    });
+                } else {
+                    alert('Your browser does not support Geolocation.');
+                }
+            }
+        }
+    }
+
+    function currentLocation(){
+        let currentLocation = JSON.parse(Android.getCurrentLocation());
+
+        let popup = '현재 위치 ' + ' ( ' + now(3) + ' )'
+            + '<br>위도 : ' + currentLocation.lat + ' / 경도 : ' + currentLocation.lon
+
+        L.marker([currentLocation.lat, currentLocation.lon]).addTo(map).bindPopup(popup).openPopup();
+        map.setView([currentLocation.lat, currentLocation.lon], 18);
+    }
+
+    async function save(lat, lon, autoFg){
+        let memo;
+
+        if(!autoFg){
+            memo = document.getElementById('memo').value
+        }
+
+        newInfo = {};
+        newInfo.time = now(3);
+        newInfo.lat = lat??"";
+        newInfo.lon = lon??"";
+        newInfo.memo = memo;
+
+        let saveData = {};
+        saveData.data = newInfo;
+        saveData.type = autoFg == true ? 0 : 1;
+        //console.log("####### save Data : " , JSON.stringify(saveData));
+
+        let saveReturnData = Android.save(JSON.stringify(saveData));
+        //console.log("####### saveReturn Data : " , saveReturnData);
+
+        let returnData = Android.readFile(now(1), 1);
+        //let returnData = '[{"lat":"37.123","lon":"127.123","memo":"없음","time":"2024-11-08  13:31:16"},{"lat":"37.125","lon":"127.125","memo":"","time":"2024-11-08  13:35:10"},{"lat":"37.122","lon":"127.124","memo":"123","time":"2024-11-08  13:38:42"},{"lat":"37.121","lon":"127.121","memo":"ㅂㅈㄷ","time":"2024-11-08  13:42:05"}]';
+        //console.log("####### Return Data : " , returnData);
+
+        let locInfo = JSON.parse(returnData);
+        //console.log("####### locInfo Data : " , locInfo);
+
+        createLiTag(locInfo);
+
+        if(!autoFg){
+            //document.getElementById('currntLocationSaveDiv').style.display = 'none';
+            reset();
+        }
+    }
+
+    function createLiTag(locInfo){
+        let visitList = document.getElementById("visitList");
+        while (visitList.firstChild) {
+            visitList.removeChild(list.firstChild);
+        }
+
+        for(let i=0; i<locInfo.length; i++){
+            let visit = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
+                        + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
+                        + '<br>메모 : ' + locInfo[i].memo;
+
+            let li = document.createElement('li');
+            li.innerHTML = visit;
+            li.onclick = function() {
+                L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(map)
+                    .bindPopup(visit)
+                    .openPopup();
+
+                map.setView([locInfo[i].lat, locInfo[i].lon], map.getZoom()); // 지도의 중앙을 마커 위치로 설정
+            };
+            visitList.appendChild(li);
+
+        }
+
+        listToggle("show");
+    }
+
+    function listToggle(param){
+        if(param != bottom){
+            let listContainer = document.querySelector('.bottom-list-container');
+            listContainer.classList.toggle(param);
+            bottom = param;
+        }
+    }
+
+    function autoMap(){
+        //if(initFg == 'Y'){
+            // 지도 초기화
+            map = L.map('autoMap').setView([0, 0], 2);
+
+            // OpenStreetMap 타일 레이어 추가
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        //}
+
+        // 현재 위치 가져오기 및 지도에 표시
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                let marker = L.marker([lat, lon]).addTo(map)
+                    .bindPopup('위도 : ' + lat + ' / 경도 : ' + lon)
+                    .openPopup();
+                map.setView([lat, lon], 18);
+            }, (error) => {
+                alert('Geolocation service failed. : ' + error.message);
+            });
+        } else {
+            alert('Your browser does not support Geolocation.');
+        }
+    }
+
+    function reset() {
+        document.getElementById('memo').value = "";
+    }
+
+    function autoOn(param){
+        locationInterval = setInterval(updateLocation, 2000);
+        alert("자동 저장 시작");
+    }
+
+    function updateLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                document.getElementById("currentLoction").innerHTML = '현재위치 : ' + lat + ' / ' + lon;
+                save(lat, lon, true);
+            }, (error) => {
+                alert('Geolocation service failed. : ' + error.message);
+            });
+
+        } else {
+            document.getElementById("location").innerHTML = "이 브라우저는 Geolocation을 지원하지 않습니다.";
+        }
+    }
+
+    function autoOff(param){
+        clearInterval(locationInterval);
+        alert("자동 저장 종료");
+    }
+
+    function now(param){
+        /*
+            param : return
+            1 : 년월일
+            2 : 시분초
+            3 : 년월일  시분초
+        */
+        let today = new Date();
+
+        let year = today.getFullYear();
+        let month = ('0' + (today.getMonth() + 1)).slice(-2);
+        let day = ('0' + today.getDate()).slice(-2);
+        let hours = ('0' + today.getHours()).slice(-2);
+        let minutes = ('0' + today.getMinutes()).slice(-2);
+        let seconds = ('0' + today.getSeconds()).slice(-2);
+
+        let dateString;
+        if(param == 1) dateString = year + '-' + month  + '-' + day;
+        if(param == 2) dateString = hours + ':' + minutes  + ':' + seconds;
+        if(param == 3) dateString = year + '-' + month  + '-' + day + '  ' + hours + ':' + minutes  + ':' + seconds;
+
+        return dateString;
+    }
+</script>
+<body>
+<!-- 자동 저장 -->
+<div id="Tab1" class="tabcontent" style="display:none">
+    <p id="currentLoction">
+    </P>
+    <p>
+        <button class="button" id="autoOnBt" onClick="autoOn()">On</button>
+        <button class="button" id="autoOffBt" onClick="autoOff()">Off</button>
+        <button class="button" id="autoMapBt" onClick="autoMap()">지도표시</button>
+    </p>
+    <div id="autoMap"></div>
+</div>
+</div>
+
+</body>
+</html>
