@@ -1,9 +1,7 @@
-let map;
-let locationInterval;
-let initFg = "Y";
+
 let bottom = "hidden";
 
-function readFile(){
+function tab2_readFile(){
     initMap();
 
     let returnData = Android.readFile(now(1), 1);
@@ -11,55 +9,13 @@ function readFile(){
     let locInfo = JSON.parse(returnData);
 
     if(locInfo != ""){
-        createLiTag(locInfo);
+        tab2_createLiTag(locInfo);
     }
     currentLocation();
-    initFg = "N";
 }
 
-function initMap(locInfo){
-    if(initFg == 'Y'){
-        let currentLocation = JSON.parse(Android.getCurrentLocation());
 
-        // 지도 초기화
-        map = L.map('map').setView([currentLocation.lat, currentLocation.lon], 18);
-
-        // OpenStreetMap 타일 레이어 추가
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-    }else{
-        if(locInfo != null){
-            if (navigator.geolocation) {
-                let i = 1;
-                locInfo.forEach(location => {
-
-                    let popup = '방문 장소 ' + i + ' ( ' + location.time + ' )'
-                        + '<br>위도 : ' + location.lat + ' / 경도 : ' + location.lon
-                        + '<br>메모 : ' + location.memo;
-
-                    L.marker([location.lat, location.lon]).addTo(map).bindPopup(popup).openPopup();
-                    map.setView([location.lat, location.lon], 18).draggable(ture);
-                });
-            } else {
-                alert('Your browser does not support Geolocation.');
-            }
-        }
-    }
-}
-
-function currentLocation(){
-    let currentLocation = JSON.parse(Android.getCurrentLocation());
-
-    let popup = '현재 위치 ' + ' ( ' + now(3) + ' )'
-        + '<br>위도 : ' + currentLocation.lat + ' / 경도 : ' + currentLocation.lon
-
-    L.marker([currentLocation.lat, currentLocation.lon]).addTo(map).bindPopup(popup).openPopup();
-    map.setView([currentLocation.lat, currentLocation.lon], 18);
-}
-
-async function save(lat, lon, autoFg){
+async function tab2_save(lat, lon, autoFg){
     let memo;
 
     if(!autoFg){
@@ -86,20 +42,20 @@ async function save(lat, lon, autoFg){
     let locInfo = JSON.parse(returnData);
     //console.log("####### locInfo Data : " , locInfo);
 
-    createLiTag(locInfo);
+    tab2_createLiTag(locInfo);
 
     if(!autoFg){
-        reset();
+        tab2_reset();
     }
 }
 
-function createLiTag(locInfo){
+function tab2_createLiTag(locInfo){
     let visitList = document.getElementById("visitList");
     while (visitList.firstChild) {
-        visitList.removeChild(list.firstChild);
+        visitList.removeChild(visitList.firstChild);
     }
-
-    for(let i=0; i<locInfo.length; i++){
+    locLength = locInfo.length;
+    for(let i=0; i<locLength; i++){
         let visit = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
                     + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
                     + '<br>메모 : ' + locInfo[i].memo;
@@ -114,9 +70,9 @@ function createLiTag(locInfo){
             map.setView([locInfo[i].lat, locInfo[i].lon], map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
         visitList.appendChild(li);
-
     }
     listToggle("show");
+    visitList.getElementsByTagName('li')[locLength-1].onclick();
 }
 
 function listToggle(param){
@@ -127,30 +83,11 @@ function listToggle(param){
     }
 }
 
-function reset() {
+function tab2_reset() {
     document.getElementById('memo').value = "";
 }
 
-function now(param){
-    /*
-        param : return
-        1 : 년월일
-        2 : 시분초
-        3 : 년월일  시분초
-    */
-    let today = new Date();
-
-    let year = today.getFullYear();
-    let month = ('0' + (today.getMonth() + 1)).slice(-2);
-    let day = ('0' + today.getDate()).slice(-2);
-    let hours = ('0' + today.getHours()).slice(-2);
-    let minutes = ('0' + today.getMinutes()).slice(-2);
-    let seconds = ('0' + today.getSeconds()).slice(-2);
-
-    let dateString;
-    if(param == 1) dateString = year + '-' + month  + '-' + day;
-    if(param == 2) dateString = hours + ':' + minutes  + ':' + seconds;
-    if(param == 3) dateString = year + '-' + month  + '-' + day + '  ' + hours + ':' + minutes  + ':' + seconds;
-
-    return dateString;
+function tab2_listOpen(){
+    document.getElementById('visitList').style.display = 'block';
+    document.getElementById('bottomListContainer').classList.toggle('full-height');
 }

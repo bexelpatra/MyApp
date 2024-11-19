@@ -12,9 +12,7 @@
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 <script>
-    console.log("##########################################################################");
     window.onload = function() {
-
         document.getElementById("Tab1").style.display = "none";
         document.getElementById("Tab3").style.display = "none";
     }
@@ -94,12 +92,13 @@
         }
       }
       setTimeout(function() {
-          document.querySelector('.bottom-list-container').classList.toggle("hidden");
-          //readFile();
+        document.querySelector('.bottom-list-container').classList.toggle("hidden");
+        tab2_readFile();
       }, 0);
     }
     includeHTML();
 </script>
+<script src="./js/location.js"></script>
 <script src="./js/tab1.js"></script>
 <script src="./js/tab2.js"></script>
 <script src="./js/tab3.js"></script>

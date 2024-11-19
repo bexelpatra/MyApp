@@ -1,5 +1,5 @@
 #map {
-    height: 610px;
+    height: 600px;
     width: 100%;
 }
 #autoMap {
@@ -43,7 +43,7 @@ body, html {
 }*/
 .bottom-list-container {
     position: fixed;
-    bottom: 0%;
+    bottom: 1%;
     width: 80%;
     height: 30px;
     background-color: #F9FFFF;
@@ -64,6 +64,7 @@ body, html {
     display: none;
     overflow-y: auto;
     height: 90%;
+    bottom: 1%;
 }
 .full-height {
     height: 33% !important;
