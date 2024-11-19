@@ -83,20 +83,7 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         var map = getLocationSynchronously()
         return  JSONObject.wrap(map).toString()
     }
-    @SuppressLint("MissingPermission")
-    suspend fun getLocation() : () -> Task<Location> {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
-        return {fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { success: Location? ->
-                success?.let { location ->
-                    "${location.latitude} ${location.longitude}"
-                }?:"not found"
-            }
-            .addOnFailureListener { fail ->
-                "fail"
-            }}
-    }
     // 아직 이해가 안 가는 소스다...
     // 추후에 코루틴과 함께 더욱 공부해봐야쓰겄다
     @SuppressLint("MissingPermission")
