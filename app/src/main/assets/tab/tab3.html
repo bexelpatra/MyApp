@@ -1,7 +1,23 @@
-<!-- 자동 저장 -->
-<div>
-    <a>TEST</a>
+<div class="add-form">
+    <input
+            type="text"
+            id="searchTerm"
+            placeholder="날짜 (YYYYMMDD)"
+            oninput="handleInput(this,this.value)"
+    >
+    <!-- <button class="button" onclick="search()">Add Item</button> -->
 </div>
-<script>
-    console.log("tab3");
-</script>
+
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>type</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- Items will be added here -->
+        </tbody>
+    </table>
+</div>
