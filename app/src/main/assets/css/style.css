@@ -32,68 +32,6 @@
     background-color: #6b95ff;
 }
 
-/* 방문 장소 스타일 정의 */
-/*
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-}*/
-.bottom-list-container {
-    position: fixed;
-    bottom: 1%;
-    width: 80%;
-    height: 30px;
-    background-color: #F9FFFF;
-    border-top: 2px solid #FFFFFF;
-    border-radius: 15px 15px 0 0;
-    transition: bottom 1s;
-    z-index: 1000;
-    font-family: "Stylish", serif;
-    font-weight: 400;
-    font-style: normal;
-    cursor:pointer;
-}
-
-.bottom-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 10px;
-    display: none;
-    overflow-y: auto;
-    height: 90%;
-    bottom: 1%;
-}
-.full-height {
-    height: 33% !important;
-}
-.default-height {
-    height: 30px !important;
-}
-.bottom-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #BEEFFF;
-}
-.hidden {
-    height: 0;
-}
-.show {
-    height: 30px;
-}
-.toggle-button {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 /* 버튼 스타일 정의 */
 .button {
     background-color: #b3e5fc;
@@ -137,55 +75,6 @@ body, html {
     border-color: #FF69B4; /* 포커스 시 테두리 색상 변경 */
 }
 
-h3, p, label {
-    font-family: "Stylish", serif;
-    font-style: normal;
-}
-
-li:active {
-    background-color: #6b95ff;
-    color: black;
-}
-
-/* 햄버거 스타일 정의 */
-.hamburger{
-    background: #FFFFFF;
-    border-bottom: 1px solid #BEEFFF;
-    border-radius: 15px 15px 0 0;
-    position:relative;
-    display:block;
-    width: 100%;
-    height: 30px;
-    cursor:pointer;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.hamburger span,
-.hamburger span:before,
-.hamburger span:after{
-    display:block;
-    position:absolute;
-    width:30px;
-    height:5px;
-    background:#2d2d2d;
-    border-radius: 15px 15px 15px 15px;
-}
-.hamburger span{
-    top:50%;
-}
-.hamburger span:before,
-.hamburger span:after{
-    content:'';
-}
-.hamburger span:before{
-    top:-10px;
-}
-.hamburger span:after{
-    top:10px;
-}
-
 /* TextArea 스타일 정의 */
 textarea {
     width: 300px;
@@ -198,4 +87,15 @@ textarea {
 textarea:focus {
     width: 85%;
     height: 100px;
+}
+
+
+h3, p, label {
+    font-family: "Stylish", serif;
+    font-style: normal;
+}
+
+li:active {
+    background-color: #6b95ff;
+    color: black;
 }

@@ -77,7 +77,7 @@ function tab2_createLiTag(locInfo){
 
 function listToggle(param){
     if(param != bottom){
-        let listContainer = document.querySelector('.bottom-list-container');
+        let listContainer = document.querySelector('.tab2-bottom-list-container');
         listContainer.classList.toggle(param);
         bottom = param;
     }
