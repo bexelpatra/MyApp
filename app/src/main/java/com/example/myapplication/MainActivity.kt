@@ -52,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         webView.settings.useWideViewPort = true
         webView.settings.setSupportZoom(true)
 
+        webView.settings.allowFileAccessFromFileURLs = true
+        webView.settings.allowUniversalAccessFromFileURLs = true
+
         webView.addJavascriptInterface(WebAppInterface(this,fileIO), "Android")
         // Load the HTML file from the assets folder
         webView.loadUrl("file:///android_asset/location.html")
