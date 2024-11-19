@@ -1,4 +1,3 @@
-
 let bottom = "hidden";
 
 function tab2_readFile(){

@@ -1,5 +1,6 @@
 let initFg = "Y";
 let map;
+let marker;
 
 function initMap(locInfo){
     if(initFg == 'Y'){
@@ -41,7 +42,11 @@ function currentLocation(){
     let popup = '현재 위치 ' + ' ( ' + now(3) + ' )'
         + '<br>위도 : ' + currentLocation.lat + ' / 경도 : ' + currentLocation.lon
 
-    L.marker([currentLocation.lat, currentLocation.lon]/*, {draggable: true}*/).addTo(map).bindPopup(popup).openPopup();
+    marker = L.marker([currentLocation.lat, currentLocation.lon], {draggable: true}).addTo(map).bindPopup(popup).openPopup();
+
+    marker.on('dragend', function(event) {
+        console.log(event.target._latlng);
+    });
     map.setView([currentLocation.lat, currentLocation.lon], 18);
 }
 
@@ -68,4 +73,3 @@ function now(param){
 
     return dateString;
 }
-
