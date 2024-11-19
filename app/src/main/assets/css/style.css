@@ -13,11 +13,11 @@ body {
 /* 탭 스타일 정의 */
 .tab {
     overflow: hidden;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #58438d;
 }
 
 .tab button {
-    background-color: #b3e5fc;
+    background-color: #654e9fb2;
     border: none;
     outline: none;
     cursor: pointer;
@@ -26,18 +26,19 @@ body {
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 17px;
+    font-size: 20px;
+    color: white;
     border-radius: 15px 15px 0 0;
     margin-right: 0; /* 탭 사이 간격*/
 }
 
 .tab button.active {
-    background-color: #6b95ff;
-} 
+    background-color: #58438d;
+}
 
 /* 버튼 스타일 정의 */
 .button {
-    background-color: #b3e5fc;
+    background-color: #654e9fb2;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -47,8 +48,7 @@ body {
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 16px;
-    color: black;
+    font-size: 18px;
     margin: 4px 2px;
     transition-duration: 0.2s;
     cursor: pointer;
@@ -56,13 +56,13 @@ body {
 }
 
 .button:active {
-    background-color: #6b95ff;
-    color: black;
+    background-color: #58438d;
+    color: white;
 }
 
 /* Text 스타일 정의 */
 .text-input {
-    border: 2px solid #b3e5fc; /* 테두리 색상 */
+    border: 2px solid #654e9fb2; /* 테두리 색상 */
     color: #333; /* 텍스트 색상 */
     padding: 10px 20px;
     border-radius: 25px; /* 둥근 모서리 */
@@ -75,7 +75,7 @@ body {
     transition: border 0.3s ease;
 }
 .text-input:focus {
-    border-color: #FF69B4; /* 포커스 시 테두리 색상 변경 */
+    border-color: #58438d; /* 포커스 시 테두리 색상 변경 */
 }
 
 /* TextArea 스타일 정의 */
@@ -84,7 +84,7 @@ textarea {
     height: 25px;
     border-radius: 7px 7px 7px 7px;
     transition: width 0.3s ease, height 0.3s ease;
-    outline-color: #FE6B8B;
+    outline-color: #58438d;
 }
 
 textarea:focus {
@@ -99,6 +99,6 @@ h3, p, label {
 }
 
 li:active {
-    background-color: #6b95ff;
-    color: black;
+    background-color: #654e9fb2;
+    color: white;
 }
