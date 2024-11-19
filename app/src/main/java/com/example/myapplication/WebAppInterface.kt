@@ -31,10 +31,13 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         var json = JSONObject(data)
         println(json)
         var searchTerm = json.getString("searchTerm")
-
+    ///storage/emulated/0/TimeAndPlace/2024/2024-11-18-1-.txt
         var allFiles = ArrayList<File>()
         fileIo.findAllFiles(fileIo.rootDir,allFiles)
-        var fileNames = allFiles.filter { file: File -> file.name.startsWith(data) }.map { file: File -> file.name }
+        var fileNames = allFiles
+            .map { file: File ->file.name.substring(file.name.lastIndexOf("/") + 1)}
+            .filter { name: String -> name.startsWith(searchTerm) }
+
         var result = fileNames.joinToString(prefix = "[", postfix = "]", separator = ",")
 
         return result
