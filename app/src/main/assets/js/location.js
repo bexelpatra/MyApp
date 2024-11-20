@@ -1,4 +1,3 @@
-let initFg = "Y";
 let map;
 let currentMarker={};
 
@@ -13,7 +12,7 @@ function initMap(divId){
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-    
+
     return map
 }
 

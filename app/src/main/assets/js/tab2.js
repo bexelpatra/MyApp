@@ -1,7 +1,13 @@
 let bottom = "hidden";
+let tab2Map;
+let initFg = true;
+
 
 function tab2_readFile(){
-    initMap();
+    if(initFg){
+        tab2Map = initMap('tab2_map');
+        initFg = false
+    }
 
     let returnData = Android.readFile(now(1), 1);
     //console.log("##### tab returnData : ", returnData);
@@ -10,7 +16,7 @@ function tab2_readFile(){
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }
-    currentLocation();
+    currentLocation(tab2Map,2);
 }
 
 
@@ -66,11 +72,11 @@ function tab2_createLiTag(locInfo){
         let li = document.createElement('li');
         li.innerHTML = visit;
         li.onclick = function() {
-            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(map)
+            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2Map)
                 .bindPopup(markerStr)
                 .openPopup();
 
-            map.setView([locInfo[i].lat, locInfo[i].lon], map.getZoom()); // 지도의 중앙을 마커 위치로 설정
+            tab2Map.setView([locInfo[i].lat, locInfo[i].lon], tab2Map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
         visitList.appendChild(li);
     }

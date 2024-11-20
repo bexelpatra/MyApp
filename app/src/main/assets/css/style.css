@@ -1,11 +1,11 @@
 body {
     -webkit-tap-highlight-color: transparent;
 }
-#map {
+#tab2_map {
     height: 615px;
     width: 100%;
 }
-#autoMap {
+#tab1_map {
     height: 580px;
     width: 100%;
 }
