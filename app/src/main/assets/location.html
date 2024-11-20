@@ -20,23 +20,33 @@
     }
 
     function openTab(tabName, evt) {
-    let i, tabcontent, tablinks;
+        let i, tabcontent, tablinks;
 
-    // 모든 탭 콘텐츠를 숨기기
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-    }
+        // 모든 탭 콘텐츠를 숨기기
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
 
-    // 모든 탭 링크에서 'active' 클래스를 제거하기
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
+        // 모든 탭 링크에서 'active' 클래스를 제거하기
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
 
-    // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+        // 현재 탭을 표시하고, 해당 탭 링크를 'active'로 설정하기
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+        if(tabName == "Tab1"){
+
+        }else if(tabName == "Tab2"){
+            console.log("tab2");
+            tab2_readFile();
+
+        }else if(tabName == "Tab3"){
+
+        }
     }
 </script>
 <body>

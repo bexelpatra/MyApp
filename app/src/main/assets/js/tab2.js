@@ -55,7 +55,6 @@ function tab2_createLiTag(locInfo){
     }
     locLength = locInfo.length;
     for(let i=0; i<locLength; i++){
-        console.log("메모 : ", locInfo[i].memo);
         let visit = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
                     //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
                     + '<br>메모 : <br>' + locInfo[i].memo.replaceAll('\n', '<br>');
