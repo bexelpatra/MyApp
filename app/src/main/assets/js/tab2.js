@@ -57,13 +57,17 @@ function tab2_createLiTag(locInfo){
     for(let i=0; i<locLength; i++){
         let visit = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
                     //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
-                    + '<br>메모 : <br>' + locInfo[i].memo.replaceAll('\n', '<br>');
+                    + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
+
+        let markerStr = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
+                    + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
+                    + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
 
         let li = document.createElement('li');
         li.innerHTML = visit;
         li.onclick = function() {
             L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(map)
-                .bindPopup(visit)
+                .bindPopup(markerStr)
                 .openPopup();
 
             map.setView([locInfo[i].lat, locInfo[i].lon], map.getZoom()); // 지도의 중앙을 마커 위치로 설정
