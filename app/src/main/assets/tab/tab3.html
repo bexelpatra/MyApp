@@ -1,3 +1,4 @@
+
 <div class="add-form">
     <input
             type="text"
@@ -11,13 +12,22 @@
 <div class="table-container">
     <table>
         <thead>
-        <tr>
-            <th>type</th>
-            <th>Name</th>
-        </tr>
+            <tr>
+                <th>type</th>
+                <th>Name</th>
+            </tr>
         </thead>
         <tbody id="tableBody">
-        <!-- Items will be added here -->
+            <!-- Items will be added here -->
         </tbody>
     </table>
 </div>
+<div class="tab3-bottom-list-container" id="bottomListContainer2">
+    <div style="width: 50px; height: 30px;position: fixed; z-index: 10; right: 0px; top: -10px; z-index: 999;">
+        <button class="button" onclick="tab3_listClose()" style="float: inline-end;">종료</button>
+    </div>
+    <div id="tab3_map" style="height: 800px; width: 100%;">
+    </div>
+    <ul class="tab3-bottom-list" id="visitList2"></ul>
+</div>
+

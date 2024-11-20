@@ -4,6 +4,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     position: relative; /* For fixed header */
+    width: 95%;
 }
 
 /* Make the header fixed */
@@ -38,4 +39,46 @@ tr:hover {
     border-radius: 10px;
     font-size: medium;
     margin: 10px 0px 10px 0px;
+}
+
+
+
+.tab3-bottom-list-container {
+    position: fixed;
+    bottom: 0px;
+    width: 95%;
+    height: 0px;
+    border-radius: 15px 15px 0 0;
+    transition: all 0.35s;
+    z-index: 1000;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: larger;
+    border: 1px solid salmon;
+}
+
+.tab3-bottom-list {
+    list-style-type: none;
+    background-color: white;
+    margin: 0;
+    padding: 0%;
+    display: none;
+    overflow-y: auto;
+    height: 90%;
+    bottom: 1px;
+    width: 100%;
+}
+.full-height_2 {
+    height: 86dvh !important;
+}
+.default-height {
+    height: 30px !important;
+}
+.tab3-bottom-list-container span{
+    right: 5%;
+}
+.tab3-bottom-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #654e9fb2;
 }
