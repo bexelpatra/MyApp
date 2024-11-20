@@ -1,3 +1,11 @@
+<div class="test-t">
+    <label>
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+</div>
+
 <div id="currntLocationSaveDiv">
     <p>
         <textarea id="memo" name="메모" placeholder="메모 하세요..."></textarea>
@@ -7,10 +15,18 @@
         <button class="button" id="currntBt" onClick='currentLocation()'>현재위치</button>
     </p>
 </div>
+
 <div id="map"></div>
 <div class="tab2-bottom-list-container" id="bottomListContainer">
-    <div class="tab2-hamburger" id="handle" onclick="tab2_listOpen()">
-        <span></span>
+    <div class="tab2-bottom-menu">
+    <input id="toggle" type="checkbox" />
+    <label class="tab2-hamburger" for="toggle" onclick="tab2_listOpen()">
+        <div class="top"></div>
+        <div class="middle"></div>
+        <div class="bottom"></div>
+    </label>
     </div>
     <ul class="tab2-bottom-list" id="visitList"></ul>
 </div>
+
+
