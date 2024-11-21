@@ -1,4 +1,4 @@
-let map;
+// let map;
 let currentMarker={};
 
 
@@ -60,3 +60,60 @@ function now(param){
 
     return dateString;
 }
+
+function findFarthestPair(locations) {
+    let maxDistance = 0;
+    let farthestPair = [];
+  
+    for (let i = 0; i < locations.length - 1; i++) {
+      for (let j = i + 1; j < locations.length; j++) {
+        const distance = calculateDistance(
+          locations[i].lat,
+          locations[i].lon,
+          locations[j].lat,
+          locations[j].lon
+        );
+        if (distance > maxDistance) {
+            console.log(distance)
+          maxDistance = distance;
+          farthestPair = [locations[i], locations[j]];
+        }
+      }
+    }
+    let result = {}
+    result['farthestPair'] = farthestPair
+    result['distance'] = maxDistance
+    result['center'] = {"lat" : (farthestPair[0].lat*1 + farthestPair[1].lat*1)/2 ,"lon":(farthestPair[0].lon*1 + farthestPair[1].lon*1)/2}
+    return result;
+  }
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+  
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
+  
+    const distance = R * c;
+ 
+    return distance;
+  }
+  
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  function getZoomLevel(distance){
+    let unit = 250;
+    for(let i =0;i < 19;i++){
+        if(distance < Math.pow(2,i) * unit){
+            return 18 - i;
+        }
+    }
+    return 18;
+  }
