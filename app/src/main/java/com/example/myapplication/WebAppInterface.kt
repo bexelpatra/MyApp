@@ -3,6 +3,8 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.location.LocationRequest
+import android.util.Log
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.google.android.gms.location.LocationServices
@@ -97,19 +99,31 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
         result.putAll(mapOf("lat" to "0","lon" to "0"))
 
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { location ->
-                result.putAll(location?.let {
-                    mapOf("lat" to "${it.latitude}","lon" to "${it.longitude}")
-                } ?: mapOf("code" to "fail"))
+//        fusedLocationProviderClient.lastLocation
+//            .addOnSuccessListener { location ->
+//                result.putAll(location?.let {
+//                    mapOf("lat" to "${it.latitude}","lon" to "${it.longitude}")
+//                } ?: mapOf("code" to "fail"))
+//
+//                latch.countDown() // Release the latch once location is received
+//            }
+//            .addOnFailureListener {
+//                result.put("code", "fail")
+//                latch.countDown()
+//            }
+        fusedLocationProviderClient.getCurrentLocation(
+            LocationRequest.QUALITY_HIGH_ACCURACY,
+            null // No need for a CancellationToken if not canceling the request
+        ).addOnSuccessListener { location ->
+            result.putAll(location?.let {
+                mapOf("lat" to "${it.latitude}","lon" to "${it.longitude}")
+            } ?: mapOf("code" to "fail"))
 
-                latch.countDown() // Release the latch once location is received
-            }
-            .addOnFailureListener {
-                result.put("code", "fail")
-                latch.countDown()
-            }
-
+            latch.countDown() // Release the latch once location is received
+        }.addOnFailureListener { exception ->
+            result.put("code", "fail")
+            latch.countDown()
+        }
         // Wait for location response or timeout after 10 seconds
         latch.await(10, TimeUnit.SECONDS)
         return result
