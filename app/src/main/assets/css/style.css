@@ -1,16 +1,22 @@
-body {
+html, body {
     -webkit-tap-highlight-color: transparent;
+    height: 99%
+}
+.tabcontent {
+     height: 90%
 }
 #tab2_map {
+    height: 86%;
+    width: 100%;
+    position: relative;
+    transition: height 0.5s ease-in-out;
+}
+#tab3_map {
     height: 76vh;
     width: 100%;
 }
-#tab3_map {
-    height: 615px;
-    width: 100%;
-}
 #tab1_map {
-    height: 80vh;
+    height: 76vh;
     width: 100%;
 }
 

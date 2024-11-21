@@ -13,7 +13,6 @@ function tab2_readFile(){
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
 
-    console.log("!!!!locInfo = ", locInfo);
     tab2_listToggle("hidden");
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
@@ -89,10 +88,6 @@ function tab2_createLiTag(locInfo){
 function tab2_listToggle(param){
     if(param != tab2_bottom){
         document.querySelector('.tab2-bottom-list-container').classList.toggle(param);
-/*        document.querySelector('.tab2-bottom-menu').classList.toggle(param);
-        document.querySelector('.tab2-top').classList.toggle(param);
-        document.querySelector('.tab2-middle').classList.toggle(param);
-        document.querySelector('.tab2-bottom').classList.toggle(param);*/
         tab2_bottom = param;
     }
 }

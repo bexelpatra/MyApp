@@ -40,10 +40,10 @@
         evt.currentTarget.className += " active";
 
         if(tabName == "Tab1"){
-
+            tab1_map.invalidateSize();
         }else if(tabName == "Tab2"){
             tab2_readFile();
-
+            tab2_map.invalidateSize();
         }else if(tabName == "Tab3"){
 
         }

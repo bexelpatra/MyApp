@@ -1,9 +1,9 @@
-let tab1Map;
-let tab1InitFg = true;
+let tab1_map;
+let tab1_initFg = true;
 
 function tab1_initMap(){
-    if(tab1InitFg){
-        tab1Map = initMap('tab1_map');
-        tab1InitFg = false
+    if(tab1_initFg){
+        tab1_map = initMap('tab1_map');
+        tab1_initFg = false
     }
 }
