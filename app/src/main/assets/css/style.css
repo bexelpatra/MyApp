@@ -2,7 +2,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 #tab2_map {
-    height: 615px;
+    height: 76vh;
     width: 100%;
 }
 #tab3_map {
@@ -10,7 +10,7 @@ body {
     width: 100%;
 }
 #tab1_map {
-    height: 580px;
+    height: 80vh;
     width: 100%;
 }
 
