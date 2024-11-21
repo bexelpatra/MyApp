@@ -1,24 +1,24 @@
 <div id="currntLocationSaveDiv">
     <p>
-        <textarea id="memo" name="메모" placeholder="메모 하세요..."></textarea>
+        <textarea id="tab2_memo" placeholder="메모 하세요..."></textarea>
     </p>
     <p>
-        <button class="button" id="mapBt" onClick='tab2_save()'>저장</button>
-        <button class="button" id="currntBt" onClick='currentLocation()'>현재위치</button>
+        <button class="button" onClick='tab2_save()'>저장</button>
+        <button class="button" onClick='tab2_currentLocation()'>현재위치</button>
     </p>
 </div>
 
 <div id="tab2_map"></div>
-<div class="tab2-bottom-list-container" id="bottomListContainer">
+<div class="tab2-bottom-list-container" id="tab2_bottomListContainer">
     <div class="tab2-bottom-menu">
-    <input id="toggle" type="checkbox" />
-    <label class="tab2-hamburger" for="toggle" onclick="tab2_listOpen()">
-        <div class="top"></div>
-        <div class="middle"></div>
-        <div class="bottom"></div>
+    <input id="tab2_toggle" type="checkbox" />
+    <label class="tab2-hamburger" for="tab2_toggle" onclick="tab2_listOpen()">
+        <div class="tab2-top"></div>
+        <div class="tab2-middle"></div>
+        <div class="tab2-bottom"></div>
     </label>
     </div>
-    <ul class="tab2-bottom-list" id="visitList"></ul>
+    <ul class="tab2-bottom-list" id="tab2_visitList"></ul>
 </div>
 
 

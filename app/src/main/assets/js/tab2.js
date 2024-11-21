@@ -1,22 +1,24 @@
-let bottom = "hidden";
-let tab2Map;
-let initFg = true;
+let tab2_bottom = "hidden";
+let tab2_map;
+let tab2_initFg = true;
 
 
 function tab2_readFile(){
-    if(initFg){
-        tab2Map = initMap('tab2_map');
-        initFg = false
+    if(tab2_initFg){
+        tab2_map = initMap('tab2_map');
+        tab2_initFg = false
     }
 
     let returnData = Android.readFile(now(1), 1);
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
 
+    console.log("!!!!locInfo = ", locInfo);
+    tab2_listToggle("hidden");
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }
-    currentLocation(tab2Map,2);
+    currentLocation(tab2_map,2);
 }
 
 
@@ -24,7 +26,7 @@ async function tab2_save(lat, lon, autoFg){
     let memo;
 
     if(!autoFg){
-        memo = document.getElementById('memo').value
+        memo = document.getElementById('tab2_memo').value
     }
 
     newInfo = {};
@@ -55,7 +57,7 @@ async function tab2_save(lat, lon, autoFg){
 }
 
 function tab2_createLiTag(locInfo){
-    let visitList = document.getElementById("visitList");
+    let visitList = document.getElementById("tab2_visitList");
     while (visitList.firstChild) {
         visitList.removeChild(visitList.firstChild);
     }
@@ -72,31 +74,38 @@ function tab2_createLiTag(locInfo){
         let li = document.createElement('li');
         li.innerHTML = visit;
         li.onclick = function() {
-            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2Map)
+            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
                 .bindPopup(markerStr)
                 .openPopup();
 
-            tab2Map.setView([locInfo[i].lat, locInfo[i].lon], tab2Map.getZoom()); // 지도의 중앙을 마커 위치로 설정
+            tab2_map.setView([locInfo[i].lat, locInfo[i].lon], tab2_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
         visitList.appendChild(li);
     }
-    listToggle("show");
+    tab2_listToggle("show");
     visitList.getElementsByTagName('li')[locLength-1].onclick();
 }
 
-function listToggle(param){
-    if(param != bottom){
-        let listContainer = document.querySelector('.tab2-bottom-list-container');
-        listContainer.classList.toggle(param);
-        bottom = param;
+function tab2_listToggle(param){
+    if(param != tab2_bottom){
+        document.querySelector('.tab2-bottom-list-container').classList.toggle(param);
+/*        document.querySelector('.tab2-bottom-menu').classList.toggle(param);
+        document.querySelector('.tab2-top').classList.toggle(param);
+        document.querySelector('.tab2-middle').classList.toggle(param);
+        document.querySelector('.tab2-bottom').classList.toggle(param);*/
+        tab2_bottom = param;
     }
 }
 
 function tab2_reset() {
-    document.getElementById('memo').value = "";
+    document.getElementById('tab2_memo').value = "";
 }
 
 function tab2_listOpen(){
-    document.getElementById('visitList').style.display = 'block';
-    document.getElementById('bottomListContainer').classList.toggle('full-height');
+    document.getElementById('tab2_visitList').style.display = 'block';
+    document.getElementById('tab2_bottomListContainer').classList.toggle('full-height');
+}
+
+function tab2_currentLocation(){
+    currentLocation(tab2_map,2);
 }
