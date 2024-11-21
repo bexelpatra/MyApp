@@ -7,6 +7,7 @@
             oninput="handleInput(this,this.value)"
     >
     <!-- <button class="button" onclick="search()">Add Item</button> -->
+     <textarea id="tab3_memo" style="display: none;" onblur="tab3_memoBlur()"></textarea>
 </div>
 
 <div class="table-container">
@@ -25,7 +26,7 @@
 <div class="tab3-bottom-list-container" id="bottomListContainer2">
     <div style="width: 50px; height: 30px;position: fixed; z-index: 10; right: 0px; top: 40px; z-index: 999;">
         <button class="button" onclick="tab3_listClose()" style="float: inline-end;">종료</button>
-        <!-- <button class="button" onclick="temp()" style="float: inline-end;">테스트</button> -->
+        <button class="button" onclick="tab3_memoFucus()" style="float: inline-end;">테스트</button>
     </div>
     <div id="tab3_map" style="height: 800px; width: 100%;"></div>
     <ul class="tab3-bottom-list" id="visitList2"></ul>

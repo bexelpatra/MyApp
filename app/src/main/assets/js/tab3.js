@@ -88,8 +88,15 @@ function tab3_readFile(fileName){
 }
 let i = 2;
 
-function temp(){
-    console.log("temp")
+function tab3_memoFucus(){
+    document.getElementById('tab3_memo').style.display='block'
+    document.getElementById('searchTerm').style.display='none'
+    document.getElementById('tab3_memo').focus()
+}
+function tab3_memoBlur(){
+    console.log("gogo")
+    document.getElementById('searchTerm').style.display='block'
+    document.getElementById('tab3_memo').style.display='none'
 }
 let tab3_markers=[]
 
@@ -103,6 +110,7 @@ function makeTextarea(popup){
     let parentNode = document.getElementById('Tab3')
     let textarea = document.createElement('textarea')
     textarea.style.float="inner-start"
+    textarea.style.zIndex="1001"
     textarea.style.position="absolute"
     textarea.value = popup.innerText
     parentNode.childNodes[0].before(textarea)
