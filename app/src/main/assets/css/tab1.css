@@ -1,0 +1,10 @@
+.tab1-marker-pin {
+    width: 15px;
+    height: 15px;
+    border-radius: 50% 50% 50% 50%;
+    background: #58438d;
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+}

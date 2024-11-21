@@ -5,20 +5,20 @@ html, body {
 .tabcontent {
      height: 90%
 }
+
+#tab1_map {
+    height: 97.5%;
+    width: 100%;
+}
 #tab2_map {
     height: 86%;
     width: 100%;
-    position: relative;
-    transition: height 0.5s ease-in-out;
 }
 #tab3_map {
-    height: 76vh;
+    height: 99%;
     width: 100%;
 }
-#tab1_map {
-    height: 76vh;
-    width: 100%;
-}
+
 
 /* 탭 스타일 정의 */
 .tab {
