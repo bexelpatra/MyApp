@@ -38,7 +38,8 @@ class WebAppInterface(private val context:Context, io :FileIO) {
             .map { file: File ->file.name.substring(file.name.lastIndexOf("/") + 1)}
             .filter { name: String -> name.startsWith(searchTerm) }
 
-        var result = fileNames.joinToString(prefix = "[", postfix = "]", separator = ",")
+        var result = fileNames.joinToString(prefix = "[", postfix = "]", separator = ",", transform = {"\"$it\""})
+
 
         return result
     }

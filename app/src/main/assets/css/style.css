@@ -1,14 +1,24 @@
-body {
+html, body {
     -webkit-tap-highlight-color: transparent;
+    height: 99%
 }
-#map {
-    height: 600px;
+.tabcontent {
+     height: 90%
+}
+
+#tab1_map {
+    height: 97.5%;
     width: 100%;
 }
-#autoMap {
-    height: 500px;
+#tab2_map {
+    height: 86%;
     width: 100%;
 }
+#tab3_map {
+    height: 99%;
+    width: 100%;
+}
+
 
 /* 탭 스타일 정의 */
 .tab {
@@ -21,15 +31,14 @@ body {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 10px 12px;
     transition: 0.3s;
     font-family: "Stylish", serif;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
-    font-size: 20px;
+    font-size: 1.4rem;
     color: white;
     border-radius: 15px 15px 0 0;
-    margin-right: 0; /* 탭 사이 간격*/
 }
 
 .tab button.active {
@@ -41,14 +50,14 @@ body {
     background-color: #654e9fb2;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 18px;
+    font-size: 1.3rem;
     margin: 4px 2px;
     transition-duration: 0.2s;
     cursor: pointer;
@@ -80,18 +89,19 @@ body {
 
 /* TextArea 스타일 정의 */
 textarea {
-    width: 300px;
+    width: 95%;
     height: 25px;
     border-radius: 7px 7px 7px 7px;
     transition: width 0.3s ease, height 0.3s ease;
     outline-color: #58438d;
+    font-size: 1rem;
 }
 
 textarea:focus {
-    width: 85%;
-    height: 100px;
+    width: 95%;
+    height: 200px;
+    font-size: 1.2rem;
 }
-
 
 h3, p, label {
     font-family: "Stylish", serif;
