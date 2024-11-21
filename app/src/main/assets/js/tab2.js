@@ -36,7 +36,7 @@ async function tab2_save(lat, lon, autoFg){
 
     let saveData = {};
     saveData.data = newInfo;
-    saveData.type = autoFg == true ? 0 : 1;
+    saveData.type = 1;
     //console.log("####### save Data : " , JSON.stringify(saveData));
 
     let saveReturnData = Android.save(JSON.stringify(saveData));
