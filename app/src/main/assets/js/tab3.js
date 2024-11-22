@@ -1,4 +1,4 @@
-console.log('tab3')
+console.log('tab3.js')
 let tab3_map;
 let tab3_initFg = true;
 

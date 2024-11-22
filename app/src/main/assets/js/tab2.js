@@ -1,3 +1,4 @@
+console.log("tab2.js");
 let tab2_bottom = "hidden";
 let tab2_map;
 let tab2_initFg = true;
@@ -5,7 +6,7 @@ let tab2_initFg = true;
 
 function tab2_readFile(){
     if(tab2_initFg){
-        tab2_map = initMap('tab2_map');
+        tab2_map = initMap('tab2_map',18);
         tab2_initFg = false
     }
 

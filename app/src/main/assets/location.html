@@ -15,16 +15,17 @@
     <link rel="stylesheet" href="css/tab1.css"/>
     <link rel="stylesheet" href="css/tab2.css"/>
     <link rel="stylesheet" href="css/tab3.css"/>
-    <!-- 로컬 테스트 용 JS-->
-    <script src="./js/localTest.js"/>
-    <script src="./js/tab1.js"></script>
-    <script src="./js/tab2.js"></script>
+    <!-- 로컬 테스트 용 JS Start-->
+<!--    <script src="./js/localTest.js"></script>
     <script src="./js/tab3.js"></script>
-    <script src="./js/location.js"></script>
+    <script src="./js/tab2.js"></script>
+    <script src="./js/tab1.js"></script>
+    <script src="./js/location.js"></script>-->
+    <!-- 로컬 테스트 용 JS End-->
 </head>
+
 <script>
     window.onload = function() {
-    console.log("123123123");
         document.getElementById("Tab1").style.display = "none";
         document.getElementById("Tab3").style.display = "none";
     }
@@ -54,11 +55,12 @@
             tab2_readFile();
             tab2_map.invalidateSize();
           }else if(tabName == "Tab3"){
-            tab3_initMap()
-            tab3_map.invalidateSize();
+            tab3_initMap();
+            if(tab3_map != undefined) tab3_map.invalidateSize();
         }
     }
 </script>
+
 <body>
     <!-- Tab -->
     <div class="tab">
@@ -121,8 +123,11 @@
     }
     includeHTML();
 </script>
-<!--<script src="./js/location.js"></script>
+
+<!-- 배포용 Start -->
+<script src="./js/location.js"></script>
 <script src="./js/tab1.js"></script>
 <script src="./js/tab2.js"></script>
-<script src="./js/tab3.js"></script>-->
+<script src="./js/tab3.js"></script>
+<!-- 배포용 Start End -->
 </html>

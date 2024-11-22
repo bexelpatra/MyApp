@@ -1,12 +1,11 @@
-// let map;
+console.log("location.js");
 let currentMarker={};
 
-
-function initMap(divId){
+function initMap(divId, zoom){
     let currentLocation = JSON.parse(Android.getCurrentLocation());
 
     // 지도 초기화
-    let map = L.map(divId).setView([currentLocation.lat, currentLocation.lon], 18);
+    let map = L.map(divId).setView([currentLocation.lat, currentLocation.lon], zoom);
 
     // OpenStreetMap 타일 레이어 추가
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

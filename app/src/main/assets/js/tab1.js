@@ -1,10 +1,11 @@
+console.log("tab1.js");
 let tab1_map;
 let tab1_initFg = true;
 let tab1_interval;
 
 function tab1_markMap(){
     if(tab1_initFg){
-        tab1_map = initMap('tab1_map');
+        tab1_map = initMap('tab1_map',18);
         tab1_initFg = false;
     }
 
@@ -82,17 +83,14 @@ function fitMapToFarthestMarkers(markers) {
 }
 
 function tab1_autoOn(){
-    console.log("tab1_autoOn() = ");
-    tab1_interval = setInterval(updateLocation, 3000);
+    tab1_interval = setInterval(updateLocation, 180000);
 }
 
 function tab1_autoOff(){
-    console.log("tab1_autoOff() = ");
     clearInterval(tab1_interval);
 }
 
 function updateLocation() {
-    console.log("updateLocation");
     let currentLocation = JSON.parse(Android.getCurrentLocation());
 
     newInfo = {};
