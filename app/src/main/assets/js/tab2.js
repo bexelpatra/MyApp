@@ -14,7 +14,6 @@ function tab2_readFile(){
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
 
-    tab2_listToggle("hidden");
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }
@@ -56,6 +55,7 @@ async function tab2_save(lat, lon, autoFg){
     }
 }
 
+let tab2_markers = [];
 function tab2_createLiTag(locInfo){
     let visitList = document.getElementById("tab2_visitList");
     while (visitList.firstChild) {
@@ -67,18 +67,18 @@ function tab2_createLiTag(locInfo){
                     //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
                     + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
 
-        let markerStr = '방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
-                    + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
-                    + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
-
         let li = document.createElement('li');
         li.innerHTML = visit;
         li.onclick = function() {
-            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
-                .bindPopup(markerStr)
+            let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
+                .bindPopup(visit)
                 .openPopup();
 
-            tab2_map.setView([locInfo[i].lat, locInfo[i].lon], tab2_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
+
+            tab2_markers.push(tab2_marker);
+            tab2_ramoveMarker(i, tab2_marker);
+
+            tab2_map.setView([locInfo[i].lat, locInfo[i].lon], tab2_map.getZoom());
         };
         visitList.appendChild(li);
     }
@@ -104,4 +104,12 @@ function tab2_listOpen(){
 
 function tab2_currentLocation(){
     currentLocation(tab2_map,2);
+}
+
+let tab2_markIdx = [];
+function tab2_ramoveMarker(index, marker){
+    if(tab2_markIdx[index] != undefined){
+        tab2_markIdx[index].remove();
+    }
+    tab2_markIdx[index] = marker;
 }

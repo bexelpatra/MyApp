@@ -2,6 +2,7 @@ console.log("tab1.js");
 let tab1_map;
 let tab1_initFg = true;
 let tab1_interval;
+let tab1_markers = [];
 
 function tab1_markMap(){
     if(tab1_initFg){
@@ -15,7 +16,11 @@ function tab1_markMap(){
 
     if(locInfo != ""){
 
-        let tab1_markers = [];
+        tab1_markers.forEach(marker => {
+            marker.remove();
+        });
+        tab1_markers = []; // 배열 초기화
+
         let locLength = locInfo.length;
 
         let tab1_icon = L.divIcon({
@@ -35,12 +40,6 @@ function tab1_markMap(){
             tab1_line.push([locInfo[i].lat, locInfo[i].lon])
 
             tab1_markers.push(tab1_marker);
-/*            polyline.addLatLng(tab1_marker.getLatLng());
-
-            tab1_marker.on('dragend', function(e) {
-                let index = tab1_markers.indexOf(this);
-                polyline.setLatLngs(tab1_markers.map(m => m.getLatLng()));
-            });*/
         }
 
         let polyline = L.polyline([tab1_line], {
@@ -66,28 +65,14 @@ function fitMapToFarthestMarkers(markers) {
         bounds.extend(marker.getLatLng());
     });
 
-    // 지도의 크기와 경계를 기반으로 최적의 줌 레벨 계산
-    let mapWidth = tab1_map.getSize().x;
-    let mapHeight = tab1_map.getSize().y;
-
-    let latSpan = bounds.getNorth() - bounds.getSouth();
-    let lonSpan = bounds.getEast() - bounds.getWest();
-
     // 계산된 줌 레벨을 Leaflet의 최대 지원 줌 레벨(18)로 제한
     let maxZoom = Math.min(18, tab1_map.getBoundsZoom(bounds));
+
     // 지도 뷰 조정
     tab1_map.fitBounds(bounds, {
         padding: [50, 50],
         maxZoom: maxZoom
     });
-}
-
-function tab1_autoOn(){
-    tab1_interval = setInterval(updateLocation, 180000);
-}
-
-function tab1_autoOff(){
-    clearInterval(tab1_interval);
 }
 
 function updateLocation() {
@@ -105,4 +90,14 @@ function updateLocation() {
 
     let saveReturnData = Android.save(JSON.stringify(saveData));
     //console.log("####### saveReturn Data : " , saveReturnData);
+}
+
+function tab1_handleToggle(checkbox) {
+    if (checkbox.checked) {
+        console.log("체크됨");
+        tab1_interval = setInterval(updateLocation, 60000);
+    } else {
+        console.log("체크 해제됨");
+        clearInterval(tab1_interval);
+    }
 }

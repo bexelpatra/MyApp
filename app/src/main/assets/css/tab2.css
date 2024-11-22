@@ -21,12 +21,12 @@
     padding: 0%;
     display: none;
     overflow-y: auto;
-    height: 90%;
+    height: 76%;
     bottom: 1px;
     width: 88%;
 }
 .full-height {
-    height: 33% !important;
+    height: 45% !important;
 }
 .default-height {
     height: 30px !important;

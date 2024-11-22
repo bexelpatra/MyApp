@@ -50,6 +50,7 @@
         evt.currentTarget.className += " active";
 
         if(tabName == "Tab1"){
+            tab1_markMap()
             if(tab1_map != undefined) tab1_map.invalidateSize();
         }else if(tabName == "Tab2"){
             tab2_readFile();
@@ -80,8 +81,6 @@
     <!-- tab3 : 기록 보기 -->
     <div id="Tab3" class="tabcontent" include-html="./tab/tab3.html">
     </div>
-
-
 </body>
 
 <script>
