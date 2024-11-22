@@ -2,9 +2,69 @@
     width: 15px;
     height: 15px;
     border-radius: 50% 50% 50% 50%;
-    background: #58438d;
+    background: #654e9fb2;
     position: absolute;
     transform: rotate(-45deg);
     left: 50%;
     top: 50%;
+}
+
+.tab1-container {
+    display: flex;
+    align-items: center;
+}
+
+.tab1-checkbox-wrapper {
+    display: flex;
+    align-items: left;
+}
+
+.tab1-toggleSwitch {
+  width: 100px;
+  height: 50px;
+  display: block;
+  position: relative;
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 10px 3px #654e9f81;
+  cursor: pointer;
+  margin: 30px;
+}
+
+.tab1-toggleSwitch .tab1_toggleButton {
+   width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: #654e9fb2;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.tab1-toggle-icon::before {
+content: 'Off';
+color: white;
+font-size: 17px;
+font-weight: 900;
+}
+
+#tab1_toggle:checked ~ .tab1-toggleSwitch {
+  background: #654e9fb2;
+}
+
+#tab1_toggle:checked ~ .tab1-toggleSwitch .tab1_toggleButton {
+  left: calc(100% - 44px);
+  background: #58438d;
+}
+
+#tab1_toggle:checked ~ .tab1-toggleSwitch .tab1-toggle-icon::before {
+    content: 'On';
+}
+
+.tab1-toggleSwitch, .tab1_toggleButton {
+  transition: all 0.2s ease-in;
 }

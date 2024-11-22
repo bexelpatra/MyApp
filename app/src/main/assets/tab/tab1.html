@@ -1,6 +1,12 @@
-<div>
-    <button class="button" id="tab1_onBt" onClick="tab1_autoOn()">On</button>
-    <button class="button" id="tab1_offBt" onClick="tab1_autoOff()">Off</button>
+<div class="tab1-container">
     <button class="button" id="tab1_mapMark" onClick="tab1_markMap()">지도표시</button>
+    <div class="tab1-checkbox-wrapper">
+        <input type="checkbox" id="tab1_toggle" onchange="tab1_handleToggle(this)" hidden>
+        <label for="tab1_toggle" class="tab1-toggleSwitch">
+            <span class="tab1_toggleButton">
+                <i class="tab1-toggle-icon"></i>
+            </span>
+        </label>
+    </div>
 </div>
 <div id="tab1_map"></div>
