@@ -2,13 +2,10 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.location.LocationRequest
-import android.util.Log
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.CountDownLatch
@@ -70,7 +67,7 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         var timeString = dataObject.getString("time").split(" ")
         var time = timeString[0]
         var fileName = "${time}-${type}-.txt"
-        fileIo.writeFileCrypto(fileName,"${dataObject.toString()},")
+        fileIo.writeFileCrypto(fileName,dataObject)
     }
 
     // {"data":{"time":"2024-11-08","type":0}}"
