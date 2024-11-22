@@ -1,8 +1,7 @@
-console.log('tab3.js')
 let tab3_map;
 let tab3_initFg = true;
-
 let tab3_bottom = 'hidden'
+let tab3_markers=[]
 
 function tab3_initMap(){
     if(tab3_initFg){
@@ -16,6 +15,7 @@ function tab3_initMap(){
         tab3_initFg = false
     }
 }
+
 function appendHistory(items) {
     console.log(items)
     const tbody = document.getElementById('tableBody');
@@ -47,7 +47,7 @@ function tab3_search() {
         searchTerm:date
     }
     let list = Android.reqSearch(JSON.stringify(param))
-
+    console.log(list)
     return JSON.parse(list)
 }
 
@@ -86,67 +86,83 @@ function tab3_readFile(fileName){
         tab3_map.setView([distanceInfo.center.lat,distanceInfo.center.lon],getZoomLevel(distanceInfo.distance));
     }
 }
-let i = 2;
 
-function tab3_memoFucus(){
-    document.getElementById('tab3_memo').style.display='block'
-    document.getElementById('searchTerm').style.display='none'
-    document.getElementById('tab3_memo').focus()
+function tab3_memoFucus(locInfo){
+    let tab3_memo = document.getElementById('tab3_memo');
+    let tab3_searchTerm = document.getElementById('searchTerm');
+    tab3_memo.style.display='block'
+    tab3_searchTerm.style.display='none'
+    Object.keys(locInfo).forEach((key)=>{
+        tab3_memo.dataset[key] = locInfo[key]
+    })
+    tab3_memo.value = locInfo.memo
+    tab3_memo.focus()
 }
-function tab3_memoBlur(){
-    console.log("gogo")
-    document.getElementById('searchTerm').style.display='block'
-    document.getElementById('tab3_memo').style.display='none'
-}
-let tab3_markers=[]
+function tab3_updateMemo(locInfo){
 
-function tab3_resetMakers(){
-    markers.forEach(function(marker) {
-        map.removeLayer(marker);
-    });
-    markers = []; // Clear the array
 }
-function makeTextarea(popup){
-    let parentNode = document.getElementById('Tab3')
-    let textarea = document.createElement('textarea')
-    textarea.style.float="inner-start"
-    textarea.style.zIndex="1001"
-    textarea.style.position="absolute"
-    textarea.value = popup.innerText
-    parentNode.childNodes[0].before(textarea)
-    textarea.focus()
 
-    textarea.addEventListener('blur', function(e) {
-        console.log(e)
-        console.log(this)
-        popup.innerText = this.value
-        this.remove()
+function tab3_memoBlur(e){
+    let tab3_memo = document.getElementById('tab3_memo');
+    let tab3_searchTerm = document.getElementById('searchTerm');
+    tab3_memo.style.display='none'
+    tab3_searchTerm.style.display='block'
+    Android.showToast("저장되었습니다.")
+
+    Object.keys(tab3_memo.dataset).forEach((key)=>{
+        tab3_memo.removeAttribute(`data-${key}`)
     })
 }
+
+
+
+function tab3_resetMakers(){
+    tab3_markers.forEach((marker) =>{
+        tab3_map.removeLayer(marker);
+    });
+    tab3_markers = []; // Clear the array
+}
+
 function tab3_createLiTag(locationInfo){
 
-    let visitList = document.getElementById("visitList2");
+    let visitList = document.getElementById("tab3_visitList");
     console.log('tab3_createLiTag',locationInfo)
     locLength = locationInfo.length;
     for(let i=0; i<locLength; i++){
         // locationInfo[i].time
         // locationInfo[i].memo
-        let visit = `<div id="popupContent">
+        let visit = `<div class="popupContent">
                         <h3>방문장소 ${i} ${locationInfo[i].time}</h3>
-                        <p id="description" onclick='makeTextarea(this)'>${locationInfo[i].memo}</p>
+                        <p id="description_${i}" onclick="tab3_memoFucus(this)">${locationInfo[i].memo}</p>
                     </div>
                     `;
-
-        let li = document.createElement('li');
+        let div = document.createElement('div')
+        div.classList.add('popupContent')
+        let h3 = document.createElement('h3')
+        h3.innerText=`방문장소 ${i} ${locationInfo[i].time}`
+        let p = document.createElement('p')
+        p.id=`description_${i}`
+        p.onclick = function(){
+            console.log("goigo")
+            tab3_memoFucus(locationInfo[i])
+        }
+        p.innerText=locationInfo[i].memo;
         
-        li.innerHTML = visit;
+        div.appendChild(h3)
+        div.appendChild(p)
+        console.log(div)
+        let li = document.createElement('li');
+        // li.appendChild(div)
+        li.innerHTML = div.innerHTML;
 
-        marker = L.marker([locationInfo[i].lat, locationInfo[i].lon]).addTo(tab3_map).bindPopup(visit)
+        marker = L.marker([locationInfo[i].lat, locationInfo[i].lon]).addTo(tab3_map).bindPopup(div)
+                
         tab3_markers.push(marker)
         li.onclick = function() {
             marker.bindPopup(visit).openPopup();
             tab3_map.setView([locationInfo[i].lat, locationInfo[i].lon], tab3_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
+        console.log(li)
         // marker.on('popupopen',marker.on('popupopen', patch ));
         visitList.appendChild(li);
     }
