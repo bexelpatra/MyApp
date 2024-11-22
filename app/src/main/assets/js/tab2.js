@@ -14,7 +14,6 @@ function tab2_readFile(){
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
 
-    tab2_listToggle("hidden");
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }

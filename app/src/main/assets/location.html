@@ -50,6 +50,7 @@
         evt.currentTarget.className += " active";
 
         if(tabName == "Tab1"){
+            tab1_markMap()
             if(tab1_map != undefined) tab1_map.invalidateSize();
         }else if(tabName == "Tab2"){
             tab2_readFile();
