@@ -56,6 +56,7 @@ async function tab2_save(lat, lon, autoFg){
     }
 }
 
+let tab2_markers = [];
 function tab2_createLiTag(locInfo){
     let visitList = document.getElementById("tab2_visitList");
     while (visitList.firstChild) {
@@ -70,9 +71,13 @@ function tab2_createLiTag(locInfo){
         let li = document.createElement('li');
         li.innerHTML = visit;
         li.onclick = function() {
-            L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
+            let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
                 .bindPopup(visit)
                 .openPopup();
+
+
+            tab2_markers.push(tab2_marker);
+            tab2_ramoveMarker(i, tab2_marker);
 
             tab2_map.setView([locInfo[i].lat, locInfo[i].lon], tab2_map.getZoom());
         };
@@ -102,3 +107,10 @@ function tab2_currentLocation(){
     currentLocation(tab2_map,2);
 }
 
+let tab2_markIdx = [];
+function tab2_ramoveMarker(index, marker){
+    if(tab2_markIdx[index] != undefined){
+        tab2_markIdx[index].remove();
+    }
+    tab2_markIdx[index] = marker;
+}

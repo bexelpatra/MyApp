@@ -2,6 +2,7 @@ console.log("tab1.js");
 let tab1_map;
 let tab1_initFg = true;
 let tab1_interval;
+let tab1_markers = [];
 
 function tab1_markMap(){
     if(tab1_initFg){
@@ -14,7 +15,12 @@ function tab1_markMap(){
     let locInfo = JSON.parse(returnData);
 
     if(locInfo != ""){
-        let tab1_markers = [];
+
+        tab1_markers.forEach(marker => {
+            marker.remove();
+        });
+        tab1_markers = []; // 배열 초기화
+
         let locLength = locInfo.length;
 
         let tab1_icon = L.divIcon({
@@ -89,7 +95,7 @@ function updateLocation() {
 function tab1_handleToggle(checkbox) {
     if (checkbox.checked) {
         console.log("체크됨");
-        tab1_interval = setInterval(updateLocation, 1000);
+        tab1_interval = setInterval(updateLocation, 60000);
     } else {
         console.log("체크 해제됨");
         clearInterval(tab1_interval);
