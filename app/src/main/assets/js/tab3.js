@@ -107,9 +107,17 @@ function tab3_memoBlur(e){
     let tab3_searchTerm = document.getElementById('searchTerm');
     tab3_memo.style.display='none'
     tab3_searchTerm.style.display='block'
+
+    tab3_memo.dataset.memo = tab3_memo.value;
+    let param = {}
+    param.data=tab3_memo.dataset
+    param.type='1'
+
+    Android.updateFile(JSON.stringify(param))
     Android.showToast("저장되었습니다.")
 
     Object.keys(tab3_memo.dataset).forEach((key)=>{
+        console.log(key,tab3_memo.dataset[key])
         tab3_memo.removeAttribute(`data-${key}`)
     })
 }

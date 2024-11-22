@@ -80,6 +80,23 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
         return "[${arr}]"
     }
+    // {"data":{"time":"2024-11-08","type":0}}"
+    @JavascriptInterface
+    fun updateFile(data:String):String?{
+        var origin = JSONObject(data)
+        var dataObject = origin.getJSONObject("data")
+        var type = origin.getString("type")
+
+        var timeString = dataObject.getString("time").split(" ")
+        var time = timeString[0]
+
+        var year = time.split("-")[0]
+        var fileName = "${fileIo.rootDir.absolutePath}/${year}/${time}-${type}-.txt"
+        fileIo.updateFileContent(fileName,dataObject)
+
+
+        return ""
+    }
 
     @JavascriptInterface
     fun getCurrentLocation():String {

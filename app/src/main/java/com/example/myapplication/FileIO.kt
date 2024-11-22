@@ -21,13 +21,14 @@ fun main(){
     resultFiles = ArrayList<File>()
     var result = resultFiles.joinToString(prefix = "[", postfix = "]", separator = ",")
     println(result)
-    var x = "abccddd"
-    println(x.startsWith(""))
 
     var a = Pair("gogo",123)
     println(a)
     println(a.first)
     println(a.second)
+    var c = CryptoUtil()
+    println(c.decrypt("Zz9gW9ZUfKDOnKYKmpyW0DMjxFsiEy3G08aQP2PQTVquhQIBs1orDQJ92xrKnH6ltINVBLY+o/EanZGIiN5C0Z+ULv7qir1fat0jc6ob+PVLeLWKgr/byBiVKIFno9yaZBmQc5sbhr+1Z7Tf0Fsa9Q=="))
+
 }
 fun findAllFiles(dir: File, fileList :ArrayList<File>) {
     for (file :File in dir.listFiles()){
@@ -44,8 +45,8 @@ class FileIO {
     lateinit var rootDir :File
 
     init {
-//        rootDir = File(Environment.getExternalStorageDirectory(),"TimeAndPlace")
-        rootDir = File("d:/","TimeAndPlace")
+        rootDir = File(Environment.getExternalStorageDirectory(),"TimeAndPlace")
+//        rootDir = File("d:/","TimeAndPlace")
         if(!rootDir.exists()){
             rootDir.mkdirs()
         }
@@ -194,19 +195,13 @@ class FileIO {
     }
     // using a line order replace the line with content
     fun updateFileContent(fileName: String,content: JSONObject) {
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
             // Get the external storage directory
-            var time = fileName.split("-")[0]
-            val fileDir = File(rootDir, time)
-
-            if (!fileDir.exists()) {
-                fileDir.mkdirs()
-            }
-            var file = File(fileDir, fileName)
+            var file = File(fileName)
             if(!file.exists()){
                 return
             }
-            copyFileWithModification(file, content.toString(), content.getInt("order"))
+            copyFileWithModification(file, "${content.toString()},", content.getInt("order"))
         }
     }
 
@@ -221,7 +216,7 @@ class FileIO {
 
     fun copyFileWithModification(originalFile: File, content: String, order:Int) {
 
-        val newFile = File("temporary_${originalFile.name}")
+        val newFile = File("${originalFile.parent.toString()}temporary_.txt")
 
         if (!originalFile.exists()) {
             println("Original file does not exist!")
@@ -240,8 +235,9 @@ class FileIO {
                     reader.lineSequence().forEach { line ->
                         var modifiedLine = line
                         if(lineCount == order){
-                            modifiedLine = content
+                            modifiedLine = cryptoUtil.encrypt(content)
                         }
+                        println(modifiedLine)
                         lineCount+=1
                         writer.write(modifiedLine)
                         writer.newLine() // Write the line to the new file

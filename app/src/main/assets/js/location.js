@@ -63,7 +63,13 @@ function now(param){
 function findFarthestPair(locations) {
     let maxDistance = 0;
     let farthestPair = [];
-  
+    let result = {}
+    if(locations.length == 1 ){
+        result['farthestPair'] = [locations[0],locations[0]]
+        result['distance'] = maxDistance
+        result['center'] = {"lat" : locations[0].lat ,"lon":locations[0].lon}
+        return result;
+    }
     for (let i = 0; i < locations.length - 1; i++) {
       for (let j = i + 1; j < locations.length; j++) {
         const distance = calculateDistance(
@@ -79,7 +85,7 @@ function findFarthestPair(locations) {
         }
       }
     }
-    let result = {}
+
     result['farthestPair'] = farthestPair
     result['distance'] = maxDistance
     result['center'] = {"lat" : (farthestPair[0].lat*1 + farthestPair[1].lat*1)/2 ,"lon":(farthestPair[0].lon*1 + farthestPair[1].lon*1)/2}
