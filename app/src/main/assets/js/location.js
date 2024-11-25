@@ -78,7 +78,7 @@ function findFarthestPair(locations) {
           locations[j].lat,
           locations[j].lon
         );
-        if (distance > maxDistance) {
+        if (distance >= maxDistance) {
             console.log(distance)
           maxDistance = distance;
           farthestPair = [locations[i], locations[j]];
