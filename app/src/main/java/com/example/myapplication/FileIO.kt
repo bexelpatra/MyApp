@@ -8,7 +8,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 fun main(){
-//    val file = FileIO()
+    val file = FileIO()
     var temp = File("/timeandplace/temp.txt")
 
 //    FileIO().copyFileWithModification(temp,"얍",2)
@@ -26,8 +26,11 @@ fun main(){
     println(a)
     println(a.first)
     println(a.second)
-    var c = CryptoUtil()
-    println(c.decrypt("Zz9gW9ZUfKDOnKYKmpyW0DMjxFsiEy3G08aQP2PQTVquhQIBs1orDQJ92xrKnH6ltINVBLY+o/EanZGIiN5C0Z+ULv7qir1fat0jc6ob+PVLeLWKgr/byBiVKIFno9yaZBmQc5sbhr+1Z7Tf0Fsa9Q=="))
+//    var c = CryptoUtil()
+//    println(c.decrypt("Zz9gW9ZUfKDOnKYKmpyW0DMjxFsiEy3G08aQP2PQTVquhQIBs1orDQJ92xrKnH6ltINVBLY+o/EanZGIiN5C0Z+ULv7qir1fat0jc6ob+PVLeLWKgr/byBiVKIFno9yaZBmQc5sbhr+1Z7Tf0Fsa9Q=="))
+    var result2 = ArrayList<File>()
+    findAllFiles(File("D:/timeandplace"),result2)
+    result2.forEach { file: File ->    println(file.name) }
 
 }
 fun findAllFiles(dir: File, fileList :ArrayList<File>) {
@@ -37,6 +40,8 @@ fun findAllFiles(dir: File, fileList :ArrayList<File>) {
             fileList.add(file)
         }
     }
+    fileList.sortByDescending { it.name }
+
 }
 class FileIO {
 
@@ -74,7 +79,7 @@ class FileIO {
                     writer.write(fileContent)
                 }
                 writer.write(content)
-                writer.write("\n")
+                writer.write(System.lineSeparator())
                 writer.close()
                 println("File written to external storage: ${file.absolutePath}")
             } catch (e: IOException) {
@@ -153,6 +158,7 @@ class FileIO {
                 val writer  = fileOutputStream.writer()
                 if(fileContent != null){
                     writer.write(fileContent)
+                    writer.write(System.lineSeparator())
                 }
                 writer.write(encryptedContent)
                 writer.write(System.lineSeparator())
@@ -174,7 +180,6 @@ class FileIO {
         var stringBuilder = StringBuilder()
         if (file.exists()) {
             try {
-                val fileInputStream = FileInputStream(file)
                 file.bufferedReader().use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
@@ -240,7 +245,7 @@ class FileIO {
                         println(modifiedLine)
                         lineCount+=1
                         writer.write(modifiedLine)
-                        writer.newLine() // Write the line to the new file
+                        writer.write(System.lineSeparator()) // Write the line to the new file
                     }
                 }
             }
