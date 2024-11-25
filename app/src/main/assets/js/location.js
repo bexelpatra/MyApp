@@ -122,3 +122,78 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     }
     return 18;
   }
+
+/*
+let hbgLoc = {};
+hbgLoc.top = {};
+hbgLoc.middle = {};
+hbgLoc.bottom = {};
+hbgLoc.topC = {};
+hbgLoc.middleC = {};
+hbgLoc.bottomC = {};
+hbgLoc.top.top = "-90%";
+hbgLoc.top.right = "25%";
+hbgLoc.middle.top = "-120%";
+hbgLoc.middle.right = "25%";
+hbgLoc.bottom.top = "-150%";
+hbgLoc.bottom.right = "25%";
+hbgLoc.topC.top = "45%";
+hbgLoc.topC.right = "25%";
+hbgLoc.middleC.top = "-120%";
+hbgLoc.middleC.right = "25%";
+hbgLoc.bottomC.top = "-150%";
+hbgLoc.bottomC.right = "25%";
+*/
+function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
+    console.log("makeHamburger", hbgLoc)
+    // div 선택
+    let parentDiv = document.getElementById(divId);
+    //parentDiv.setAttribute('style', 'position: fixed; bottom: 0px; width: 95%; height: 30px; border-radius: 15px 15px 0 0; transition: all 0.35s; z-index: 1000; font-family: "Stylish", serif; font-weight: 400; font-style: normal; font-size: 1.3rem; cursor:pointer;');
+
+    // 새로운 div 생성
+    let newDiv = document.createElement('div');
+    newDiv.id = newDivId;
+    newDiv.setAttribute('style', 'border-radius: 15px 15px 0 0; position:relative; display:block; width: 100%; height: 30px; margin: 0 auto; display: flex; align-items: center; justify-content: right;');
+
+    // 새로운 checkbox 생성
+    let newCheckbox = document.createElement('input')
+    newCheckbox.type = 'checkbox';
+    newCheckbox.id = newCheckboxId;
+    newCheckbox.setAttribute('style','display: none;')
+
+    // label 생성
+    let newLabel = document.createElement('label');
+    newLabel.setAttribute('for', newCheckboxId);
+    newLabel.setAttribute('style', 'border-radius: 15px 15px 0 0; position:relative; display:block; height: 45px; margin: 0 auto; display: grid; left: 46%');
+    newLabel.onclick = labelFnc;
+
+    // 햄버거 모양 DIV 생성
+    let topDiv = document.createElement('div');
+    topDiv.setAttribute('style', 'top: '+hbgLoc.top.top+'; right: '+hbgLoc.top.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+
+    let middleDiv = document.createElement('div');
+    middleDiv.setAttribute('style', 'top: '+hbgLoc.middle.top+'; right: '+hbgLoc.middle.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+
+    let bottomDiv = document.createElement('div');
+    bottomDiv.setAttribute('style', 'top: '+hbgLoc.bottom.top+'; right: '+hbgLoc.bottom.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+
+    // 체크박스 상태 변경 감지
+    newCheckbox.onchange = function() {
+        if(this.checked) {
+            topDiv.setAttribute('style', 'transform: rotate(45deg); top: '+hbgLoc.topC.top+'; right: '+hbgLoc.topC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            middleDiv.setAttribute('style', 'transform: scale(0); top: '+hbgLoc.middleC.top+'; right: '+hbgLoc.middleC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            bottomDiv.setAttribute('style', 'transform: rotate(-45deg); top: '+hbgLoc.bottomC.top+'; right: '+hbgLoc.bottomC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+        } else {
+            topDiv.setAttribute('style', 'top: '+hbgLoc.top.top+'; right: '+hbgLoc.top.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            middleDiv.setAttribute('style', 'top: '+hbgLoc.middle.top+'; right: '+hbgLoc.middle.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            bottomDiv.setAttribute('style', 'top: '+hbgLoc.bottom.top+'; right: '+hbgLoc.bottom.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+        }
+    };
+
+    parentDiv.appendChild(newDiv);
+    parentDiv.appendChild(newCheckbox);
+    parentDiv.appendChild(newLabel);
+    newLabel.appendChild(topDiv);
+    newLabel.appendChild(middleDiv);
+    newLabel.appendChild(bottomDiv);
+}
