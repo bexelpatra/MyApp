@@ -21,6 +21,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.textfield.TextInputEditText
 import java.io.BufferedReader
@@ -42,7 +44,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        checkStoragePermissions()
-
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
         val webView: WebView = findViewById(R.id.webview)
 
         webView.settings.javaScriptEnabled = true

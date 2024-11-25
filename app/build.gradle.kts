@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.chaquo.python")
+
 }
 
 android {
@@ -15,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            // On Apple silicon, you can omit x86_64.
+            abiFilters += listOf("arm64-v8a", "x86_64")
+        }
     }
 
     buildTypes {
@@ -34,7 +40,18 @@ android {
         jvmTarget = "1.8"
     }
 }
+chaquopy {
+    defaultConfig {
+        pip {
+            // A requirement specifier, with or without a version number:
+            install("numpy")
+            install("requests")
 
+            install("./src/main/python") // Relative path to the Python directory
+
+        }
+    }
+}
 dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-play-services
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
