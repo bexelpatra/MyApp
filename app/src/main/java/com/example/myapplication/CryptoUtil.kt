@@ -7,6 +7,8 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 import android.util.Base64
+import org.bouncycastle.util.encoders.Base64Encoder
+import java.io.File
 
 class CryptoUtil {
 
@@ -44,4 +46,16 @@ class CryptoUtil {
 
         return String(decryptedBytes, Charsets.UTF_8)
     }
+}
+
+fun main(){
+    var util = CryptoUtil()
+
+    for (i in 1..9){
+//        var str ="{\"time\":\"2024-11-21  23:${10 + i}:22\",\"lat\":\"37.5699849\",\"lon\":\"126.97${i}5051\",\"memo\":\"test\"},"
+        var str ="{\"time\":\"2024-11-22  23:${10 + i}:22\",\"lat\":\"37.569${i}849\",\"lon\":\"126.97${i}5051\",\"memo\":\"test\"},"
+//        println(util.encrypt(str))
+        println(str)
+    }
+    var file = File ("")
 }
