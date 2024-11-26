@@ -123,56 +123,55 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return 18;
   }
 
-
+/*
+divId : 부모 div ID,
+newDivId : 생성할 햄버거 div ID,
+newCheckboxId : 생성할 햄버거 체크박스 ID,
+labelFnc : 햄버거 클릭 시 호출하는 함수,
+hbgLoc : 햄버거 위치 CSS로 조정
+*/
 function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     console.log("makeHamburger", hbgLoc)
     if(hbgLoc == undefined){
         // Default values for hbgLoc
         let defaultLoc = {
-            top: { top: '-90%', right: '25%' },
-            middle: { top: '-120%', right: '25%' },
-            bottom: { top: '-150%', right: '25%' },
-            topC: { top: '45%', right: '25%' },
-            middleC: { top: '-120%', right: '25%' },
-            bottomC: { top: '-150%', right: '25%' }
+            top: { style: 'left:1%;' },
+            middle: { style: 'left:1%;' },
+            bottom: { style: 'left:1%;' },
+            topC: { style: 'left:1%;' },
+            middleC: { style: 'left:1%;' },
+            bottomC: { style: 'left:1%;' }
         };
 
         // Merge default values with provided hbgLoc using nullish coalescing
         hbgLoc = {
             top: {
-                top: hbgLoc?.top?.top ?? defaultLoc.top.top,
-                right: hbgLoc?.top?.right ?? defaultLoc.top.right
+                style: hbgLoc?.top?.style ?? defaultLoc.top.style
             },
             middle: {
-                top: hbgLoc?.middle?.top ?? defaultLoc.middle.top,
-                right: hbgLoc?.middle?.right ?? defaultLoc.middle.right
+                style: hbgLoc?.middle?.style ?? defaultLoc.middle.style
             },
             bottom: {
-                top: hbgLoc?.bottom?.top ?? defaultLoc.bottom.top,
-                right: hbgLoc?.bottom?.right ?? defaultLoc.bottom.right
+                style: hbgLoc?.bottom?.style ?? defaultLoc.bottom.style
             },
             topC: {
-                top: hbgLoc?.topC?.top ?? defaultLoc.topC.top,
-                right: hbgLoc?.topC?.right ?? defaultLoc.topC.right
+                style: hbgLoc?.topC?.style ?? defaultLoc.topC.style
             },
             middleC: {
-                top: hbgLoc?.middleC?.top ?? defaultLoc.middleC.top,
-                right: hbgLoc?.middleC?.right ?? defaultLoc.middleC.right
+                style: hbgLoc?.middleC?.style ?? defaultLoc.middleC.style
             },
             bottomC: {
-                top: hbgLoc?.bottomC?.top ?? defaultLoc.bottomC.top,
-                right: hbgLoc?.bottomC?.right ?? defaultLoc.bottomC.right
+                style: hbgLoc?.bottomC?.style ?? defaultLoc.bottomC.style
             }
         };
     }
     // div 선택
     let parentDiv = document.getElementById(divId);
-    //parentDiv.setAttribute('style', 'position: fixed; bottom: 0px; width: 95%; height: 30px; border-radius: 15px 15px 0 0; transition: all 0.35s; z-index: 1000; font-family: "Stylish", serif; font-weight: 400; font-style: normal; font-size: 1.3rem; cursor:pointer;');
 
     // 새로운 div 생성
     let newDiv = document.createElement('div');
     newDiv.id = newDivId;
-    newDiv.setAttribute('style', 'border-radius: 15px 15px 0 0; position:relative; display:block; width: 100%; height: 30px; margin: 0 auto; display: flex; align-items: center; justify-content: right;');
+    newDiv.setAttribute('style', 'border-radius: 15px 15px 0 0; position:relative; display:block; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: right;');
 
     // 새로운 checkbox 생성
     let newCheckbox = document.createElement('input')
@@ -183,29 +182,29 @@ function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     // label 생성
     let newLabel = document.createElement('label');
     newLabel.setAttribute('for', newCheckboxId);
-    newLabel.setAttribute('style', 'border-radius: 15px 15px 0 0; position:relative; display:block; height: 45px; margin: 0 auto; display: grid; left: 46%');
+    newLabel.setAttribute('style', 'height:36px; border-radius: 15px 15px 0 0; position:relative; display:block; margin: 0 auto; display: grid;');
     newLabel.onclick = labelFnc;
 
     // 햄버거 모양 DIV 생성
     let topDiv = document.createElement('div');
-    topDiv.setAttribute('style', 'top: '+hbgLoc.top.top+'; right: '+hbgLoc.top.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+    topDiv.setAttribute('style', hbgLoc.top.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 5px; transition: all 0.2s ease-in-out; border-radius: 35px;');
 
     let middleDiv = document.createElement('div');
-    middleDiv.setAttribute('style', 'top: '+hbgLoc.middle.top+'; right: '+hbgLoc.middle.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+    middleDiv.setAttribute('style', hbgLoc.middle.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 5px; transition: all 0.2s ease-in-out; border-radius: 35px;');
 
     let bottomDiv = document.createElement('div');
-    bottomDiv.setAttribute('style', 'top: '+hbgLoc.bottom.top+'; right: '+hbgLoc.bottom.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+    bottomDiv.setAttribute('style', hbgLoc.bottom.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 5px; transition: all 0.2s ease-in-out; border-radius: 35px;');
 
     // 체크박스 상태 변경 감지
     newCheckbox.onchange = function() {
         if(this.checked) {
-            topDiv.setAttribute('style', 'transform: rotate(45deg); top: '+hbgLoc.topC.top+'; right: '+hbgLoc.topC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
-            middleDiv.setAttribute('style', 'transform: scale(0); top: '+hbgLoc.middleC.top+'; right: '+hbgLoc.middleC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
-            bottomDiv.setAttribute('style', 'transform: rotate(-45deg); top: '+hbgLoc.bottomC.top+'; right: '+hbgLoc.bottomC.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            topDiv.setAttribute('style', hbgLoc.topC.style+'transform: rotate(45deg); top:11px;  background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            middleDiv.setAttribute('style', hbgLoc.middleC.style+'transform: scale(0); background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            bottomDiv.setAttribute('style', hbgLoc.bottomC.style+'transform: rotate(-45deg); bottom:12px; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
         } else {
-            topDiv.setAttribute('style', 'top: '+hbgLoc.top.top+'; right: '+hbgLoc.top.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
-            middleDiv.setAttribute('style', 'top: '+hbgLoc.middle.top+'; right: '+hbgLoc.middle.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
-            bottomDiv.setAttribute('style', 'top: '+hbgLoc.bottom.top+'; right: '+hbgLoc.bottom.right+'; background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            topDiv.setAttribute('style', hbgLoc.top.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            middleDiv.setAttribute('style', hbgLoc.middle.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
+            bottomDiv.setAttribute('style', hbgLoc.bottom.style+'background-color: #000; position: relative; width: 40px; height: 5px; margin-top: 7px; transition: all 0.2s ease-in-out; border-radius: 35px;');
         }
     };
 
