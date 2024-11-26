@@ -9,7 +9,7 @@ function initMap(divId, zoom){
 
     // OpenStreetMap 타일 레이어 추가
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+        attribution: ''
     }).addTo(map);
 
     return map
@@ -123,29 +123,48 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return 18;
   }
 
-/*
-let hbgLoc = {};
-hbgLoc.top = {};
-hbgLoc.middle = {};
-hbgLoc.bottom = {};
-hbgLoc.topC = {};
-hbgLoc.middleC = {};
-hbgLoc.bottomC = {};
-hbgLoc.top.top = "-90%";
-hbgLoc.top.right = "25%";
-hbgLoc.middle.top = "-120%";
-hbgLoc.middle.right = "25%";
-hbgLoc.bottom.top = "-150%";
-hbgLoc.bottom.right = "25%";
-hbgLoc.topC.top = "45%";
-hbgLoc.topC.right = "25%";
-hbgLoc.middleC.top = "-120%";
-hbgLoc.middleC.right = "25%";
-hbgLoc.bottomC.top = "-150%";
-hbgLoc.bottomC.right = "25%";
-*/
+
 function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     console.log("makeHamburger", hbgLoc)
+    if(hbgLoc == undefined){
+        // Default values for hbgLoc
+        let defaultLoc = {
+            top: { top: '-90%', right: '25%' },
+            middle: { top: '-120%', right: '25%' },
+            bottom: { top: '-150%', right: '25%' },
+            topC: { top: '45%', right: '25%' },
+            middleC: { top: '-120%', right: '25%' },
+            bottomC: { top: '-150%', right: '25%' }
+        };
+
+        // Merge default values with provided hbgLoc using nullish coalescing
+        hbgLoc = {
+            top: {
+                top: hbgLoc?.top?.top ?? defaultLoc.top.top,
+                right: hbgLoc?.top?.right ?? defaultLoc.top.right
+            },
+            middle: {
+                top: hbgLoc?.middle?.top ?? defaultLoc.middle.top,
+                right: hbgLoc?.middle?.right ?? defaultLoc.middle.right
+            },
+            bottom: {
+                top: hbgLoc?.bottom?.top ?? defaultLoc.bottom.top,
+                right: hbgLoc?.bottom?.right ?? defaultLoc.bottom.right
+            },
+            topC: {
+                top: hbgLoc?.topC?.top ?? defaultLoc.topC.top,
+                right: hbgLoc?.topC?.right ?? defaultLoc.topC.right
+            },
+            middleC: {
+                top: hbgLoc?.middleC?.top ?? defaultLoc.middleC.top,
+                right: hbgLoc?.middleC?.right ?? defaultLoc.middleC.right
+            },
+            bottomC: {
+                top: hbgLoc?.bottomC?.top ?? defaultLoc.bottomC.top,
+                right: hbgLoc?.bottomC?.right ?? defaultLoc.bottomC.right
+            }
+        };
+    }
     // div 선택
     let parentDiv = document.getElementById(divId);
     //parentDiv.setAttribute('style', 'position: fixed; bottom: 0px; width: 95%; height: 30px; border-radius: 15px 15px 0 0; transition: all 0.35s; z-index: 1000; font-family: "Stylish", serif; font-weight: 400; font-style: normal; font-size: 1.3rem; cursor:pointer;');
