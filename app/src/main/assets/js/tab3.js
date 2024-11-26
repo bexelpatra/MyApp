@@ -25,13 +25,16 @@ function appendHistory(items) {
         tr.innerHTML = `
             <td>기록</td>
             <td>${item}</td>
+            <td onclick="tab3_title(${item})">수정하기</td>
         `;
         tr.setAttribute("onclick","tab3_listOpen(this)")
         tr.setAttribute("value",item)
         tbody.appendChild(tr);
     });
 }
-
+function tab3_title(fileName){
+    
+}
 // get file names
 function tab3_search() {
     let temp = document.getElementById("searchTerm").value
@@ -47,7 +50,6 @@ function tab3_search() {
         searchTerm:date
     }
     let list = Android.reqSearch(JSON.stringify(param))
-    console.log(list)
     return JSON.parse(list)
 }
 
@@ -81,20 +83,23 @@ function tab3_readFile(fileName){
     let distanceInfo ;
     if(locationInfo != ""){
         distanceInfo = findFarthestPair(locationInfo);
-        console.log(distanceInfo)
-        tab3_createLiTag(locationInfo);
+        tab3_createLiTag(locationInfo,fileName);
         tab3_map.setView([distanceInfo.center.lat,distanceInfo.center.lon],getZoomLevel(distanceInfo.distance));
     }
 }
 
-function tab3_memoFucus(locInfo){
+function tab3_memoFucus(locInfo,fileName){
     let tab3_memo = document.getElementById('tab3_memo');
     let tab3_searchTerm = document.getElementById('searchTerm');
     tab3_memo.style.display='block'
     tab3_searchTerm.style.display='none'
+    console.log(locInfo)
+    tab3_memo.dataset['fileName'] = fileName
     Object.keys(locInfo).forEach((key)=>{
         tab3_memo.dataset[key] = locInfo[key]
     })
+
+
     tab3_memo.value = locInfo.memo
     tab3_memo.focus()
 }
@@ -122,7 +127,7 @@ function tab3_memoBlur(e){
         tab3_memo.removeAttribute(`data-${key}`)
     })
 
-    // tab3_readFile()
+    tab3_readFile(tab3_memo.dataset.fileName)
 }
 
 
@@ -134,17 +139,16 @@ function tab3_resetMakers(){
     tab3_markers = []; // Clear the array
 }
 
-function tab3_createLiTag(locationInfo){
+function tab3_createLiTag(locationInfo,fileName){
 
     let visitList = document.getElementById("tab3_visitList");
-    console.log('tab3_createLiTag',locationInfo)
     locLength = locationInfo.length;
     for(let i=0; i<locLength; i++){
         // locationInfo[i].time
         // locationInfo[i].memo
         let visit = `<div class="popupContent">
                         <h3>방문장소 ${i} ${locationInfo[i].time}</h3>
-                        <p id="description_${i}" onclick="tab3_memoFucus(this)">${locationInfo[i].memo}</p>
+                        <p id="description_${i}">${locationInfo[i].memo}</p>
                     </div>
                     `;
         let div = document.createElement('div')
@@ -161,11 +165,9 @@ function tab3_createLiTag(locationInfo){
         innerDiv.appendChild(h3)
         innerDiv.appendChild(p)
         innerDiv.onclick = function(){
-            tab3_memoFucus(locationInfo[i])
+            tab3_memoFucus(locationInfo[i],fileName)
         }
-
         div.appendChild(innerDiv)
-        console.log(div)
         let li = document.createElement('li');
         // li.appendChild(div)
         li.innerHTML = div.innerHTML;
@@ -177,7 +179,7 @@ function tab3_createLiTag(locationInfo){
             marker.bindPopup(visit).openPopup();
             tab3_map.setView([locationInfo[i].lat, locationInfo[i].lon], tab3_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
-        console.log(li)
+        
         // marker.on('popupopen',marker.on('popupopen', patch ));
         visitList.appendChild(li);
     }
@@ -193,13 +195,15 @@ function tab3_listToggle(param){
 }
 function tab3_listOpen(el){
     console.log(typeof el ,el, el.getAttribute('value'))
-    document.getElementById('tab3_bottomListContainer').classList.toggle('full-height_2');
+    document.getElementById('table-container').style.display = 'none'
+    document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
+    
     tab3_readFile(el.getAttribute('value'))
-
 }
 
 function tab3_listClose(el){
-    document.getElementById('tab3_bottomListContainer').classList.remove('full-height_2')
+    document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down')
+    document.getElementById('table-container').style.display = 'block'
     tab3_resetMakers()
 }
 

@@ -1,5 +1,5 @@
 .table-container {
-    height: 84dvh; /* Fixed height */
+    height: 85dvh; /* Fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -12,7 +12,7 @@
     position: sticky;
     top: 0;
     background: white;
-    z-index: 3001;
+    z-index: 1;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,14 +42,15 @@ tr:hover {
 }
 
 
+
 .tab3-bottom-list-container {
-    position: fixed;
+    position: relative;
     bottom: 0px;
     width: 95%;
     height: 0px;
     border-radius: 15px 15px 0 0;
     transition: all 0.35s;
-    z-index: 3002;
+    z-index: 1000;
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
@@ -67,8 +68,9 @@ tr:hover {
     bottom: 1px;
     width: 100%;
 }
-.full-height_2 {
-    height: 93dvh !important;
+
+.bottom-down {
+    bottom: -92dvh !important;
 }
 .default-height {
     height: 30px !important;
@@ -80,3 +82,9 @@ tr:hover {
     padding: 10px 0;
     border-bottom: 1px solid #654e9fb2;
 }
+
+/* td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } */

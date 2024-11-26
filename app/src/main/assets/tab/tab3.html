@@ -7,27 +7,28 @@
     >
     <!-- <button class="button" onclick="search()">Add Item</button> -->
     <textarea id="tab3_memo" style="display:none; position: fixed; z-index: 3004;" onblur="tab3_memoBlur(this)"></textarea>
-</div>
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>type</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- Items will be added here -->
-        </tbody>
-    </table>
-</div>
-<div class="tab3-bottom-list-container" id="tab3_bottomListContainer">
-    <div style="width: 100px; height: 30px; display:inline-block,; position: absolute; z-index: 10; right: 10px; top: 0px; z-index: 999;">
-        <button class="button" onclick="tab3_listClose()" style="float: inline-end;">종료</button>
-        <!-- <button class="button" onclick="tab3_memoFucus()" style="float: inline-end;">테스트</button> -->
+    
+    <div class="table-container" id="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>종류</th>
+                    <th>이름</th>
+                    <th>수정</th>
+                </tr>
+
+            </thead>
+            <tbody id="tableBody">
+                <!-- Items will be added here -->
+            </tbody>
+        </table>
     </div>
-    <div id="tab3_map" style="height: 730px; width: 99%;"></div>
-    <ul class="tab3-bottom-list" id="tab3_visitList"></ul>
+    <div class="tab3-bottom-list-container bottom-down" id="tab3_bottomListContainer">
+        <div style="width: 100px; height: 30px; display:inline-block,; position: absolute; z-index: 10; right: 10px; top: 0px; z-index: 999;">
+            <button class="button" onclick="tab3_listClose()" style="float: inline-end;">종료</button>
+            <!-- <button class="button" onclick="tab3_memoFucus()" style="float: inline-end;">테스트</button> -->
+        </div>
+        <div id="tab3_map" style="height: 730px; width: 99%;"></div>
+        <ul class="tab3-bottom-list" id="tab3_visitList"></ul>
+    </div>
 </div>
-
-
