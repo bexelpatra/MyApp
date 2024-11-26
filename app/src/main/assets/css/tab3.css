@@ -12,7 +12,7 @@
     position: sticky;
     top: 0;
     background: white;
-    z-index: 1;
+    z-index: 3001;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,7 +42,6 @@ tr:hover {
 }
 
 
-
 .tab3-bottom-list-container {
     position: fixed;
     bottom: 0px;
@@ -50,7 +49,7 @@ tr:hover {
     height: 0px;
     border-radius: 15px 15px 0 0;
     transition: all 0.35s;
-    z-index: 1000;
+    z-index: 3002;
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
@@ -69,7 +68,7 @@ tr:hover {
     width: 100%;
 }
 .full-height_2 {
-    height: 86dvh !important;
+    height: 93dvh !important;
 }
 .default-height {
     height: 30px !important;
