@@ -1,5 +1,5 @@
 .table-container {
-    height: 85dvh; /* Fixed height */
+    height: 84dvh; /* Fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
     border: 1px solid #ddd;
     border-radius: 4px;
