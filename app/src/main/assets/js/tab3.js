@@ -147,17 +147,22 @@ function tab3_createLiTag(locationInfo){
                     `;
         let div = document.createElement('div')
         div.classList.add('popupContent')
+        let innerDiv = document.createElement('div')
+        div.classList.add('inner')
+
         let h3 = document.createElement('h3')
         h3.innerText=`방문장소 ${i} ${locationInfo[i].time}`
         let p = document.createElement('p')
         p.id=`description_${i}`
-        p.onclick = function(){
-            tab3_memoFucus(locationInfo[i])
-        }
+        // p.onclick = function(){
+        //     tab3_memoFucus(locationInfo[i])
+        // }
         p.innerText=locationInfo[i].memo;
         
-        div.appendChild(h3)
-        div.appendChild(p)
+        innerDiv.appendChild(h3)
+        innerDiv.appendChild(p)
+        
+        div.appendChild(innerDiv)
         console.log(div)
         let li = document.createElement('li');
         // li.appendChild(div)
