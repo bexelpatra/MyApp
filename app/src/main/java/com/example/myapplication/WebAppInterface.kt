@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.LocationRequest
 import android.webkit.JavascriptInterface
 import android.widget.Toast
+import com.chaquo.python.Python
 import com.google.android.gms.location.LocationServices
 import org.json.JSONObject
 import java.io.File
@@ -102,6 +103,14 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     fun getCurrentLocation():String {
         var map = getLocationSynchronously()
         return  JSONObject.wrap(map).toString()
+    }
+    @JavascriptInterface
+    fun getPython():String {
+        val python = Python.getInstance()
+        val pythonModule = python.getModule("my_script")
+        val result3 = pythonModule.callAttr("greet", "Android")
+        println(result3)
+        return result3.toString()
     }
 
     // 아직 이해가 안 가는 소스다...
