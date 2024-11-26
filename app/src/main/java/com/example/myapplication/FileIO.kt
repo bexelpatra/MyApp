@@ -245,7 +245,7 @@ class FileIO {
                         println(modifiedLine)
                         lineCount+=1
                         writer.write(modifiedLine)
-                        writer.write(System.lineSeparator()) // Write the line to the new file
+                        writer.write("\n") // Write the line to the new file
                     }
                 }
             }
