@@ -98,6 +98,7 @@ function tab3_memoFucus(locInfo){
     tab3_memo.value = locInfo.memo
     tab3_memo.focus()
 }
+
 function tab3_updateMemo(locInfo){
 
 }
@@ -151,7 +152,6 @@ function tab3_createLiTag(locationInfo){
         let p = document.createElement('p')
         p.id=`description_${i}`
         p.onclick = function(){
-            console.log("goigo")
             tab3_memoFucus(locationInfo[i])
         }
         p.innerText=locationInfo[i].memo;
@@ -186,13 +186,13 @@ function tab3_listToggle(param){
 }
 function tab3_listOpen(el){
     console.log(typeof el ,el, el.getAttribute('value'))
-    document.getElementById('bottomListContainer2').classList.toggle('full-height_2');
+    document.getElementById('tab3_bottomListContainer').classList.toggle('full-height_2');
     tab3_readFile(el.getAttribute('value'))
 
 }
 
 function tab3_listClose(el){
-    document.getElementById('bottomListContainer2').classList.remove('full-height_2')
+    document.getElementById('tab3_bottomListContainer').classList.remove('full-height_2')
     tab3_resetMakers()
 }
 
