@@ -135,12 +135,12 @@ function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     if(hbgLoc == undefined){
         // Default values for hbgLoc
         let defaultLoc = {
-            top: { style: 'left:10%;' },
-            middle: { style: 'left:10%;' },
-            bottom: { style: 'left:10%;' },
-            topC: { style: 'left:10%;' },
-            middleC: { style: 'left:10%;' },
-            bottomC: { style: 'left:10%;' }
+            top: { style: 'left:1%;' },
+            middle: { style: 'left:1%;' },
+            bottom: { style: 'left:1%;' },
+            topC: { style: 'left:1%;' },
+            middleC: { style: 'left:1%;' },
+            bottomC: { style: 'left:1%;' }
         };
 
         // Merge default values with provided hbgLoc using nullish coalescing
