@@ -3,7 +3,9 @@ html, body {
     height: 98.5%
 }
 .tabcontent {
-     height: 92.5%
+    height: 92.5%;
+    width : 97%;
+    position : absolute    
 }
 
 #tab1_map {
