@@ -225,7 +225,7 @@ class FileIO {
                     while (reader.readLine().also { line = it } != null) {
                         println(line) // Process each line as needed
 //                        stringBuilder.append(line?.let { cryptoUtil.decrypt(it) })
-                        stringBuilder.append(line?.let { "$it," })
+                        stringBuilder.append(line?.let { it })
                     }
                     reader.close()
                 }
