@@ -23,8 +23,6 @@ html, body {
     box-shadow: 0 0 5px 5px #654e9f23;
 }
 #tab3_map {
-    height: 98.6%;
-    width: 99%;
     border-radius: 12px; /* 둥근 모서리 */
     border: 2px solid #58438d;
     box-shadow: 0 0 5px 5px #654e9f23;

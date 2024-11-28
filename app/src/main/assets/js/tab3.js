@@ -17,7 +17,7 @@ function tab3_initMap(){
 }
 
 function appendHistory(items) {
-    console.log(items)
+    //console.log(items)
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
     items.forEach((item, index) => {
@@ -68,7 +68,6 @@ function handleInput(el,value) {
     list = tab3_search()
     // list=['2024-11-18-1-.txt','2024-11-19-1-.txt']
     appendHistory(list)
-    
 }
 
 function tab3_readFile(fileName){
@@ -77,7 +76,7 @@ function tab3_readFile(fileName){
     let time = ymdte.splice(0,3).join('-')
     let fileType = ymdte.splice(0,1).join('')
     let returnData = Android.readFile(time,fileType);
-    console.log("##### tab returnData : ", returnData);
+    //console.log("##### tab returnData : ", returnData);
     let locationInfo = JSON.parse(returnData);
     
     let distanceInfo ;
@@ -93,7 +92,7 @@ function tab3_memoFucus(locInfo,fileName){
     let tab3_searchTerm = document.getElementById('searchTerm');
     tab3_memo.style.display='block'
     tab3_searchTerm.style.display='none'
-    console.log(locInfo)
+    //console.log(locInfo)
     tab3_memo.dataset['fileName'] = fileName
     Object.keys(locInfo).forEach((key)=>{
         tab3_memo.dataset[key] = locInfo[key]
@@ -123,7 +122,7 @@ function tab3_memoBlur(e){
     Android.showToast("저장되었습니다.")
 
     Object.keys(tab3_memo.dataset).forEach((key)=>{
-        console.log(key,tab3_memo.dataset[key])
+        //console.log(key,tab3_memo.dataset[key])
         tab3_memo.removeAttribute(`data-${key}`)
     })
 
@@ -194,7 +193,7 @@ function tab3_listToggle(param){
     }
 }
 function tab3_listOpen(el){
-    console.log(typeof el ,el, el.getAttribute('value'))
+    //console.log(typeof el ,el, el.getAttribute('value'))
     document.getElementById('table-container').style.display = 'none'
     document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
     
@@ -229,11 +228,11 @@ function patch(e) {
         // Event listener when input loses focus
         input.addEventListener('blur', function() {
             // Update the hidden paragraph with new text
-            console.log(this)
-            console.log(this.value)
+            //console.log(this)
+            //console.log(this.value)
             var originalP = this.previousElementSibling;
             originalP.textContent = this.value;
-            console.log(this.originalP)
+            //console.log(this.originalP)
             
             // Remove the input
             // this.remove();
@@ -244,7 +243,7 @@ function patch(e) {
             // Re-add click event listener
             originalP.addEventListener('click', function() {
                 // Your click-to-edit logic
-                console.log("???")
+                //console.log("???")
             });
         });
 

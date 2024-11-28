@@ -55,7 +55,7 @@ function now(param){
     let dateString;
     if(param == 1) dateString = year + '-' + month  + '-' + day;
     if(param == 2) dateString = hours + ':' + minutes  + ':' + seconds;
-    if(param == 3) dateString = year + '-' + month  + '-' + day + '  ' + hours + ':' + minutes  + ':' + seconds;
+    if(param == 3) dateString = year + '-' + month  + '-' + day + ' ' + hours + ':' + minutes  + ':' + seconds;
 
     return dateString;
 }
@@ -79,7 +79,7 @@ function findFarthestPair(locations) {
           locations[j].lon
         );
         if (distance >= maxDistance) {
-            console.log(distance)
+            //console.log(distance)
           maxDistance = distance;
           farthestPair = [locations[i], locations[j]];
         }
@@ -131,7 +131,6 @@ labelFnc : 햄버거 클릭 시 호출하는 함수,
 hbgLoc : 햄버거 위치 CSS로 조정
 */
 function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
-    console.log("makeHamburger", hbgLoc)
     if(hbgLoc == undefined){
         // Default values for hbgLoc
         let defaultLoc = {
