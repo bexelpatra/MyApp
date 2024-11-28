@@ -61,17 +61,12 @@ fun mytest2(){
 @RequiresApi(Build.VERSION_CODES.P)
 fun main(){
 //    mytest1()
-    var map = HashMap<String,String>()
-
-
-    map.put("1","3");
-    map.put("2","3");
-    map.put("3","3");
-    with(map){
-        var a = "$1"
-        println(a)
-    }
+    var temp = "12122";
+    var result  = temp.startsWith("")
+    println(result)
+    println("".length)
 }
+
 fun findAllFiles(dir: File, fileList :ArrayList<File>) {
     for (file :File in dir.listFiles()){
         if(file.isDirectory) findAllFiles(file,fileList)
@@ -195,7 +190,7 @@ class FileIO {
         writeFileCrypto(fileName,content,',')
     }
     fun readFileCrypto(fileName: String): String? {
-        val file = findFile(fileName) ?: return "File does not exist."
+        val file = findFile(fileName) ?: return ""
 
         var stringBuilder = StringBuilder()
         if (file.exists()) {
@@ -216,7 +211,7 @@ class FileIO {
         } else {
             println("File does not exist.")
         }
-        return null
+        return ""
     }
     // using a line order replace the line with content
     fun updateFileContent(fileName: String,content: JSONObject) {
