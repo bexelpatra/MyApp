@@ -108,7 +108,6 @@ function tab3_search() {
 
 // only number, length < 9
 function handleInput(el,value) {
-    // Remove any non-numeric characters
     let cleanValue = value.replace(/[^0-9]/g, '');
     if(cleanValue.length>8){
         cleanValue = cleanValue.substr(0,8)
@@ -245,15 +244,21 @@ function tab3_listOpen(el){
     if(input){
         return
     }
+    let listContainer = document.querySelector('.tab3-bottom-list-container');
+    listContainer.style.display = 'block';
+    setTimeout(function(){
+        document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
+    },10)
     document.getElementById('table-container').style.display = 'none'
-    document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
-    
     tab3_readFile(el.getAttribute('value'))
 }
 
 function tab3_listClose(el){
     document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down')
     document.getElementById('table-container').style.display = 'block'
+
+    let listContainer = document.querySelector('.tab3-bottom-list-container');
+    listContainer.style.display = 'none';
     tab3_resetMakers()
 }
 
