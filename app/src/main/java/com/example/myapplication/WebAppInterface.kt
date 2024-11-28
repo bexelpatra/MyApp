@@ -5,7 +5,7 @@ import android.content.Context
 import android.location.LocationRequest
 import android.webkit.JavascriptInterface
 import android.widget.Toast
-import com.chaquo.python.Python
+//import com.chaquo.python.Python
 import com.google.android.gms.location.LocationServices
 import org.json.JSONObject
 import java.io.File
@@ -76,7 +76,7 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     fun readFile(time:String,type :String):String?{
         var year = time.split("-")[0]
         var fileName = "${fileIo.rootDir.absolutePath}/${year}/${time}-${type}-.txt"
-        val fileContent = fileIo.readFileCrypto(fileName)
+        val fileContent = fileIo.readFileCrypto("${time}-${type}")
         var arr = fileContent?.subSequence(0,fileContent.length-1)
 
         return "[${arr}]"
@@ -90,10 +90,23 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
         var timeString = dataObject.getString("time").split(" ")
         var time = timeString[0]
+        fileIo.updateFileContent("${time}-${type}",dataObject)
 
-        var year = time.split("-")[0]
-        var fileName = "${fileIo.rootDir.absolutePath}/${year}/${time}-${type}-.txt"
-        fileIo.updateFileContent(fileName,dataObject)
+
+        return ""
+    }
+    @JavascriptInterface
+    fun updateTitle(data:String):String?{
+        var origin = JSONObject(data)
+        var dataObject = origin.getJSONObject("data")
+
+        var ymdt = dataObject.getString("ymdt")
+        var year = ymdt.split("-")[0]
+
+        var newFileName = dataObject.getString("newFileName")
+        var fileName = "${ymdt}${newFileName}.txt"
+
+        fileIo.updateFileTitle("${ymdt}",fileName)
 
 
         return ""
@@ -106,11 +119,12 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     }
     @JavascriptInterface
     fun getPython():String {
-        val python = Python.getInstance()
-        val pythonModule = python.getModule("my_script")
-        val result3 = pythonModule.callAttr("greet", "Android")
-        println(result3)
-        return result3.toString()
+//        val python = Python.getInstance()
+//        val pythonModule = python.getModule("my_script")
+//        val result3 = pythonModule.callAttr("greet", "Android")
+//        print(result3)
+//        return result3.toString()
+        return "1"
     }
 
     // 아직 이해가 안 가는 소스다...

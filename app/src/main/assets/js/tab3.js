@@ -22,19 +22,73 @@ function appendHistory(items) {
     tbody.innerHTML = '';
     items.forEach((item, index) => {
         const tr = document.createElement('tr');
+        let fileName = item.substr(0,12)
         tr.innerHTML = `
-            <td>기록</td>
-            <td>${item}</td>
-            <td onclick="tab3_title(${item})">수정하기</td>
+            <td style='width:7%'>기록</td>
+            <td id="fileNameCell" style='width:70%' onclick="tab3_listOpen(this)" ymdt='${fileName}' value='${item}'>${item.substr(0,item.lastIndexOf(".txt"))}</td>
+            <td style='width:20%'>
+                <button onclick="tab3_titleUpdate(this)">수정</button>
+            </td>
         `;
-        tr.setAttribute("onclick","tab3_listOpen(this)")
+        // tr.setAttribute("onclick","tab3_listOpen(this)")
         tr.setAttribute("value",item)
         tbody.appendChild(tr);
     });
 }
-function tab3_title(fileName){
-    
+
+function tab3_titleUpdate(button){
+    const fileNameCell = button.closest('tr').querySelector('#fileNameCell');
+
+    if (fileNameCell.querySelector('input')) {
+        saveEdit(fileNameCell);
+    } else {
+        startEdit(fileNameCell);
+    }
 }
+function startEdit(cell) {
+    console.log(cell)
+    // const originalText = cell.textContent.trim();
+    let trimed = cell.textContent.trim()
+    const originalText = trimed.substr(12,trimed.length);
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = originalText;
+    input.classList.add('edit-input');
+
+    // Replace cell content with input
+    cell.innerHTML = '';
+    cell.innerText += cell.getAttribute('ymdt')
+    cell.appendChild(input);
+    
+    // Focus the input
+    input.focus();
+    
+    // Change button text
+    const button = cell.closest('tr').querySelector('button');
+    button.textContent = '저장';
+}
+
+function saveEdit(cell) {
+    console.log('save',cell)
+    const input = cell.querySelector('input');
+    
+    const newText = input.value.trim();
+    cell.textContent = cell.getAttribute('ymdt');
+    cell.textContent += newText;
+    
+    const button = cell.closest('tr').querySelector('button');
+    button.textContent = '수정';
+    // 서버 통신 구간
+    let data ={}
+    data.ymdt = cell.getAttribute('ymdt')
+    data.newFileName = cell.textContent.substr(12)
+    let param ={
+        'data' : data
+    }
+    Android.updateTitle(JSON.stringify(param))
+}
+
 // get file names
 function tab3_search() {
     let temp = document.getElementById("searchTerm").value
@@ -59,7 +113,7 @@ function handleInput(el,value) {
     // Remove any non-numeric characters
     let cleanValue = value.replace(/[^0-9]/g, '');
     if(cleanValue.length>8){
-        cleanValue = cleanValue.substring(0,8)
+        cleanValue = cleanValue.substr(0,8)
     }
     if (value !== cleanValue) {
         el.value = cleanValue
@@ -194,6 +248,10 @@ function tab3_listToggle(param){
 }
 function tab3_listOpen(el){
     //console.log(typeof el ,el, el.getAttribute('value'))
+    const input = el.querySelector('input');
+    if(input){
+        return
+    }
     document.getElementById('table-container').style.display = 'none'
     document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
     
