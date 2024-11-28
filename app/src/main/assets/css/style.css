@@ -102,7 +102,7 @@ html, body {
 textarea {
     width: 80%;
     height: 30px;
-    border-radius: 7px 7px 7px 7px;
+    border-radius: 7px;
     border: solid 2px #654e9fb2;
     transition: width 0.3s ease, height 0.3s ease;
     outline-color: #58438d;

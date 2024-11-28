@@ -1,10 +1,11 @@
 .table-container {
     height: 85dvh; /* Fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: solid 2px #654e9fb2;
+    border-radius: 7px;
     position: relative; /* For fixed header */
-    width: 95%;
+    width: 98%;
+    box-shadow: 0 0 5px 5px #654e9f23;
 }
 
 /* Make the header fixed */
@@ -124,6 +125,18 @@ tr:hover {
     color: white;
 }
 
+.edit-input{
+    border: 2px solid #654e9fb2;
+    border-radius: 7px;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    transition: border 0.3s ease;
+    box-shadow: 0 0 5px 5px #654e9f23;
+}
+.edit-input:focus {
+    outline-color: #58438d;
+}
 /* td {
     white-space: nowrap;
     overflow: hidden;
