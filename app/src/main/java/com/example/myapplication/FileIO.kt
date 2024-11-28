@@ -131,12 +131,12 @@ class FileIO {
     }
 
     fun readFile(fileName: String): Pair<String?,Int> {
-        val file = File(fileName)
+        val file = findFile(fileName) ?: return Pair(null,0)
+
         var stringBuilder = StringBuilder()
         var lineCount = 0;
         if (file.exists()) {
             try {
-                val fileInputStream = FileInputStream(file)
                 file.bufferedReader().use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
@@ -169,7 +169,7 @@ class FileIO {
             }
             var file = File(fileDir,fileName)
 
-            val fileInfo = readFile(file.absolutePath)
+            val fileInfo = readFile(file.name)
             var fileContent= fileInfo.first
             var fileLine = fileInfo.second
             content.put("order",fileLine)
@@ -179,9 +179,7 @@ class FileIO {
             try {
                 val fileOutputStream = FileOutputStream(file)
                 val writer  = fileOutputStream.writer()
-                if(fileContent != null){
-                    writer.write(fileContent)
-                }
+                fileContent?.let { writer.write(it) }
                 writer.write(encryptedContent)
                 writer.write("\n")
                 writer.close()
@@ -198,14 +196,14 @@ class FileIO {
         writeFileCrypto(fileName,content,',')
     }
     fun readFileCrypto(fileName: String): String? {
-        val file = File(fileName)
+        val file = findFile(fileName) ?: return "File does not exist."
+
         var stringBuilder = StringBuilder()
         if (file.exists()) {
             try {
                 file.bufferedReader().use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
-                        println(line) // Process each line as needed
 //                        stringBuilder.append(line?.let { cryptoUtil.decrypt(it) })
                         stringBuilder.append(line?.let { it })
                     }
@@ -224,25 +222,28 @@ class FileIO {
     // using a line order replace the line with content
     fun updateFileContent(fileName: String,content: JSONObject) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
-            // Get the external storage directory
-            var file = File(fileName)
-            if(!file.exists()){
-                return
-            }
-            copyFileWithModification(file, "${content.toString()},", content.getInt("order"))
+            findFile(fileName)?.let { copyFileWithModification(it, "${content.toString()},", content.getInt("order")) }
         }
     }
-    fun updateFileTitle(originalFileName: String,newFileName :String) {
+    fun updateFileTitle(originalFileYMDT: String,newFileName :String) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
-            // Get the external storage directory
-            var fileList = ArrayList<File>()
-            findAllFiles(rootDir,fileList)
-            var originalFile =fileList.find { it.name.startsWith("someword") }
-
-//            var file = File(originalFileName)
-//            file.renameTo(File(newFileName))
+//            findFile(originalFileYMDT)?.let { it.renameTo(File(newFileName)) }
+            var file = findFile(originalFileYMDT)
+            if(file !=null){
+                var newone = File(file.parentFile,newFileName)
+                var result =file.renameTo(newone)
+                println(result)
+            }
         }
     }
+
+    fun findFile(ymdt :String) :File?{
+        var pk = ymdt.substring(0,12)
+        var fileList = ArrayList<File>()
+        findAllFiles(rootDir, fileList )
+        return fileList.find { it.name.startsWith(pk) }
+    }
+
     fun findAllFiles(dir: File, fileList :ArrayList<File>) {
         for (file :File in dir.listFiles()){
             if(file.isDirectory) findAllFiles(file,fileList)
@@ -273,7 +274,8 @@ class FileIO {
                     reader.lineSequence().forEach { line ->
                         var modifiedLine = line
                         if(lineCount == order){
-                            modifiedLine = cryptoUtil.encrypt(content)
+//                            modifiedLine = cryptoUtil.encrypt(content)
+                            modifiedLine = content
                         }
                         println(modifiedLine)
                         lineCount+=1
