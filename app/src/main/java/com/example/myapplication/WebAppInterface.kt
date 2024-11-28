@@ -31,7 +31,7 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         var json = JSONObject(data)
         println(json)
         var searchTerm = json.getString("searchTerm").ifEmpty { "9" }
-        
+
     ///storage/emulated/0/TimeAndPlace/2024/2024-11-18-1-.txt
         var allFiles = ArrayList<File>()
         fileIo.findAllFiles(fileIo.rootDir,allFiles)
@@ -77,10 +77,9 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     fun readFile(time:String,type :String):String?{
         var year = time.split("-")[0]
         var fileName = "${fileIo.rootDir.absolutePath}/${year}/${time}-${type}-.txt"
-        val fileContent = fileIo.readFileCrypto("${time}-${type}")
-        var arr = fileContent?.subSequence(0,fileContent.length-1)
+        val fileContent = fileIo.readFileCrypto("${time}-${type}")?.takeIf { it.isNotEmpty() }?.dropLast(1) ?: ""
 
-        return "[${arr}]"
+        return "[${fileContent}]"
     }
     // {"data":{"time":"2024-11-08","type":0}}"
     @JavascriptInterface
