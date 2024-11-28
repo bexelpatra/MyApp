@@ -1,16 +1,40 @@
 package com.example.myapplication
 
+import android.app.Person
+import android.os.Build
 import android.os.Environment
+import androidx.annotation.RequiresApi
 import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+fun mytest1(){
 
-fun main(){
-    val file = FileIO()
+        // Create a list of files
+    val fileList = arrayListOf(
+        File("someword_document.txt"),
+        File("another_file.pdf"),
+        File("someword_image.jpg"),
+        File("different_file.docx")
+    )
+
+    // Find the first file starting with "someword"
+    val firstMatchingFile = fileList.find { it.name.startsWith("someword") }
+    println("First matching file: ${firstMatchingFile?.name}")
+//    firstMatchingFile.
+    // Find all files starting with "someword"
+    val allMatchingFiles = fileList.filter { it.name.startsWith("someword") }
+    println("All matching files:")
+    allMatchingFiles.forEach { println(it.name) }
+}
+fun mytest2(){
+    //    val file = FileIO()
     var temp = File("/timeandplace/temp.txt")
+    var my = "2024-11-24-1.txt"
+    my = my.substring(startIndex = 12,my.lastIndexOf(".txt"))
 
+    println(my)
 //    FileIO().copyFileWithModification(temp,"얍",2)
     println(temp.name)
     println(temp.absolutePath)
@@ -31,7 +55,22 @@ fun main(){
     var result2 = ArrayList<File>()
     findAllFiles(File("D:/timeandplace"),result2)
     result2.forEach { file: File ->    println(file.name) }
+    var file1 = File("d:/1.txt")
+    file1.renameTo(File("d:/2.txt"))
+}
+@RequiresApi(Build.VERSION_CODES.P)
+fun main(){
+//    mytest1()
+    var map = HashMap<String,String>()
 
+
+    map.put("1","3");
+    map.put("2","3");
+    map.put("3","3");
+    with(map){
+        var a = "$1"
+        println(a)
+    }
 }
 fun findAllFiles(dir: File, fileList :ArrayList<File>) {
     for (file :File in dir.listFiles()){
@@ -79,7 +118,7 @@ class FileIO {
                     writer.write(fileContent)
                 }
                 writer.write(content)
-                writer.write(System.lineSeparator())
+                writer.write("\n")
                 writer.close()
                 println("File written to external storage: ${file.absolutePath}")
             } catch (e: IOException) {
@@ -151,17 +190,18 @@ class FileIO {
             var fileContent= fileInfo.first
             var fileLine = fileInfo.second
             content.put("order",fileLine)
-            var encryptedContent =cryptoUtil.encrypt("${content.toString()}${delimiter}")
+//            var encryptedContent =cryptoUtil.encrypt("${content.toString()}${delimiter}")
+            var encryptedContent ="${content.toString()},"
             println(encryptedContent)
             try {
                 val fileOutputStream = FileOutputStream(file)
                 val writer  = fileOutputStream.writer()
                 if(fileContent != null){
                     writer.write(fileContent)
-                    writer.write(System.lineSeparator())
+                    writer.write("\n")
                 }
                 writer.write(encryptedContent)
-                writer.write(System.lineSeparator())
+                writer.write("\n")
                 writer.close()
                 println("File written to external storage: ${file.absolutePath}")
             } catch (e: IOException) {
@@ -184,7 +224,8 @@ class FileIO {
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         println(line) // Process each line as needed
-                        stringBuilder.append(line?.let { cryptoUtil.decrypt(it) })
+//                        stringBuilder.append(line?.let { cryptoUtil.decrypt(it) })
+                        stringBuilder.append(line?.let { it })
                     }
                     reader.close()
                 }
@@ -209,7 +250,17 @@ class FileIO {
             copyFileWithModification(file, "${content.toString()},", content.getInt("order"))
         }
     }
+    fun updateFileTitle(originalFileName: String,newFileName :String) {
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
+            // Get the external storage directory
+            var fileList = ArrayList<File>()
+            findAllFiles(rootDir,fileList)
+            var originalFile =fileList.find { it.name.startsWith("someword") }
 
+//            var file = File(originalFileName)
+//            file.renameTo(File(newFileName))
+        }
+    }
     fun findAllFiles(dir: File, fileList :ArrayList<File>) {
         for (file :File in dir.listFiles()){
             if(file.isDirectory) findAllFiles(file,fileList)
