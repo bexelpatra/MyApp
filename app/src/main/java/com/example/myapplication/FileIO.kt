@@ -131,23 +131,6 @@ class FileIO {
     }
 
     fun readFile(fileName: String): Pair<String?,Int> {
-//        val file = File(fileName)
-//
-//        if (file.exists()) {
-//            try {
-//                val fileInputStream = FileInputStream(file)
-//                val content = fileInputStream.readBytes().toString(Charsets.UTF_8)
-//                fileInputStream.close()
-//                println("File read successfully: $content")
-//                return content
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//                println("Error reading file: ${e.message}")
-//            }
-//        } else {
-//            println("File does not exist.")
-//        }
-//        return null
         val file = File(fileName)
         var stringBuilder = StringBuilder()
         var lineCount = 0;
@@ -160,7 +143,7 @@ class FileIO {
                         println(line) // Process each line as needed
                         stringBuilder.append(line?.let {
                             lineCount+=1
-                            it
+                            "$it\n"
                         })
                     }
                     reader.close()
