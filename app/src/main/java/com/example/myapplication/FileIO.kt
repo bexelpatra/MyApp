@@ -181,7 +181,6 @@ class FileIO {
                 val writer  = fileOutputStream.writer()
                 if(fileContent != null){
                     writer.write(fileContent)
-                    writer.write("\n")
                 }
                 writer.write(encryptedContent)
                 writer.write("\n")
