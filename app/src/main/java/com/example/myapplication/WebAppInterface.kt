@@ -30,7 +30,8 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         // Handle data received from JavaScript
         var json = JSONObject(data)
         println(json)
-        var searchTerm = json.getString("searchTerm")
+        var searchTerm = json.getString("searchTerm").ifEmpty { "9" }
+        
     ///storage/emulated/0/TimeAndPlace/2024/2024-11-18-1-.txt
         var allFiles = ArrayList<File>()
         fileIo.findAllFiles(fileIo.rootDir,allFiles)
