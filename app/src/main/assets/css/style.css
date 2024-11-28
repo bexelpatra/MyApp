@@ -100,7 +100,7 @@ html, body {
 
 /* TextArea 스타일 정의 */
 textarea {
-    width: 98%;
+    width: 80%;
     height: 30px;
     border-radius: 7px 7px 7px 7px;
     border: solid 2px #654e9fb2;
@@ -113,7 +113,6 @@ textarea:focus {
     width: 95%;
     height: 200px;
     font-size: 1.2rem;
-
 }
 textarea::placeholder {
   color: #654e9fb2;
