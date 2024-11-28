@@ -24,7 +24,12 @@ table {
 th, td {
     padding: 8px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #654e9fb2;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    text-align: center;
 }
 th:nth-child(1){
     width: 15%;
@@ -33,14 +38,28 @@ tr:hover {
     background-color: #f5f5f5;
 }
 #searchTerm{
-    height: 40px;
+    height: 30px;
     width: 80%;
-    border: 1px solid black;
-    border-radius: 10px;
-    font-size: medium;
+    border: 2px solid #654e9fb2;
+    border-radius: 7px;
     margin: 10px 0px 10px 0px;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    transition: border 0.3s ease;
+    box-shadow: 0 0 5px 5px #654e9f23;
 }
-
+#searchTerm:focus {
+    outline-color: #58438d;
+}
+#searchTerm::placeholder {
+  color: #654e9fb2;
+  font-family: "Stylish", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.2rem;
+}
 
 
 .tab3-bottom-list-container {
@@ -81,6 +100,28 @@ tr:hover {
 .tab3-bottom-list li {
     padding: 10px 0;
     border-bottom: 1px solid #654e9fb2;
+}
+
+.tab3-button {
+    background-color: #654e9fb2;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0 0 5px 5px #654e9f23;
+}
+.tab3-button:active {
+    background-color: #58438d;
+    color: white;
 }
 
 /* td {

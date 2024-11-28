@@ -1,4 +1,3 @@
-console.log("location.js");
 let currentMarker={};
 
 function initMap(divId, zoom){

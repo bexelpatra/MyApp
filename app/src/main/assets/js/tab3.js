@@ -24,10 +24,10 @@ function appendHistory(items) {
         const tr = document.createElement('tr');
         let fileName = item.substr(0,12)
         tr.innerHTML = `
-            <td style='width:7%'>기록</td>
-            <td id="fileNameCell" style='width:70%' onclick="tab3_listOpen(this)" ymdt='${fileName}' value='${item}'>${item.substr(0,item.lastIndexOf(".txt"))}</td>
-            <td style='width:20%'>
-                <button onclick="tab3_titleUpdate(this)">수정</button>
+            <td>기록</td>
+            <td id="fileNameCell" onclick="tab3_listOpen(this)" ymdt='${fileName}' value='${item}'>${item.substr(0,item.lastIndexOf(".txt"))}</td>
+            <td>
+                <button class="tab3-button" onclick="tab3_titleUpdate(this)">수정</button>
             </td>
         `;
         tr.setAttribute("value",item)

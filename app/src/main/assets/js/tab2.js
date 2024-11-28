@@ -1,4 +1,3 @@
-console.log("tab2.js");
 let tab2_bottom = "hidden";
 let tab2_map;
 let tab2_initFg = true;

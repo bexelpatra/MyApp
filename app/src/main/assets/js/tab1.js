@@ -1,4 +1,3 @@
-console.log("tab1.js");
 let tab1_map;
 let tab1_initFg = true;
 let tab1_interval;
