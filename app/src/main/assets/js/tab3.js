@@ -30,7 +30,6 @@ function appendHistory(items) {
                 <button onclick="tab3_titleUpdate(this)">수정</button>
             </td>
         `;
-        // tr.setAttribute("onclick","tab3_listOpen(this)")
         tr.setAttribute("value",item)
         tbody.appendChild(tr);
     });
@@ -99,7 +98,6 @@ function tab3_search() {
             date+='-'
         }
     }
-
     let param = {
         searchTerm:date
     }
@@ -157,11 +155,7 @@ function tab3_memoFucus(locInfo,fileName){
     tab3_memo.focus()
 }
 
-function tab3_updateMemo(locInfo){
-
-}
-
-function tab3_memoBlur(e){
+function tab3_memoBlur(){
     let tab3_memo = document.getElementById('tab3_memo');
     let tab3_searchTerm = document.getElementById('searchTerm');
     tab3_memo.style.display='none'
@@ -176,7 +170,6 @@ function tab3_memoBlur(e){
     Android.showToast("저장되었습니다.")
 
     Object.keys(tab3_memo.dataset).forEach((key)=>{
-        //console.log(key,tab3_memo.dataset[key])
         tab3_memo.removeAttribute(`data-${key}`)
     })
 
