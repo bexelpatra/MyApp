@@ -107,7 +107,7 @@ class FileIO {
             }
             var file = File(fileDir,fileName)
 
-            val fileInfo = readFile(file.absolutePath)
+            val fileInfo = readFile(file)
             var fileContent= fileInfo.first
             var fileLine = fileInfo.second
 
@@ -130,8 +130,7 @@ class FileIO {
         }
     }
 
-    fun readFile(fileName: String): Pair<String?,Int> {
-        val file = findFile(fileName) ?: return Pair(null,0)
+    fun readFile(file: File): Pair<String?,Int> {
 
         var stringBuilder = StringBuilder()
         var lineCount = 0;
@@ -167,9 +166,9 @@ class FileIO {
             if(!fileDir.exists()){
                 fileDir.mkdirs()
             }
-            var file = File(fileDir,fileName)
 
-            val fileInfo = readFile(file.name)
+            val file = findFile(fileName) ?: File(fileDir,fileName)
+            val fileInfo = readFile(file)
             var fileContent= fileInfo.first
             var fileLine = fileInfo.second
             content.put("order",fileLine)
