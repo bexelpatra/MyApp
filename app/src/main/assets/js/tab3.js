@@ -25,7 +25,7 @@ function appendHistory(items) {
         let fileName = item.substr(0,12)
         tr.innerHTML = `
             <td>기록</td>
-            <td id="fileNameCell" onclick="tab3_listOpen(this)" ymdt='${fileName}' value='${item}'>${item.substr(0,item.lastIndexOf(".txt"))}</td>
+            <td id="fileNameCell" onclick="tab3_mapOpen(this)" ymdt='${fileName}' value='${item}'>${item.substr(0,item.lastIndexOf(".txt"))}</td>
             <td>
                 <button class="tab3-button" onclick="tab3_titleUpdate(this)">수정</button>
             </td>
@@ -233,33 +233,46 @@ function tab3_createLiTag(locationInfo,fileName){
 
 function tab3_listToggle(param){
     if(param != tab3_bottom){
-        let listContainer = document.querySelector('.tab3-bottom-list-container');
+        let listContainer = document.querySelector('.tab3-bottom-map-list-container');
         listContainer.classList.toggle(param);
         tab3_bottom = param;
     }
 }
-function tab3_listOpen(el){
+function tab3_mapOpen(el){
     //console.log(typeof el ,el, el.getAttribute('value'))
     const input = el.querySelector('input');
     if(input){
         return
     }
-    let listContainer = document.querySelector('.tab3-bottom-list-container');
+    let listContainer = document.querySelector('.tab3-bottom-map-list-container');
     listContainer.style.display = 'block';
     setTimeout(function(){
-        document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down');
+        document.getElementById('tab3_bottomMapListContainer').classList.toggle('bottom-down');
     },10)
     document.getElementById('table-container').style.display = 'none'
     tab3_readFile(el.getAttribute('value'))
+    tab3_map.invalidateSize();
 }
 
-function tab3_listClose(el){
-    document.getElementById('tab3_bottomListContainer').classList.toggle('bottom-down')
+function tab3_mapListClose(el){
+    document.getElementById('tab3_bottomMapListContainer').classList.toggle('bottom-down')
     document.getElementById('table-container').style.display = 'block'
 
-    let listContainer = document.querySelector('.tab3-bottom-list-container');
+    let listContainer = document.querySelector('.tab3-bottom-map-list-container');
     listContainer.style.display = 'none';
     tab3_resetMakers()
+}
+
+function tab3_listOpen(){
+    let bottom_menu = document.querySelector(".tab3-bottom-menu")
+    bottom_menu.classList.toggle("list-open")
+    let dp = document.getElementById('tab3_visitList').style.display
+    if(dp=='block'){
+        document.getElementById('tab3_visitList').style.display = 'none'
+    }else{
+        document.getElementById('tab3_visitList').style.display = 'block'
+    }
+    console.log("gogo")
 }
 
 

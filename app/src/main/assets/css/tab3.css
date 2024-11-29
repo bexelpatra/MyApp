@@ -1,3 +1,6 @@
+.tab3_root_div{
+    position:relative
+}
 .table-container {
     height: 85dvh; /* Fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
@@ -61,9 +64,15 @@ tr:hover {
   font-style: normal;
   font-size: 1.2rem;
 }
-
-
-.tab3-bottom-list-container {
+.tab3_map{
+    position:absolute;
+    height: 675px;
+    width: 99%;
+}
+.tab3-bottom-list-container{
+    position:absolute;
+}
+.tab3-bottom-map-list-container {
     position: relative;
     bottom: 0px;
     width: 99%;
@@ -83,6 +92,7 @@ tr:hover {
     background-color: white;
     margin: 0;
     padding: 0%;
+    position:relative;
     display: none;
     overflow-y: auto;
     height: 90%;
@@ -90,13 +100,11 @@ tr:hover {
     width: 100%;
 }
 
-.bottom-down {
-    bottom: -92dvh !important;
-}
+
 .default-height {
     height: 30px !important;
 }
-.tab3-bottom-list-container span{
+.tab3-bottom-map-list-container span{
     right: 5%;
 }
 .tab3-bottom-list li {
@@ -143,3 +151,67 @@ tr:hover {
     overflow: hidden;
     text-overflow: ellipsis;
   } */
+
+
+  .list-open{
+
+  }
+  .tab3-bottom-menu{
+      border-radius: 15px 15px 0 0;
+      position:relative;
+      display:block;
+      width: 100%;
+      height: 30px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      z-index:1000
+  }
+
+
+  /* Hamburger */
+  .tab3-hamburger {
+      border-radius: 15px 15px 0 0;
+      position:relative;
+      display:block;
+      height: 45px;
+      margin: 0 auto;
+      display: grid;
+      left: 46%
+  }
+  .tab3-hamburger div {
+      background-color: #000;
+      position: relative;
+      width: 40px;
+      height: 5px;
+      margin-top: 7px;
+      transition: all 0.2s ease-in-out;
+      border-radius: 35px;
+  }
+  .tab3-button-line{
+    position:relative
+    display:flex
+  }
+  #tab3_toggle {
+    display: none;
+  }
+  #tab3_toggle + .tab3-hamburger .tab3-top{
+      top: -90%;
+  }
+  #tab3_toggle + .tab3-hamburger .tab3-middle{
+      top: -120%;
+  }
+  #tab3_toggle + .tab3-hamburger .tab3-bottom{
+      top: -150%;
+  }
+  #tab3_toggle:checked + .tab3-hamburger .tab3-top {
+      transform: rotate(45deg);
+      top: 45%;
+  }
+  #tab3_toggle:checked + .tab3-hamburger .tab3-middle {
+      transform: scale(0);
+  }
+  #tab3_toggle:checked + .tab3-hamburger .tab3-bottom {
+      transform: rotate(-45deg);
+  }
