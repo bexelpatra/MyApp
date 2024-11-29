@@ -266,12 +266,10 @@ function tab3_mapListClose(el){
 function tab3_listOpen(){
     let bottom_menu = document.querySelector(".tab3-bottom-menu")
     bottom_menu.classList.toggle("list-open")
-    let dp = document.getElementById('tab3_visitList').style.display
-    if(dp=='block'){
-        document.getElementById('tab3_visitList').style.display = 'none'
-    }else{
-        document.getElementById('tab3_visitList').style.display = 'block'
-    }
+
+    let tab3_bottomListContainer = document.getElementById('tab3_bottomListContainer')
+    let tab3_visitList = document.getElementById('tab3_visitList')
+
     console.log("gogo")
 }
 

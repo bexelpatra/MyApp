@@ -64,22 +64,26 @@ tr:hover {
   font-style: normal;
   font-size: 1.2rem;
 }
-.tab3_map{
+#tab3_map{
     position:absolute;
     height: 675px;
     width: 99%;
 }
 .tab3-bottom-list-container{
     position:absolute;
+    z-index:1000;
+    top:75dvh;
+    width:96dvw;
+
 }
 .tab3-bottom-map-list-container {
     position: relative;
     bottom: 0px;
     width: 99%;
-    height: 0px;
+    height: 0dvh;
     border-radius: 15px 15px 0 0;
     transition: all 0.35s;
-    z-index: 1000;
+    z-index: 10;
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
@@ -93,14 +97,15 @@ tr:hover {
     margin: 0;
     padding: 0%;
     position:relative;
-    display: none;
     overflow-y: auto;
-    height: 90%;
-    bottom: 1px;
+    height: inherit;
     width: 100%;
+
 }
 
-
+.top45{
+    top: 45dvh;
+}
 .default-height {
     height: 30px !important;
 }
@@ -166,7 +171,7 @@ tr:hover {
       display: flex;
       align-items: center;
       justify-content: right;
-      z-index:1000
+      z-index:11
   }
 
 
