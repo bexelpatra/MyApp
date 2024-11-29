@@ -93,10 +93,9 @@ function updateLocation() {
 
 function tab1_handleToggle(checkbox) {
     if (checkbox.checked) {
-        console.log("체크됨");
-        tab1_interval = setInterval(updateLocation, 60000);
+        updateLocation()
+        tab1_interval = setInterval(updateLocation, 1000);
     } else {
-        console.log("체크 해제됨");
         clearInterval(tab1_interval);
     }
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Visit Location on Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="../js/leaflet.geometryutil.js"></script>
+    <script src="../js/leaflet-arrowheads.js"></script>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <link rel="stylesheet" href="../css/tab3.css"/>
+    <!-- 로컬 테스트 용 JS Start-->
+    <!--<script src="../js/localTest.js"></script>-->
+    <!-- 로컬 테스트 용 JS End-->
+    <script src="../js/location.js"></script>
+    <script src="../js/tab3.js"></script>
+</head>
+<script>
+    window.onload = function() {
+        tab3_initMap();
+        if(tab3_map != undefined) tab3_map.invalidateSize();
+    }
+</script>
+<body class="page-rewards">
+    <div>
+        <a href="../main.html" class="a_back">
+            <img src="../image/img_back_p.png" class="img_back">
+        </a>
+    </div>
+    <div>
+        <input
+                type="text"
+                id="searchTerm"
+                placeholder="날짜 (YYYYMMDD)"
+                oninput="handleInput(this,this.value)"
+        >
+        <textarea id="tab3_memo" style="display:none; position: fixed; z-index: 3004;" onblur="tab3_memoBlur()"></textarea>
+
+        <div class="table-container" id="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style='width:20%'>종류</th>
+                        <th>이름</th>
+                        <th style='width:25%'>수정</th>
+                    </tr>
+
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+        <div class="tab3-bottom-list-container bottom-down" id="tab3_bottomListContainer">
+            <div style="width: 100px; height: 30px; display:inline-block,; position: absolute; z-index: 10; right: 10px; top: 0px; z-index: 999;">
+                <button class="button" onclick="tab3_listClose()" style="float: inline-end;">종료</button>
+            </div>
+            <div id="tab3_map" style="height: 675px; width: 99%;"></div>
+            <ul class="tab3-bottom-list" id="tab3_visitList"></ul>
+        </div>
+    </div>
+</body>
+</html>

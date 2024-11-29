@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Visit Location on Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="../js/leaflet.geometryutil.js"></script>
+    <script src="../js/leaflet-arrowheads.js"></script>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <link rel="stylesheet" href="../css/tab2.css"/>
+    <!-- 로컬 테스트 용 JS Start-->
+    <!--<script src="../js/localTest.js"></script>-->
+    <!-- 로컬 테스트 용 JS End-->
+    <script src="../js/location.js"></script>
+    <script src="../js/tab2.js"></script>
+</head>
+<script>
+    window.onload = function() {
+        tab2_readFile();
+        tab2_map.invalidateSize();
+    }
+</script>
+<body class="page-rewards">
+    <div >
+        <a href="../main.html" class="a_back">
+            <img src="../image/img_back_p.png" class="img_back">
+        </a>
+    </div>
+    <div id="currntLocationSaveDiv">
+        <p>
+            <textarea id="tab2_memo" placeholder="메모 하세요..."></textarea>
+        </p>
+        <p>
+            <button class="button" onClick='tab2_currentLocation()'>현재위치</button>
+            <button class="button" onClick='tab2_save()'>저장</button>
+        </p>
+    </div>
+
+    <div class="tab2_map" id="tab2_map"></div>
+    <div class="tab2-bottom-list-container" id="tab2_bottomListContainer">
+        <div class="tab2-bottom-menu">
+            <input id="tab2_toggle" type="checkbox" />
+            <label class="tab2-hamburger" for="tab2_toggle" onclick="tab2_listOpen()">
+                <div class="tab2-top"></div>
+                <div class="tab2-middle"></div>
+                <div class="tab2-bottom"></div>
+            </label>
+        </div>
+        <ul class="tab2-bottom-list" id="tab2_visitList"></ul>
+    </div>
+</body>
+</html>
