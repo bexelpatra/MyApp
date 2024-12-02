@@ -94,7 +94,7 @@ function updateLocation() {
 function tab1_handleToggle(checkbox) {
     if (checkbox.checked) {
         updateLocation()
-        tab1_interval = setInterval(updateLocation, 1000);
+        tab1_interval = setInterval(updateLocation, 180000);
     } else {
         clearInterval(tab1_interval);
     }

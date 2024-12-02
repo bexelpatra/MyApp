@@ -1,4 +1,4 @@
-let tab2_bottom = "hidden";
+let tab2_bottom = "show";
 let tab2_map;
 let tab2_initFg = true;
 
@@ -12,7 +12,7 @@ function tab2_readFile(){
     let returnData = Android.readFile(now(1), 1);
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
-
+    //console.log("##### tab locInfo : ", locInfo);
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }
@@ -96,9 +96,22 @@ function tab2_reset() {
     document.getElementById('tab2_memo').value = "";
 }
 
+let listOpenFg = false;
 function tab2_listOpen(){
-    document.getElementById('tab2_visitList').style.display = 'block';
-    document.getElementById('tab2_bottomListContainer').classList.toggle('full-height');
+    if(listOpenFg){
+        console.log("close")
+        document.querySelector('.tab2-bottom-list-container').classList.toggle('full-height');
+        setTimeout(function(){
+                document.querySelector('.tab2-bottom-list').classList.toggle('hidden');
+            },250)
+        listOpenFg = false;
+    }else{
+        console.log("open")
+        document.querySelector('.tab2-bottom-list-container').classList.toggle('full-height');
+        document.querySelector('.tab2-bottom-list').classList.toggle('hidden');
+        listOpenFg = true;
+    }
+
 }
 
 function tab2_currentLocation(){
