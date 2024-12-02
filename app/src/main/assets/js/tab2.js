@@ -67,6 +67,7 @@ function tab2_createLiTag(locInfo){
                     + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
 
         let li = document.createElement('li');
+        li.className = 'tab2_li';
         li.innerHTML = visit;
         li.onclick = function() {
             let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)

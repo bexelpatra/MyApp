@@ -104,3 +104,8 @@
     bottom: 145%;
     right: 25%;
 }
+
+.tab2_li:active {
+    background-color: #654e9fb2;
+    color: white;
+}
