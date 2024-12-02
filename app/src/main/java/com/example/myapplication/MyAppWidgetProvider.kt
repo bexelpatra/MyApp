@@ -60,7 +60,9 @@ class MyAppWidgetProvider : AppWidgetProvider() {
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
 
         when (intent.action) {
-            "save_location" -> handleSaveLocation(context, appWidgetManager, remoteViews, "1")
+            "save_location" -> {
+                handleSaveLocation(context, appWidgetManager, remoteViews, "1")
+            }
             "start_location" -> {
                 println("start_location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 remoteViews.setViewVisibility(R.id.startButton, View.GONE)
@@ -72,7 +74,7 @@ class MyAppWidgetProvider : AppWidgetProvider() {
                 runnable = object : Runnable {
                     override fun run() {
                         handleSaveLocation(context, appWidgetManager, remoteViews, "0")
-                        handler?.postDelayed(this, 5000)
+                        handler?.postDelayed(this, 180000)
                     }
                 }
                 handler?.post(runnable!!)
@@ -92,8 +94,14 @@ class MyAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun handleSaveLocation(context: Context, appWidgetManager: AppWidgetManager, remoteViews: RemoteViews, type: String) {
-        remoteViews.setViewVisibility(R.id.progressBar, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.saveButton, View.INVISIBLE)
+        if(type == "1") {
+            remoteViews.setViewVisibility(R.id.saveProgressBar, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.saveButton, View.INVISIBLE)
+        }else{
+            remoteViews.setViewVisibility(R.id.stopProgressBar, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.stopButton, View.INVISIBLE)
+
+        }
         appWidgetManager.updateAppWidget(
             ComponentName(context, MyAppWidgetProvider::class.java),
             remoteViews
@@ -113,8 +121,13 @@ class MyAppWidgetProvider : AppWidgetProvider() {
             val returnValue = webAppInterface.save(jsonData.toString())
             println("Home widget returnValue : $returnValue")
 
-            remoteViews.setViewVisibility(R.id.progressBar, View.GONE)
-            remoteViews.setViewVisibility(R.id.saveButton, View.VISIBLE)
+            if(type == "1") {
+                remoteViews.setViewVisibility(R.id.saveProgressBar, View.GONE)
+                remoteViews.setViewVisibility(R.id.saveButton, View.VISIBLE)
+            }else{
+                remoteViews.setViewVisibility(R.id.stopProgressBar, View.GONE)
+                remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
+            }
             appWidgetManager.updateAppWidget(
                 ComponentName(context, MyAppWidgetProvider::class.java),
                 remoteViews

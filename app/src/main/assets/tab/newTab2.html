@@ -21,8 +21,9 @@
 </head>
 <script>
     window.onload = function() {
+        document.querySelector('.tab2-bottom-list-container').classList.toggle("hidden");
         tab2_readFile();
-        tab2_map.invalidateSize();
+        if(tab2_map != undefined)tab2_map.invalidateSize();
     }
 </script>
 <body class="page-rewards">

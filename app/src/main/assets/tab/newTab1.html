@@ -22,7 +22,7 @@
 <script>
     window.onload = function() {
         tab1_markMap()
-        tab1_map.invalidateSize();
+        if(tab1_map != undefined)tab1_map.invalidateSize();
     }
 </script>
 <body class="page-rewards">
