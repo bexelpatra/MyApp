@@ -14,8 +14,22 @@ function tab3_initMap(){
         }).addTo(tab3_map);
         tab3_initFg = false
     }
+    document.getElementById('tab3_visitList').addEventListener('click', function (event) {
+        // If a button was clicked
+        if (event.target.tagName === 'BUTTON') {
+            event.stopPropagation(); // Stop the click from bubbling to the <li>
+            doAnotherThing(); // Call the button's action
+        } else if (event.target.tagName === 'LI') {
+            doSomething(); // Call the <li>'s action
+        }
+    });
 }
-
+function doAnotherThing(){
+    console.log("stop")
+}
+function doSomething(){
+    console.log("nono")
+}
 function appendHistory(items) {
     //console.log(items)
     const tbody = document.getElementById('tableBody');
@@ -203,6 +217,12 @@ function tab3_createLiTag(locationInfo,fileName){
 
         let h3 = document.createElement('h3')
         h3.innerText=`방문장소 ${i} ${locationInfo[i].time}`
+
+        let delButton = `
+            <button class='button'>삭제</button>
+        `
+        h3.innerHTML += delButton
+
         let p = document.createElement('p')
         p.id=`description_${i}`
         p.innerText=locationInfo[i].memo;
@@ -210,11 +230,10 @@ function tab3_createLiTag(locationInfo,fileName){
         innerDiv.appendChild(h3)
         innerDiv.appendChild(p)
         innerDiv.onclick = function(){
-            tab3_memoFucus(locationInfo[i],fileName)
+//            tab3_memoFucus(locationInfo[i],fileName)
         }
         div.appendChild(innerDiv)
         let li = document.createElement('li');
-        // li.appendChild(div)
         li.innerHTML = div.innerHTML;
 
         marker = L.marker([locationInfo[i].lat, locationInfo[i].lon]).addTo(tab3_map).bindPopup(div)
@@ -228,15 +247,11 @@ function tab3_createLiTag(locationInfo,fileName){
         // marker.on('popupopen',marker.on('popupopen', patch ));
         visitList.appendChild(li);
     }
-    // tab3_listToggle("show");
 }
+function tab3_removeLi(event){
+    event.stopPropagation();
+    console.log(event)
 
-function tab3_listToggle(param){
-    if(param != tab3_bottom){
-        let listContainer = document.querySelector('.tab3-bottom-map-list-container');
-        listContainer.classList.toggle(param);
-        tab3_bottom = param;
-    }
 }
 function tab3_mapOpen(el){
     //console.log(typeof el ,el, el.getAttribute('value'))
@@ -255,64 +270,21 @@ function tab3_mapOpen(el){
 }
 
 function tab3_mapListClose(el){
-    document.getElementById('tab3_bottomMapListContainer').classList.toggle('bottom-down')
     document.getElementById('table-container').style.display = 'block'
 
     let listContainer = document.querySelector('.tab3-bottom-map-list-container');
     listContainer.style.display = 'none';
+
     tab3_resetMakers()
 }
 
 function tab3_listOpen(){
     let bottom_menu = document.querySelector(".tab3-bottom-menu")
-    bottom_menu.classList.toggle("list-open")
 
     let tab3_bottomListContainer = document.getElementById('tab3_bottomListContainer')
+    // 높이 조절
+    tab3_bottomListContainer.classList.toggle('top75dvh')
+    tab3_bottomListContainer.classList.toggle('top40dvh')
     let tab3_visitList = document.getElementById('tab3_visitList')
-
-    console.log("gogo")
-}
-
-
-function patch(e) {
-    var descriptionElement = document.getElementById('description');
-    descriptionElement.addEventListener('click', function() {
-        // Create an input element
-        var input = document.createElement('textarea');
-        // input.type = 'text';
-        input.value = this.textContent;
-        input.className = this.className;
-        
-        // Hide the original paragraph
-        this.style.display = 'none';
-        
-        // Insert the input right after the hidden paragraph
-        this.parentNode.insertBefore(input, this.nextSibling);
-        
-        // Focus the input
-        // input.focus();
-
-        // Event listener when input loses focus
-        input.addEventListener('blur', function() {
-            // Update the hidden paragraph with new text
-            //console.log(this)
-            //console.log(this.value)
-            var originalP = this.previousElementSibling;
-            originalP.textContent = this.value;
-            //console.log(this.originalP)
-            
-            // Remove the input
-            // this.remove();
-            
-            // Show the paragraph again
-            originalP.style.display = 'block';
-            
-            // Re-add click event listener
-            originalP.addEventListener('click', function() {
-                // Your click-to-edit logic
-                //console.log("???")
-            });
-        });
-
-    });
+    tab3_visitList.classList.toggle("display-none")
 }

@@ -72,9 +72,14 @@ tr:hover {
 .tab3-bottom-list-container{
     position:absolute;
     z-index:1000;
-    top:75dvh;
     width:96dvw;
-
+    height:36dvh;
+}
+.top75dvh{
+    top:75dvh;
+}
+.top40dvh{
+    top:40dvh;
 }
 .tab3-bottom-map-list-container {
     position: relative;
@@ -102,7 +107,9 @@ tr:hover {
     width: 100%;
 
 }
-
+.display-none{
+    display:none;
+}
 .top45{
     top: 45dvh;
 }
