@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -13,8 +14,6 @@ import android.widget.RemoteViews
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Timer
-import java.util.TimerTask
 
 class MyAppWidgetProvider : AppWidgetProvider() {
     companion object {
@@ -70,6 +69,7 @@ class MyAppWidgetProvider : AppWidgetProvider() {
 
                 appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
 
+                /*
                 handler = Handler(Looper.getMainLooper())
                 runnable = object : Runnable {
                     override fun run() {
@@ -78,6 +78,14 @@ class MyAppWidgetProvider : AppWidgetProvider() {
                     }
                 }
                 handler?.post(runnable!!)
+                */
+
+                val serviceIntent = Intent(context, LocationService::class.java)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(serviceIntent)
+                } else {
+                    context.startService(serviceIntent)
+                }
             }
             "stop_location" -> {
                 println("stop_location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -86,9 +94,13 @@ class MyAppWidgetProvider : AppWidgetProvider() {
 
                 appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
 
+                /*
                 handler?.removeCallbacks(runnable!!)
                 handler = null
                 runnable = null
+                */
+
+                context.stopService(Intent(context, LocationService::class.java))
             }
         }
     }
