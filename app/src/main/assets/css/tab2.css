@@ -1,32 +1,27 @@
 /* 방문 장소 스타일 정의 */
 .tab2-bottom-list-container {
     position: fixed;
-    bottom: 0px;
     width: 95%;
-    height: 30px;
-    border-radius: 15px 15px 0 0;
+    height: 98%;
     transition: all 0.35s;
     z-index: 2001;
     font-family: "Stylish", serif;
     font-weight: 400;
     font-style: normal;
     font-size: 1.3rem;
-    cursor:pointer;
 }
 
 .tab2-bottom-list {
-    list-style-type: none;
     background-color: white;
     margin: 0;
     padding: 0%;
     display: none;
     overflow-y: auto;
-    height: 76%;
-    bottom: 1px;
+    height: 97%;
     width: 88%;
 }
 .full-height {
-    height: 45% !important;
+    height: 40% !important;
 }
 .default-height {
     height: 30px !important;
@@ -39,18 +34,17 @@
     border-bottom: 1px solid #654e9fb2;
 }
 .hidden {
-    bottom: -55px;
+    display: block;
 }
 .show {
-    height: 85px;
+    bottom: -10px;
+    height: 25px;
 }
 
 .tab2-bottom-menu{
-    border-radius: 15px 15px 0 0;
     position:relative;
     display:block;
     width: 100%;
-    height: 30px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -60,10 +54,8 @@
 
 /* Hamburger */
 .tab2-hamburger {
-    border-radius: 15px 15px 0 0;
     position:relative;
     display:block;
-    height: 45px;
     margin: 0 auto;
     display: grid;
     left: 46%
@@ -81,16 +73,22 @@
   display: none;
 }
 #tab2_toggle + .tab2-hamburger .tab2-top{
+/*
     top: -90%;
     right: 25%;
+*/
 }
 #tab2_toggle + .tab2-hamburger .tab2-middle{
+/*
     top: -120%;
     right: 25%;
+*/
 }
 #tab2_toggle + .tab2-hamburger .tab2-bottom{
+/*
     top: -150%;
     right: 25%;
+*/
 }
 #tab2_toggle:checked + .tab2-hamburger .tab2-top {
     transform: rotate(45deg);
@@ -103,5 +101,6 @@
 }
 #tab2_toggle:checked + .tab2-hamburger .tab2-bottom {
     transform: rotate(-45deg);
+    bottom: 145%;
     right: 25%;
 }
