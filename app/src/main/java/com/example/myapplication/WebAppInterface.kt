@@ -1,8 +1,13 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.location.LocationRequest
+import android.os.Build
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 //import com.chaquo.python.Python
@@ -164,5 +169,34 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         // Wait for location response or timeout after 10 seconds
         latch.await(10, TimeUnit.SECONDS)
         return result
+    }
+
+    @JavascriptInterface
+    fun isServiceRunning(): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (LocationService::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+    @JavascriptInterface
+    fun stopForegroundService() {
+        val intent = Intent(context, LocationService::class.java)
+        intent.action = ".LocationService"
+        context.stopService(intent)
+    }
+
+    @JavascriptInterface
+    fun startForegroundService() {
+        val intent = Intent(context, LocationService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
     }
 }
