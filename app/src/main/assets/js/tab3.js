@@ -19,16 +19,18 @@ function tab3_initMap(){
         if (event.target.tagName === 'BUTTON') {
             event.stopPropagation(); // Stop the click from bubbling to the <li>
             doAnotherThing(); // Call the button's action
-        } else if (event.target.tagName === 'LI') {
+        } else if (event.target.tagName === 'li') {
             doSomething(); // Call the <li>'s action
+        } else{
+            console.log('event', event.target.tagName)
         }
     });
 }
 function doAnotherThing(){
-    console.log("stop")
+    console.log("삭제버튼")
 }
 function doSomething(){
-    console.log("nono")
+    console.log("리스트")
 }
 function appendHistory(items) {
     //console.log(items)
@@ -205,23 +207,49 @@ function tab3_createLiTag(locationInfo,fileName){
     for(let i=0; i<locLength; i++){
         // locationInfo[i].time
         // locationInfo[i].memo
-        let visit = `<div class="popupContent">
-                        <h3>방문장소 ${i} ${locationInfo[i].time}</h3>
-                        <p id="description_${i}">${locationInfo[i].memo}</p>
-                    </div>
-                    `;
+        let popupContent = `
+                    <h3>방문장소 ${i} ${locationInfo[i].time}</h3>
+                    <p id="description_${i}">${locationInfo[i].memo}</p>
+            `;
+        let visit = document.createElement('div') // 최종 content
+        visit.classList.add('popupContent')
+
+        let infoBox = document.createElement('div')
+        infoBox.innerHTML = popupContent
+        infoBox.onclick = ()=>{
+            tab3_memoFucus(locationInfo[i],fileName)
+        }
+        let buttonBox = document.createElement('div')
+
+        let delButton =document.createElement('button')
+        delButton.innerText="삭제"
+        delButton.id = 'deleteButton'
+        delButton.onclick=function(){
+            showDialog()
+        }
+        let moveButton =document.createElement('button')
+        moveButton.innerText="이동"
+        moveButton.id = 'moveButton'
+
+        buttonBox.appendChild(delButton)
+        buttonBox.appendChild(moveButton)
+
+        visit.appendChild(infoBox)
+        visit.appendChild(buttonBox)
+
+        marker = L.marker([locationInfo[i].lat, locationInfo[i].lon]).addTo(tab3_map).bindPopup(visit)
+        tab3_markers.push(marker)
+
+        // li 안에서 쓰일 내용
         let div = document.createElement('div')
-        div.classList.add('popupContent')
+
         let innerDiv = document.createElement('div')
         innerDiv.classList.add('inner')
 
         let h3 = document.createElement('h3')
         h3.innerText=`방문장소 ${i} ${locationInfo[i].time}`
 
-        let delButton = `
-            <button class='button'>삭제</button>
-        `
-        h3.innerHTML += delButton
+
 
         let p = document.createElement('p')
         p.id=`description_${i}`
@@ -229,21 +257,17 @@ function tab3_createLiTag(locationInfo,fileName){
         
         innerDiv.appendChild(h3)
         innerDiv.appendChild(p)
-        innerDiv.onclick = function(){
+//        innerDiv.onclick = function(){
 //            tab3_memoFucus(locationInfo[i],fileName)
-        }
+//        }
         div.appendChild(innerDiv)
         let li = document.createElement('li');
         li.innerHTML = div.innerHTML;
-
-        marker = L.marker([locationInfo[i].lat, locationInfo[i].lon]).addTo(tab3_map).bindPopup(div)
-                
-        tab3_markers.push(marker)
         li.onclick = function() {
             marker.bindPopup(visit).openPopup();
             tab3_map.setView([locationInfo[i].lat, locationInfo[i].lon], tab3_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
-        
+
         // marker.on('popupopen',marker.on('popupopen', patch ));
         visitList.appendChild(li);
     }
@@ -287,4 +311,8 @@ function tab3_listOpen(){
     tab3_bottomListContainer.classList.toggle('top40dvh')
     let tab3_visitList = document.getElementById('tab3_visitList')
     tab3_visitList.classList.toggle("display-none")
+}
+
+function dialog(){
+    initDialog('dialog-main')
 }
