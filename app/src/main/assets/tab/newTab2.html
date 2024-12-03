@@ -21,7 +21,6 @@
 </head>
 <script>
     window.onload = function() {
-        document.querySelector('.tab2-bottom-list-container').classList.toggle("show");
         tab2_readFile();
         if(tab2_map != undefined)tab2_map.invalidateSize();
     }
@@ -37,8 +36,8 @@
             <textarea id="tab2_memo" placeholder="메모 하세요..."></textarea>
         </p>
         <p>
-            <button class="button" onClick='tab2_currentLocation()'>현재위치</button>
-            <button class="button" onClick='tab2_save()'>저장</button>
+            <button class="button" id="tab2_cBt" onClick='tab2_currentLocation()'>현재위치</button>
+            <button class="button" id="tab2_sBt" onClick='tab2_save()'>저장</button>
         </p>
     </div>
 

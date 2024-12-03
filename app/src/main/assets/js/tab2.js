@@ -13,10 +13,13 @@ function tab2_readFile(){
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
     //console.log("##### tab locInfo : ", locInfo);
+    document.querySelector('.tab2-bottom-list-container').classList.toggle("show");
+    document.querySelector('.tab2-bottom-list-container').style.display = "none";
     if(locInfo != ""){
         tab2_createLiTag(locInfo);
     }
     currentLocation(tab2_map,2);
+    document.getElementById('tab2_cBt').onclick();
 }
 
 
@@ -48,10 +51,7 @@ async function tab2_save(lat, lon, autoFg){
     //console.log("####### locInfo Data : " , locInfo);
 
     tab2_createLiTag(locInfo);
-
-    if(!autoFg){
-        tab2_reset();
-    }
+    tab2_reset();
 }
 
 let tab2_markers = [];
@@ -87,6 +87,7 @@ function tab2_createLiTag(locInfo){
 }
 
 function tab2_listToggle(param){
+    document.querySelector('.tab2-bottom-list-container').style.display = "block";
     if(param != tab2_bottom){
         document.querySelector('.tab2-bottom-list-container').classList.toggle(param);
         tab2_bottom = param;
@@ -100,14 +101,12 @@ function tab2_reset() {
 let listOpenFg = false;
 function tab2_listOpen(){
     if(listOpenFg){
-        console.log("close")
         document.querySelector('.tab2-bottom-list-container').classList.toggle('full-height');
         setTimeout(function(){
                 document.querySelector('.tab2-bottom-list').classList.toggle('hidden');
             },250)
         listOpenFg = false;
     }else{
-        console.log("open")
         document.querySelector('.tab2-bottom-list-container').classList.toggle('full-height');
         document.querySelector('.tab2-bottom-list').classList.toggle('hidden');
         listOpenFg = true;
