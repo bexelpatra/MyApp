@@ -53,6 +53,15 @@ function tab1_markMap(){
 
         fitMapToFarthestMarkers(tab1_markers)
     }
+
+    let chk = document.getElementById('tab1_toggle');
+    if(checkForegroundService()){
+        chk.checked = true;
+        tab1_handleToggle(chk);
+    }else{
+        chk.checked = false;
+        tab1_handleToggle(chk);
+    }
 }
 
 function fitMapToFarthestMarkers(markers) {
@@ -92,10 +101,25 @@ function updateLocation() {
 }
 
 function tab1_handleToggle(checkbox) {
+console.log("!!!!!!!!!!!!!!!!!!!!",checkbox.checked);
     if (checkbox.checked) {
-        updateLocation()
-        tab1_interval = setInterval(updateLocation, 180000);
+        //updateLocation()
+        //tab1_interval = setInterval(updateLocation, 180000);
+        Android.startForegroundService();
     } else {
-        clearInterval(tab1_interval);
+        Android.stopForegroundService();
     }
+}
+
+function checkForegroundService() {
+    // Android 브릿지를 통해 서비스 실행 상태 확인
+    let isRunning = Android.isServiceRunning();
+
+    // 상태에 따라 UI 업데이트
+    if(isRunning) {
+        console.log("foreground 실행중")
+    } else {
+        console.log("foreground 정지")
+    }
+    return isRunning;
 }

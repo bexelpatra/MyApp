@@ -1,16 +1,23 @@
 package com.example.myapplication
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -18,6 +25,7 @@ import java.util.Date
 class LocationService : Service() {
     private var handler: Handler? = null
     private var runnable: Runnable? = null
+    private lateinit var wakeLock: PowerManager.WakeLock
 
     companion object {
         const val CHANNEL_ID = "LocationServiceChannel"
@@ -26,6 +34,8 @@ class LocationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        acquireWakeLock()
+        updateWidgets()
         createNotificationChannel()
     }
 
@@ -49,6 +59,10 @@ class LocationService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        updateWidgets()
+        if (wakeLock.isHeld) {
+            wakeLock.release()
+        }
         handler?.removeCallbacks(runnable!!)
         handler = null
         runnable = null
@@ -56,11 +70,7 @@ class LocationService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Location Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
+            val channel = NotificationChannel(CHANNEL_ID, "Location Service Channel", NotificationManager.IMPORTANCE_DEFAULT)
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
         }
@@ -79,6 +89,7 @@ class LocationService : Service() {
             .setContentText("위치 정보를 저장하고 있습니다.")
             .setSmallIcon(R.drawable.notification_p)
             .setContentIntent(pendingIntent)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .build()
     }
 
@@ -93,5 +104,25 @@ class LocationService : Service() {
             }
             webAppInterface.save(jsonData.toString())
         }.start()
+    }
+
+    private fun checkLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun acquireWakeLock() {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LocationService::WakeLock")
+        wakeLock.acquire()
+    }
+
+    private fun updateWidgets() {
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(this, MyAppWidgetProvider::class.java))
+
+        appWidgetIds.forEach { widgetId ->
+            MyAppWidgetProvider.updateWidget(this, appWidgetManager, widgetId)
+        }
     }
 }

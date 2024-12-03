@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.ActivityManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -19,6 +20,32 @@ class MyAppWidgetProvider : AppWidgetProvider() {
     companion object {
         private var handler: Handler? = null
         private var runnable: Runnable? = null
+
+        fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+            val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
+            remoteViews.setViewVisibility(R.id.stopButton, View.INVISIBLE)
+            remoteViews.setViewVisibility(R.id.startButton, View.VISIBLE)
+
+            val isRunning = isServiceRunning(context, LocationService::class.java)
+            if (isRunning) {
+                remoteViews.setViewVisibility(R.id.startButton, View.GONE)
+                remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
+            } else {
+                remoteViews.setViewVisibility(R.id.startButton, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.stopButton, View.GONE)
+            }
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+        }
+
+        private fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+            val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.name == service.service.className) {
+                    return true
+                }
+            }
+            return false
+        }
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -62,23 +89,12 @@ class MyAppWidgetProvider : AppWidgetProvider() {
             "save_location" -> {
                 handleSaveLocation(context, appWidgetManager, remoteViews, "1")
             }
+
             "start_location" -> {
-                println("start_location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 remoteViews.setViewVisibility(R.id.startButton, View.GONE)
                 remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
 
                 appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
-
-                /*
-                handler = Handler(Looper.getMainLooper())
-                runnable = object : Runnable {
-                    override fun run() {
-                        handleSaveLocation(context, appWidgetManager, remoteViews, "0")
-                        handler?.postDelayed(this, 180000)
-                    }
-                }
-                handler?.post(runnable!!)
-                */
 
                 val serviceIntent = Intent(context, LocationService::class.java)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -87,18 +103,12 @@ class MyAppWidgetProvider : AppWidgetProvider() {
                     context.startService(serviceIntent)
                 }
             }
+
             "stop_location" -> {
-                println("stop_location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 remoteViews.setViewVisibility(R.id.startButton, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.stopButton, View.GONE)
 
                 appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
-
-                /*
-                handler?.removeCallbacks(runnable!!)
-                handler = null
-                runnable = null
-                */
 
                 context.stopService(Intent(context, LocationService::class.java))
             }
@@ -112,12 +122,9 @@ class MyAppWidgetProvider : AppWidgetProvider() {
         }else{
             remoteViews.setViewVisibility(R.id.stopProgressBar, View.VISIBLE)
             remoteViews.setViewVisibility(R.id.stopButton, View.INVISIBLE)
-
         }
-        appWidgetManager.updateAppWidget(
-            ComponentName(context, MyAppWidgetProvider::class.java),
-            remoteViews
-        )
+
+        appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
 
         Thread {
             val webAppInterface = WebAppInterface(context, FileIO())
@@ -131,7 +138,6 @@ class MyAppWidgetProvider : AppWidgetProvider() {
                 put("type", type)
             }
             val returnValue = webAppInterface.save(jsonData.toString())
-            println("Home widget returnValue : $returnValue")
 
             if(type == "1") {
                 remoteViews.setViewVisibility(R.id.saveProgressBar, View.GONE)
@@ -140,10 +146,9 @@ class MyAppWidgetProvider : AppWidgetProvider() {
                 remoteViews.setViewVisibility(R.id.stopProgressBar, View.GONE)
                 remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
             }
-            appWidgetManager.updateAppWidget(
-                ComponentName(context, MyAppWidgetProvider::class.java),
-                remoteViews
-            )
+
+            appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
+
         }.start()
     }
 }
