@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <!--TrailNote: 경로(Trail)와 메모(Note)의 결합으로, 앱의 핵심 기능을 직관적으로 표현 -->
+    <string name="app_name">TrailNote</string>
 </resources>
