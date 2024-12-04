@@ -21,7 +21,7 @@ function currentLocation(map,tab){
 
     let currentLocation = JSON.parse(Android.getCurrentLocation());
 
-    let popup = '현재 위치 ' + ' ( ' + now(3) + ' )'
+    let popup = '<a style="font-weight: bold;">현재 위치 ' + ' ( ' + now(3) + ' )</a>'
         + '<br>위도 : ' + currentLocation.lat + ' / 경도 : ' + currentLocation.lon;
 
     currentMarker[tab] = L.marker([currentLocation.lat, currentLocation.lon], /*{draggable: true}*/ ).addTo(map).bindPopup(popup).openPopup();
@@ -213,3 +213,4 @@ function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     newLabel.appendChild(middleDiv);
     newLabel.appendChild(bottomDiv);
 }
+

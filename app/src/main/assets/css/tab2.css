@@ -108,3 +108,9 @@
     background-color: #654e9fb2;
     color: white;
 }
+
+.tab2-view-button{
+    position: absolute;
+    z-index: 2002;
+    right: 1%;
+}

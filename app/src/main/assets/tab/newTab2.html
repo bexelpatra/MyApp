@@ -38,10 +38,13 @@
         <p>
             <button class="button" id="tab2_cBt" onClick='tab2_currentLocation()'>현재위치</button>
             <button class="button" id="tab2_sBt" onClick='tab2_save()'>저장</button>
+            <!--<button class="button" id="tab2_vBt" onClick='tab2_view()'>한번에 보기</button>-->
         </p>
     </div>
 
-    <div class="tab2_map" id="tab2_map"></div>
+    <div class="tab2_map" id="tab2_map">
+        <button class="button tab2-view-button" id="tab2_vBt" onClick='tab2_view()'>모두 보기</button>
+    </div>
     <div class="tab2-bottom-list-container" id="tab2_bottomListContainer">
         <div class="tab2-bottom-menu">
             <input id="tab2_toggle" type="checkbox" />
