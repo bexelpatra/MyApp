@@ -53,17 +53,33 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     @JavascriptInterface
     fun save(data: String ) :String {
         // Handle data received from JavaScript
-        println("Data from WebView: $data")
-        var location = getLocationSynchronously()
+        println("Save Data from WebView: $data")
 
         var origin = JSONObject(data)
         var dataObject = origin.getJSONObject("data")
         var type = origin.getString("type")
 
-        dataObject.put("lat",location.get("lat"))
-        dataObject.put("lon",location.get("lon"))
+        var location = getLocationSynchronously()
 
-        saveLocation(origin)
+        if (type == "0" && location["lat"] == "0" && location["lon"] == "0") {
+            var i = 1
+            while (i <= 3) {
+                TimeUnit.SECONDS.sleep(1)
+                location = getLocationSynchronously()
+                if (location["lat"] != "0" && location["lon"] != "0") {
+                    break
+                }
+                ++i
+            }
+        }
+
+        if (location["lat"] != "0" && location["lon"] != "0") {
+            dataObject.put("lat", location.get("lat"))
+            dataObject.put("lon", location.get("lon"))
+            saveLocation(origin)
+        }else if(type == "1"){
+            showToast("위치 저장 실패")
+        }
 
         return origin.toString()
     }
