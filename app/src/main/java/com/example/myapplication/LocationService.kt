@@ -59,6 +59,7 @@ class LocationService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        saveLocation()
         updateWidgets()
         if (wakeLock.isHeld) {
             wakeLock.release()
