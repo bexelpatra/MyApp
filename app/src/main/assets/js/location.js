@@ -214,3 +214,21 @@ function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     newLabel.appendChild(bottomDiv);
 }
 
+function fitMapToFarthestMarkers(markers) {
+    // 가장 먼 두 마커 찾기
+    let bounds = L.latLngBounds(markers[0].getLatLng(), markers[0].getLatLng());
+
+    // 모든 마커를 포함하도록 경계 확장
+    markers.forEach(marker => {
+        bounds.extend(marker.getLatLng());
+    });
+
+    // 계산된 줌 레벨을 Leaflet의 최대 지원 줌 레벨(18)로 제한
+    let maxZoom = Math.min(18, tab1_map.getBoundsZoom(bounds));
+
+    // 지도 뷰 조정
+    tab1_map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: maxZoom
+    });
+}
