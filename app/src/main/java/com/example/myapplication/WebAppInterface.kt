@@ -30,14 +30,13 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         println("Data from WebView: $data")
         return "good"
     }
+    //{"searchTerm":""}
     @JavascriptInterface
     fun reqSearch(data: String) :String {
         // Handle data received from JavaScript
         var json = JSONObject(data)
-        println(json)
         var searchTerm = json.getString("searchTerm").ifEmpty { "9" }
 
-    ///storage/emulated/0/TimeAndPlace/2024/2024-11-18-1-.txt
         var allFiles = ArrayList<File>()
         fileIo.findAllFiles(fileIo.rootDir,allFiles)
         var fileNames = allFiles
@@ -50,6 +49,8 @@ class WebAppInterface(private val context:Context, io :FileIO) {
         return result
     }
 
+    //   {"data": {"time":"2024-11-22  23:12:22","lat":"37.5692849","lon":"126.9725051","memo":"","order":"0"}
+    //   ,"type":"1"}
     @JavascriptInterface
     fun save(data: String ) :String {
         // Handle data received from JavaScript
@@ -83,17 +84,21 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
         return origin.toString()
     }
-    //{"data":{"option":"4","time":"2024-11-08  14:54:49"},"type":0}"
+
+//    {"time":"2024-11-22  23:12:22","lat":"37.5692849","lon":"126.9725051","memo":"","order":"0"}
     fun saveLocation(origin:JSONObject){
         var dataObject = origin.getJSONObject("data")
         var type = origin.getString("type")
         var timeString = dataObject.getString("time").split(" ")
         var time = timeString[0]
         var fileName = "${time}-${type}-.txt"
+
+
+        dataObject.put("type", type)
         fileIo.writeFileCrypto(fileName,dataObject)
     }
 
-    // {"data":{"time":"2024-11-08","type":0}}"
+    // "time":"2024-11-08","type":0"
     @JavascriptInterface
     fun readFile(time:String,type :String):String?{
         var year = time.split("-")[0]
@@ -102,12 +107,13 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
         return "[${fileContent}]"
     }
-    // {"data":{"time":"2024-11-08","type":0}}"
+    // {"data":{"fileName":"2024-12-05-1-.txt","time":"2024-12-05 11:19:06","lat":"37.5628854","lon":"126.9775813","memo":"수정","order":"0"}
+    // ,"type":"1"}
     @JavascriptInterface
     fun updateFile(data:String):String?{
         var origin = JSONObject(data)
         var dataObject = origin.getJSONObject("data")
-        var type = origin.getString("type")
+        var type = dataObject.get("type")
 
         var timeString = dataObject.getString("time").split(" ")
         var time = timeString[0]
@@ -115,6 +121,21 @@ class WebAppInterface(private val context:Context, io :FileIO) {
 
 
         return ""
+    }
+    //{"data":{"fileName":"2024-12-05-1-.txt","time":"2024-12-05 13:57:10","lat":37.56312124086043,"lon":126.97767989921182,"memo":"신규저장2","type":"1","order":"0"}
+    // ,"type":"1"}
+    @JavascriptInterface
+    fun deleteFileLine(data:String):String?{
+        var origin = JSONObject(data)
+        var dataObject = origin.getJSONObject("data")
+        var type = dataObject.get("type")
+
+        var timeString = dataObject.getString("time").split(" ")
+        var time = timeString[0]
+        fileIo.deleteFileContent("${time}-${type}",dataObject)
+
+
+        return "1.5"
     }
     @JavascriptInterface
     fun updateTitle(data:String):String?{
