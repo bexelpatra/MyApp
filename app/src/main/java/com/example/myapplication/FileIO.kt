@@ -219,6 +219,11 @@ class FileIO {
             findFile(fileName)?.let { copyFileWithModification(it, "${content.toString()},", content.getInt("order")) }
         }
     }
+    fun deleteFileContent(fileName: String,content: JSONObject) {
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
+            findFile(fileName)?.let { copyFileWithDelete(it, "${content.toString()},", content.getInt("order")) }
+        }
+    }
     fun updateFileTitle(originalFileYMDT: String,newFileName :String) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) { // 파일을 저장 가능한지 확인
 //            findFile(originalFileYMDT)?.let { it.renameTo(File(newFileName)) }
@@ -271,15 +276,18 @@ class FileIO {
 //                            modifiedLine = cryptoUtil.encrypt(content)
                             modifiedLine = content
                         }
-                        println(modifiedLine)
                         lineCount+=1
                         writer.write(modifiedLine)
                         writer.write("\n") // Write the line to the new file
                     }
                 }
             }
-
-            // Step 3: Delete the original file
+//          Step 3: Delete the original file
+//            originalFile.delete().also {
+//                if(it){
+//                    newFile.renameTo(originalFile)
+//                }
+//            }
             if (originalFile.delete()) {
                 // Step 4: Rename the new file to the original file name
                 if (newFile.renameTo(originalFile)) {
@@ -290,6 +298,58 @@ class FileIO {
             } else {
                 println("Failed to delete the original file.")
             }
+        } catch (e: IOException) {
+            println("An error occurred: ${e.message}")
+        }
+    }
+    fun copyFileWithDelete(originalFile: File, content: String, order:Int) {
+
+        val newFile = File("${originalFile.parent.toString()}temporary_.txt")
+
+        if (!originalFile.exists()) {
+            println("Original file does not exist!")
+            return
+        }
+
+        try {
+            // Step 1: Create BufferedReader and BufferedWriter
+            val bufferedReader = originalFile.bufferedReader()
+            val bufferedWriter = newFile.bufferedWriter()
+
+            // Step 2: Read each line
+            var lineCount = 0;
+            bufferedReader.use { reader ->
+                bufferedWriter.use { writer ->
+                    reader.lineSequence().forEach { line ->
+                        if(lineCount != order){
+                            writer.write(line)
+                            writer.write("\n") // Write the line to the new file
+                        }
+                        lineCount+=1
+                    }
+                }
+            }
+
+            // Step 3: Delete the original file
+            originalFile.delete().also {
+                if(it){
+                    if(newFile.readText().isNotEmpty()){
+                        newFile.renameTo(originalFile)
+                    }else{
+                        newFile.delete()
+                    }
+                }
+            }
+//            if (originalFile.delete()) {
+//                // Step 4: Rename the new file to the original file name
+//                if (newFile.renameTo(originalFile)) {
+//                    println("File copy completed and original file replaced.")
+//                } else {
+//                    println("Failed to rename the new file to the original name.")
+//                }
+//            } else {
+//                println("Failed to delete the original file.")
+//            }
         } catch (e: IOException) {
             println("An error occurred: ${e.message}")
         }
