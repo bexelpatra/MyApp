@@ -214,7 +214,7 @@ function makeHamburger(divId, newDivId, newCheckboxId, labelFnc, hbgLoc){
     newLabel.appendChild(bottomDiv);
 }
 
-function fitMapToFarthestMarkers(markers) {
+function fitMapToFarthestMarkers(markers, map) {
     // 가장 먼 두 마커 찾기
     let bounds = L.latLngBounds(markers[0].getLatLng(), markers[0].getLatLng());
 
@@ -224,10 +224,10 @@ function fitMapToFarthestMarkers(markers) {
     });
 
     // 계산된 줌 레벨을 Leaflet의 최대 지원 줌 레벨(18)로 제한
-    let maxZoom = Math.min(18, tab1_map.getBoundsZoom(bounds));
+    let maxZoom = Math.min(18, map.getBoundsZoom(bounds));
 
     // 지도 뷰 조정
-    tab1_map.fitBounds(bounds, {
+    map.fitBounds(bounds, {
         padding: [50, 50],
         maxZoom: maxZoom
     });

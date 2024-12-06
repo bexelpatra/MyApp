@@ -51,7 +51,7 @@ function tab1_markMap(){
             fill: true
         }).addTo(tab1_map);
 
-        fitMapToFarthestMarkers(tab1_markers)
+        fitMapToFarthestMarkers(tab1_markers, tab1_map)
     }
 
     let chk = document.getElementById('tab1_toggle');
