@@ -53,15 +53,6 @@ function tab1_markMap(){
 
         fitMapToFarthestMarkers(tab1_markers, tab1_map);
     }
-
-    let chk = document.getElementById('tab1_toggle');
-    if(Android.isServiceRunning()){
-        chk.checked = true;
-        tab1_handleToggle(chk);
-    }else{
-        chk.checked = false;
-        tab1_handleToggle(chk);
-    }
 }
 
 function updateLocation() {
