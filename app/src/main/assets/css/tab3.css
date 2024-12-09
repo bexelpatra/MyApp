@@ -224,3 +224,15 @@ tr:hover {
   #tab3_toggle:checked + .tab3-hamburger .tab3-bottom {
       transform: rotate(-45deg);
   }
+
+/*tab3 type 0 marker pin*/
+.tab3-marker-pin {
+    width: 15px;
+    height: 15px;
+    border-radius: 50% 50% 50% 50%;
+    background: #654e9fb2;
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+}

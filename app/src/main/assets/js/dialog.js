@@ -3,7 +3,7 @@ function initDialog(dialogId){
         <div id="customDialog" class="dialog-overlay" style="display:none;">
             <div class="dialog-box">
                 <div class="dialog-title" id="dialogTitle">Confirmation</div>
-                <div class="dialog-message" id="dialogMessage">Do you want to proceed?</div>
+                <!-- <div class="dialog-message" id="dialogMessage">Do you want to proceed?</div> -->
                 <div class="dialog-buttons">
                     <button class="btn btn-deny" id="denyButton">취소</button>
                     <button class="btn btn-accept" id="acceptButton">확인</button>
@@ -20,12 +20,13 @@ function addEvent(){
     const denyButton = document.getElementById('denyButton');
     console.log('ttest')
     // Accept button handler
-    acceptButton.addEventListener('click', () => {
+    acceptButton.addEventListener('click', (e) => {
+        e.target.run()
         hideDialog();
     });
 
     // Deny button handler
-    denyButton.addEventListener('click', () => {
+    denyButton.addEventListener('click', (e) => {
         hideDialog();
     });
 

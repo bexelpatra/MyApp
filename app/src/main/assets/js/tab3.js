@@ -2,7 +2,8 @@ let tab3_map;
 let tab3_initFg = true;
 let tab3_bottom = 'hidden'
 let tab3_markers=[]
-
+let tab3_polyline;
+let longPressTimer=0;
 function tab3_initMap(){
     if(tab3_initFg){
         // tab3_map = initMap('tab3_map')
@@ -12,28 +13,16 @@ function tab3_initMap(){
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(tab3_map);
+
+        initDialog('dialog-main')
         tab3_initFg = false
     }
-    document.getElementById('tab3_visitList').addEventListener('click', function (event) {
-        // If a button was clicked
-        if (event.target.tagName === 'BUTTON') {
-            event.stopPropagation(); // Stop the click from bubbling to the <li>
-            doAnotherThing(); // Call the button's action
-        } else if (event.target.tagName === 'li') {
-            doSomething(); // Call the <li>'s action
-        } else{
-            console.log('event', event.target.tagName)
-        }
-    });
-}
-function doAnotherThing(){
-    console.log("삭제버튼")
-}
-function doSomething(){
-    console.log("리스트")
+
 }
 function appendHistory(items) {
-    //console.log(items)
+
+    tab3_resetLi()
+
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
     items.forEach((item, index) => {
@@ -94,7 +83,7 @@ function saveEdit(cell) {
     
     const button = cell.closest('tr').querySelector('button');
     button.textContent = '수정';
-    // 서버 통신 구간
+
     let data ={}
     data.ymdt = cell.getAttribute('ymdt')
     data.newFileName = cell.textContent.substr(12)
@@ -136,31 +125,37 @@ function handleInput(el,value) {
     // list=['2024-11-18-1-.txt','2024-11-19-1-.txt']
     appendHistory(list)
 }
-
+// fileName :"2024-12-11-1"
 function tab3_readFile(fileName){
-    
-    let ymdte = fileName?.split('-')
-    let time = ymdte.splice(0,3).join('-')
-    let fileType = ymdte.splice(0,1).join('')
+
+    let ymdt = fileName?.split('-')
+    let time = ymdt.splice(0,3).join('-')
+    let fileType = ymdt.splice(0,1).join('')?.substr(0,1)
     let returnData = Android.readFile(time,fileType);
-    //console.log("##### tab returnData : ", returnData);
+//    console.log("##### tab returnData : ", returnData);
     let locationInfo = JSON.parse(returnData);
     
     let distanceInfo ;
     if(locationInfo != ""){
-        distanceInfo = findFarthestPair(locationInfo);
-        tab3_createLiTag(locationInfo,fileName);
-        tab3_map.setView([distanceInfo.center.lat,distanceInfo.center.lon],getZoomLevel(distanceInfo.distance));
+//        distanceInfo = findFarthestPair(locationInfo);
+        if(fileType==0){
+            tab3_readType0Map(locationInfo);
+        }else if(fileType==1){
+            tab3_readType1Map(locationInfo);
+        }
+        setTimeout(()=>{
+            fitMapToFarthestMarkers(tab3_markers,tab3_map)
+        },10)
+    }else{
+        tab3_mapListClose()
     }
 }
 
-function tab3_memoFucus(locInfo,fileName){
+function tab3_memoFucus(locInfo){
     let tab3_memo = document.getElementById('tab3_memo');
     let tab3_searchTerm = document.getElementById('searchTerm');
     tab3_memo.style.display='block'
     tab3_searchTerm.style.display='none'
-    //console.log(locInfo)
-    tab3_memo.dataset['fileName'] = fileName
     Object.keys(locInfo).forEach((key)=>{
         tab3_memo.dataset[key] = locInfo[key]
     })
@@ -177,59 +172,127 @@ function tab3_memoBlur(){
     tab3_searchTerm.style.display='block'
 
     tab3_memo.dataset.memo = tab3_memo.value;
+
     let param = {}
     param.data=tab3_memo.dataset
-    param.type='1'
 
     Android.updateFile(JSON.stringify(param))
     Android.showToast("저장되었습니다.")
+
+    tab3_readFile(getFileName(tab3_memo.dataset))
 
     Object.keys(tab3_memo.dataset).forEach((key)=>{
         tab3_memo.removeAttribute(`data-${key}`)
     })
 
-    tab3_readFile(tab3_memo.dataset.fileName)
+
+}
+function tab3_deleteButtonClick(locationInfo,i){
+    document.getElementById('acceptButton').run = function(){
+        console.log(locationInfo[i],i)
+        let param = {}
+        param.data=locationInfo[i]
+        console.log(getFileName(locationInfo[i]))
+        Android.deleteFileLine(JSON.stringify(param))
+        tab3_readFile(getFileName(locationInfo[i]))
+    }
+    showDialog()
 }
 
+function tab3_moveButtonClick(locationInfo,i){
+    console.log(this)
+    let moveButton = document.getElementById('moveButton')
+     if(moveButton.classList.contains('move')){
+         tab3_markers[i].dragging.enable()
+         tab3_markers[i].on('dragend', function(event) {
+             var position = event.target.getLatLng();
+             locationInfo[i]['position'] = position;
+             console.log('loc info', locationInfo[i]);
+         });
+         moveButton.innerText = '저장'
+     }else{
+         moveButton.innerText = '이동'
+         showDialog()
+     }
+     moveButton.classList.toggle('move')
+     moveButton.classList.toggle('save')
 
+     document.getElementById('acceptButton').run = function(){
+         let newLat = locationInfo[i].position.lat
+         let newLon = locationInfo[i].position.lng
+
+         if(newLat){
+             locationInfo[i].lat = newLat
+         }
+         if(newLon){
+             locationInfo[i].lon =newLon
+         }
+         delete locationInfo[i].position
+         console.log(locationInfo[i])
+         let param = {}
+         param.data=locationInfo[i]
+
+
+         Android.updateFile(JSON.stringify(param))
+         Android.showToast("저장되었습니다.")
+
+     }
+ }
 
 function tab3_resetMakers(){
     tab3_markers.forEach((marker) =>{
         tab3_map.removeLayer(marker);
     });
     tab3_markers = []; // Clear the array
+    if(tab3_polyline){
+        tab3_map.removeLayer(tab3_polyline)
+        tab3_polyline = null;
+    }
+
+}
+function tab3_resetLi(){
+    document.getElementById('tab3_visitList').querySelectorAll('li').forEach((e)=>{e.remove()})
 }
 
-function tab3_createLiTag(locationInfo,fileName){
+function tab3_readType1Map(locationInfo){
+    tab3_resetMakers()
 
     let visitList = document.getElementById("tab3_visitList");
     locLength = locationInfo.length;
+    //locationinfo[i] = {"fileName":"2024-11-22-1-.txt","time":"2024-11-22  23:12:22","lat":"37.5692849","lon":"126.9725051","memo":"test","order":"0"}
     for(let i=0; i<locLength; i++){
-        // locationInfo[i].time
-        // locationInfo[i].memo
+        // 팝업 박스
         let popupContent = `
                     <h3>방문장소 ${i} ${locationInfo[i].time}</h3>
                     <p id="description_${i}">${locationInfo[i].memo}</p>
             `;
         let visit = document.createElement('div') // 최종 content
         visit.classList.add('popupContent')
-
+        console.log(JSON.stringify(locationInfo[i]))
         let infoBox = document.createElement('div')
         infoBox.innerHTML = popupContent
+
         infoBox.onclick = ()=>{
-            tab3_memoFucus(locationInfo[i],fileName)
+            tab3_memoFucus(locationInfo[i])
         }
         let buttonBox = document.createElement('div')
 
         let delButton =document.createElement('button')
         delButton.innerText="삭제"
         delButton.id = 'deleteButton'
-        delButton.onclick=function(){
-            showDialog()
+
+        delButton.onclick= ()=>{
+            tab3_deleteButtonClick(locationInfo,i)
         }
+
         let moveButton =document.createElement('button')
         moveButton.innerText="이동"
         moveButton.id = 'moveButton'
+        moveButton.classList.add('move')
+
+        moveButton.onclick= ()=>{
+            tab3_moveButtonClick(locationInfo,i)
+        }
 
         buttonBox.appendChild(delButton)
         buttonBox.appendChild(moveButton)
@@ -247,20 +310,18 @@ function tab3_createLiTag(locationInfo,fileName){
         innerDiv.classList.add('inner')
 
         let h3 = document.createElement('h3')
+        let p = document.createElement('p')
+
         h3.innerText=`방문장소 ${i} ${locationInfo[i].time}`
 
-
-
-        let p = document.createElement('p')
         p.id=`description_${i}`
         p.innerText=locationInfo[i].memo;
         
         innerDiv.appendChild(h3)
         innerDiv.appendChild(p)
-//        innerDiv.onclick = function(){
-//            tab3_memoFucus(locationInfo[i],fileName)
-//        }
+
         div.appendChild(innerDiv)
+
         let li = document.createElement('li');
         li.innerHTML = div.innerHTML;
         li.onclick = function() {
@@ -268,7 +329,6 @@ function tab3_createLiTag(locationInfo,fileName){
             tab3_map.setView([locationInfo[i].lat, locationInfo[i].lon], tab3_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
 
-        // marker.on('popupopen',marker.on('popupopen', patch ));
         visitList.appendChild(li);
     }
 }
@@ -300,6 +360,8 @@ function tab3_mapListClose(el){
     listContainer.style.display = 'none';
 
     tab3_resetMakers()
+    list = tab3_search()
+    appendHistory(list)
 }
 
 function tab3_listOpen(){
@@ -315,4 +377,80 @@ function tab3_listOpen(){
 
 function dialog(){
     initDialog('dialog-main')
+}
+
+function getFileName(locationInfo){
+    let fileName = locationInfo['time'].split(" ")[0]
+    let type = locationInfo['type']
+    return `${fileName}-${type}`
+}
+
+function tab3_readType0Map(locInfo){
+    tab3_resetMakers()
+
+    let locLength = locInfo.length;
+
+    let tab3_icon = L.divIcon({
+        className: 'tab1-custom-icon',
+        html: "<div class='tab3-marker-pin'></div><i class='tab3-material-icons'></i>",
+        iconSize: [15, 15],
+        iconAnchor: [15, 15]
+    });
+
+    let tab3_line = [];
+     var isLongPress = false;
+    var pressStartTime;
+
+    // Duration to detect long press
+    var longPressDuration = 1000; // 1 second
+
+    for(let i=0; i<locLength; i++){
+        let markerStr = '자동 저장 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
+                    + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon;
+
+        let marker = L.marker([locInfo[i].lat, locInfo[i].lon], {icon: tab3_icon}).addTo(tab3_map)/*.bindPopup(markerStr)*/;
+
+        // Listen for mousedown or touchstart
+        var longPressTimer;
+
+        marker.on('mousedown', function () {
+            // Start the timer for a long press
+            console.log("mouse down")
+            longPressTimer = setTimeout(function () {
+                marker.dragging.enable(); // Enable dragging after 1 second
+                console.log('Dragging enabled after long press');
+            }, 1000); // 1 second (1000ms)
+        });
+
+        marker.on('mouseup mouseout', function () {
+            // Cancel the timer if the mouse is released or moves out of the marker
+            console.log("mouse out")
+            clearTimeout(longPressTimer);
+        });
+
+        marker.on('dragend', function(e) {
+          // Additional actions when marker is dropped
+          this.dragging.disable();
+          this.setOpacity(1);
+            console.log('드래그애드')
+          // Function to call when marker is dropped
+//          onMarkerDropped(this.getLatLng());
+        });
+
+        tab3_line.push([locInfo[i].lat, locInfo[i].lon])
+
+        tab3_markers.push(marker);
+    }
+
+    tab3_polyline = L.polyline([tab3_line], {
+        color: '#654e9fb2'
+    }).arrowheads({
+        frequency: 'allvertices',
+        yawn: 60,
+        size: '15px',
+        color: '#654e9fb2',
+        fill: true
+    }).addTo(tab3_map);
+
+    fitMapToFarthestMarkers(tab3_markers,tab3_map)
 }
