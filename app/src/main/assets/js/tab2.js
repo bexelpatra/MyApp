@@ -77,23 +77,21 @@ function tab2_createLiTag(locInfo){
                     //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
                     + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
 
+        let tab2_markerAll = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
+        tab2_markersAll.push(tab2_markerAll);
+
         let li = document.createElement('li');
         li.className = 'tab2_li';
         li.innerHTML = visit;
         li.onclick = function() {
-            let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map)
-                .bindPopup(visit)
-                .openPopup();
-
+            /*let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
             tab2_markers.push(tab2_marker);
-            tab2_ramoveMarker(i, tab2_marker);
+            tab2_removeMarker(i, tab2_marker);*/
 
             tab2_map.setView([locInfo[i].lat, locInfo[i].lon], '18');
         };
         visitList.appendChild(li);
 
-        let tab2_markerAll = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
-        tab2_markersAll.push(tab2_markerAll);
     }
     tab2_listToggle("show");
     visitList.getElementsByTagName('li')[locLength-1].onclick();
@@ -132,7 +130,7 @@ function tab2_currentLocation(){
 }
 
 let tab2_markIdx = [];
-function tab2_ramoveMarker(index, marker){
+function tab2_removeMarker(index, marker){
     if(tab2_markIdx[index] != undefined){
         tab2_markIdx[index].remove();
     }
