@@ -230,13 +230,14 @@ function tab3_moveButtonClick(locationInfo,i){
             locationInfo[i].lon =newLon
         }
         delete locationInfo[i].position
-        console.log(locationInfo[i])
+//        console.log(locationInfo[i])
         let param = {}
         param.data=locationInfo[i]
 
 
         Android.updateFile(JSON.stringify(param))
         Android.showToast("저장되었습니다.")
+        tab3_markers[i].dragging.disable()
     }
     document.getElementById('denyButton').run = function(){
         tab3_markers[i].dragging.disable()
