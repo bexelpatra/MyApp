@@ -334,7 +334,7 @@ function tab3_readType1Map(locationInfo){
         let li = document.createElement('li');
         li.innerHTML = div.innerHTML;
         li.onclick = function() {
-            marker.bindPopup(visit).openPopup();
+            tab3_markers[i].bindPopup(visit).openPopup();
             tab3_map.setView([locationInfo[i].lat, locationInfo[i].lon], tab3_map.getZoom()); // 지도의 중앙을 마커 위치로 설정
         };
 
