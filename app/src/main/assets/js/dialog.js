@@ -27,6 +27,7 @@ function addEvent(){
 
     // Deny button handler
     denyButton.addEventListener('click', (e) => {
+        e.target.run()
         hideDialog();
     });
 
@@ -41,6 +42,8 @@ function showDialog() {
 // Hide dialog function
 function hideDialog() {
     document.getElementById('customDialog').style.display = 'none';
+    // document.getElementById('acceptButton').run = null;
+    // document.getElementById('denyButton').run = null;
 }
 
 

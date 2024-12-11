@@ -3,7 +3,7 @@ let tab3_initFg = true;
 let tab3_bottom = 'hidden'
 let tab3_markers=[]
 let tab3_polyline;
-let longPressTimer=0;
+
 function tab3_initMap(){
     if(tab3_initFg){
         // tab3_map = initMap('tab3_map')
@@ -125,7 +125,7 @@ function handleInput(el,value) {
     // list=['2024-11-18-1-.txt','2024-11-19-1-.txt']
     appendHistory(list)
 }
-// fileName :"2024-12-11-1"
+// 읽기 fileName :"2024-12-11-1"
 function tab3_readFile(fileName){
 
     let ymdt = fileName?.split('-')
@@ -164,7 +164,7 @@ function tab3_memoFucus(locInfo){
     tab3_memo.value = locInfo.memo
     tab3_memo.focus()
 }
-
+// 메모 저장
 function tab3_memoBlur(){
     let tab3_memo = document.getElementById('tab3_memo');
     let tab3_searchTerm = document.getElementById('searchTerm');
@@ -187,56 +187,62 @@ function tab3_memoBlur(){
 
 
 }
+// 삭제
 function tab3_deleteButtonClick(locationInfo,i){
     document.getElementById('acceptButton').run = function(){
-        console.log(locationInfo[i],i)
+//        console.log(locationInfo[i],i)
         let param = {}
         param.data=locationInfo[i]
-        console.log(getFileName(locationInfo[i]))
         Android.deleteFileLine(JSON.stringify(param))
         tab3_readFile(getFileName(locationInfo[i]))
     }
+    document.getElementById('denyButton').run = function(){}
     showDialog()
 }
-
+// 이동/저장
 function tab3_moveButtonClick(locationInfo,i){
     console.log(this)
     let moveButton = document.getElementById('moveButton')
-     if(moveButton.classList.contains('move')){
-         tab3_markers[i].dragging.enable()
-         tab3_markers[i].on('dragend', function(event) {
-             var position = event.target.getLatLng();
-             locationInfo[i]['position'] = position;
-             console.log('loc info', locationInfo[i]);
-         });
-         moveButton.innerText = '저장'
-     }else{
-         moveButton.innerText = '이동'
-         showDialog()
-     }
-     moveButton.classList.toggle('move')
-     moveButton.classList.toggle('save')
+    if(moveButton.classList.contains('move')){
+     tab3_markers[i].dragging.enable()
+     tab3_markers[i].on('dragend', function(event) {
+         var position = event.target.getLatLng();
+         locationInfo[i]['position'] = position;
+         console.log('loc info', locationInfo[i], i)
+         console.log(tab3_markers[i])
+     });
+     moveButton.innerText = '저장'
+    }else{
+     moveButton.innerText = '이동'
+     showDialog()
+    }
+    moveButton.classList.toggle('move')
+    moveButton.classList.toggle('save')
 
-     document.getElementById('acceptButton').run = function(){
-         let newLat = locationInfo[i].position.lat
-         let newLon = locationInfo[i].position.lng
+    document.getElementById('acceptButton').run = function(){
+        let newLat = locationInfo[i].position.lat
+        let newLon = locationInfo[i].position.lng
 
-         if(newLat){
-             locationInfo[i].lat = newLat
-         }
-         if(newLon){
-             locationInfo[i].lon =newLon
-         }
-         delete locationInfo[i].position
-         console.log(locationInfo[i])
-         let param = {}
-         param.data=locationInfo[i]
+        if(newLat){
+            locationInfo[i].lat = newLat
+        }
+        if(newLon){
+            locationInfo[i].lon =newLon
+        }
+        delete locationInfo[i].position
+        console.log(locationInfo[i])
+        let param = {}
+        param.data=locationInfo[i]
 
 
-         Android.updateFile(JSON.stringify(param))
-         Android.showToast("저장되었습니다.")
+        Android.updateFile(JSON.stringify(param))
+        Android.showToast("저장되었습니다.")
+    }
+    document.getElementById('denyButton').run = function(){
+        tab3_markers[i].dragging.disable()
+        tab3_markers[i].setLatLng([locationInfo[i].lat,locationInfo[i].lon])
 
-     }
+    }
  }
 
 function tab3_resetMakers(){
@@ -256,8 +262,10 @@ function tab3_resetLi(){
 
 function tab3_readType1Map(locationInfo){
     tab3_resetMakers()
-
+    tab3_resetLi()
+    document.getElementById('tab3_bottomListContainer').style.display = 'block'
     let visitList = document.getElementById("tab3_visitList");
+
     locLength = locationInfo.length;
     //locationinfo[i] = {"fileName":"2024-11-22-1-.txt","time":"2024-11-22  23:12:22","lat":"37.5692849","lon":"126.9725051","memo":"test","order":"0"}
     for(let i=0; i<locLength; i++){
@@ -268,7 +276,7 @@ function tab3_readType1Map(locationInfo){
             `;
         let visit = document.createElement('div') // 최종 content
         visit.classList.add('popupContent')
-        console.log(JSON.stringify(locationInfo[i]))
+
         let infoBox = document.createElement('div')
         infoBox.innerHTML = popupContent
 
@@ -387,6 +395,7 @@ function getFileName(locationInfo){
 
 function tab3_readType0Map(locInfo){
     tab3_resetMakers()
+    document.getElementById('tab3_bottomListContainer').style.display = 'none'
 
     let locLength = locInfo.length;
 
@@ -405,44 +414,57 @@ function tab3_readType0Map(locInfo){
     var longPressDuration = 1000; // 1 second
 
     for(let i=0; i<locLength; i++){
-        let markerStr = '자동 저장 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )'
-                    + '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon;
 
         let marker = L.marker([locInfo[i].lat, locInfo[i].lon], {icon: tab3_icon}).addTo(tab3_map)/*.bindPopup(markerStr)*/;
-
+        marker.dragging.enable()
         // Listen for mousedown or touchstart
-        var longPressTimer;
+//        marker.on('contextmenu', function (e) {this.dragging.enable()});
 
-        marker.on('mousedown', function () {
-            // Start the timer for a long press
-            console.log("mouse down")
-            longPressTimer = setTimeout(function () {
-                marker.dragging.enable(); // Enable dragging after 1 second
-                console.log('Dragging enabled after long press');
-            }, 1000); // 1 second (1000ms)
+        marker.on('dragstart', function(e) {
+            //1. remove line
+            tab3_map.removeLayer(tab3_polyline)
+            // console.log('drag start',e.target.getLatLng())
         });
-
-        marker.on('mouseup mouseout', function () {
-            // Cancel the timer if the mouse is released or moves out of the marker
-            console.log("mouse out")
-            clearTimeout(longPressTimer);
-        });
-
         marker.on('dragend', function(e) {
-          // Additional actions when marker is dropped
-          this.dragging.disable();
-          this.setOpacity(1);
-            console.log('드래그애드')
-          // Function to call when marker is dropped
-//          onMarkerDropped(this.getLatLng());
+            document.getElementById('acceptButton').run = function(){
+                locInfo[i].lat=e.target.getLatLng().lat
+                locInfo[i].lon=e.target.getLatLng().lng
+
+                let param = {}
+                param.data=locInfo[i]
+                console.log(locInfo[i])
+                Android.updateFile(JSON.stringify(param))
+
+                tab3_readType0Map(locInfo)
+            }
+            document.getElementById('denyButton').run = function(){
+                tab3_readType0Map(locInfo)
+            }
+
+            tab3_line_copy = JSON.parse(JSON.stringify(tab3_line));
+            tab3_line_copy[i] = [e.target.getLatLng().lat,e.target.getLatLng().lng]
+            console.log('end marker ==>',tab3_markers[i])
+            console.log('dragend' , e.target.getLatLng())
+
+
+            drawPolyline(tab3_line_copy)
+            showDialog()
+//            this.setOpacity(1);
+
         });
+
 
         tab3_line.push([locInfo[i].lat, locInfo[i].lon])
 
         tab3_markers.push(marker);
     }
+    drawPolyline(tab3_line)
+    fitMapToFarthestMarkers(tab3_markers,tab3_map)
+}
 
-    tab3_polyline = L.polyline([tab3_line], {
+function drawPolyline(lines){
+
+    tab3_polyline = L.polyline([lines], {
         color: '#654e9fb2'
     }).arrowheads({
         frequency: 'allvertices',
@@ -451,6 +473,4 @@ function tab3_readType0Map(locInfo){
         color: '#654e9fb2',
         fill: true
     }).addTo(tab3_map);
-
-    fitMapToFarthestMarkers(tab3_markers,tab3_map)
 }
