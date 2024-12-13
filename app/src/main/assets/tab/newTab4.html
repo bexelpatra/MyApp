@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Visit Location on Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="../css/main.css"/>
+    <link rel="stylesheet" href="../css/tab4.css"/>
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <!-- 로컬 테스트 용 JS Start-->
+    <!--<script src="../js/localTest.js"></script>-->
+    <!-- 로컬 테스트 용 JS End-->
+    <script src="../js/location.js"></script>
+    <script src="../js/tab4.js"></script>
+</head>
+<script>
+    window.onload = function() {
+        //tab4_readFile()
+    }
+</script>
+<body class="page-rewards" style="position:absolute">
+<div>
+    <a href="../main.html" class="a_back">
+        <img src="../image/img_back_p.png" class="img_back">
+    </a>
+</div>
+<div id="tab4_dayListDiv">
+    <input type="text"
+           id="searchTerm"
+           placeholder="날짜 (YYYYMMDD)"
+           oninput="tab4_handleInput(this,this.value)">
+    <section>
+        <div class="slider">
+            <div class="swiper-container">
+                <div class="swiper-wrapper" id="tab4_dayWrapper">
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="tab4_locationListDiv">
+    <ul class="tab4-ul" id="tab4_list"></ul>
+</div>
+</body>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        grabCursor: true,      // 슬라이드 위에 마우스를 올리면 커서모양이 grab 모양으로 바뀝니다.
+        centeredSlides: true,  // 첫번째 슬라이드를 가운데 정렬로 적용합니다.
+        slidesPerView: 2, // 중앙에 있는 슬라이드를 제외한 좌/우 슬라이드 갯수를 설정합니다.
+        cssMode: true,
+        spaceBetween: 50, // 슬라이드 간의 간격
+        // loop: true,  // 슬라이드 루프(무한 회전) 활성화
+    });
+</script>
+</html>

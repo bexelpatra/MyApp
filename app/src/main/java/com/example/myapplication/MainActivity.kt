@@ -1,19 +1,27 @@
 package com.example.myapplication
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     val fileIO = FileIO()
     private lateinit var webView: WebView
     private var backPressedTime: Long = 0
+
+    private var fileUploadCallback: ValueCallback<Array<Uri>>? = null
+    private val FILE_CHOOSER_RESULT_CODE = 1
 
     //    private lateinit var myBtn :Button;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +43,13 @@ class MainActivity : AppCompatActivity() {
         webView.settings.allowFileAccessFromFileURLs = true
         webView.settings.allowUniversalAccessFromFileURLs = true
         webView.settings.allowFileAccessFromFileURLs = true
-        webView.settings.allowFileAccess= true
+        webView.settings.allowFileAccess = true
+        webView.settings.domStorageEnabled = true
+        webView.settings.allowContentAccess = true
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = true
+
+        /*webView.setInitialScale(100);*/
 
         webView.addJavascriptInterface(WebAppInterface(this,fileIO), "Android")
         // Load the HTML file from the assets folder
@@ -45,6 +59,23 @@ class MainActivity : AppCompatActivity() {
 //        println("${fileIO.toString()} ${fileIO.hashCode()}")
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                fileUploadCallback = filePathCallback
+
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "image/*"
+
+                startActivityForResult(intent, FILE_CHOOSER_RESULT_CODE)
+                return true
+            }
+        }
     }
 
 
@@ -61,6 +92,21 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == FILE_CHOOSER_RESULT_CODE) {
+            if (resultCode == RESULT_OK) {
+                fileUploadCallback?.onReceiveValue(
+                    WebChromeClient.FileChooserParams.parseResult(resultCode, data)
+                )
+            } else {
+                fileUploadCallback?.onReceiveValue(null)
+            }
+            fileUploadCallback = null
         }
     }
 }

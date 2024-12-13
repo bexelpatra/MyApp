@@ -37,6 +37,7 @@ async function tab2_save(lat, lon, autoFg){
     newInfo.lat = lat??"";
     newInfo.lon = lon??"";
     newInfo.memo = memo;
+    newInfo.imgPath = "";
 
     let saveData = {};
     saveData.data = newInfo;
