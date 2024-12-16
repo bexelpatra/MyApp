@@ -64,11 +64,11 @@ function tab4_createLiTag(locInfo){
                     //preview.src = realImgPath;
 
                     //base64 resize
-                    const image = new Image();
+                    let image = new Image();
                     image.src = e.target.result;
                     image.onload = (e) => {
-                        const $canvas = document.createElement(`canvas`);
-                        const ctx = $canvas.getContext(`2d`);
+                        let $canvas = document.createElement(`canvas`);
+                        let ctx = $canvas.getContext(`2d`);
 
                         $canvas.width = e.target.width;
                         $canvas.height = e.target.height;
