@@ -1,9 +1,11 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -13,6 +15,7 @@ import androidx.activity.OnBackPressedCallback
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.myapplication.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         webView.settings.allowFileAccessFromFileURLs = true
         webView.settings.allowUniversalAccessFromFileURLs = true
-        webView.settings.allowFileAccessFromFileURLs = true
         webView.settings.allowFileAccess = true
         webView.settings.domStorageEnabled = true
         webView.settings.allowContentAccess = true
@@ -100,6 +102,18 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == FILE_CHOOSER_RESULT_CODE) {
             if (resultCode == RESULT_OK) {
+                val uri = data?.data
+                uri?.let {
+                    // realPath가 파일의 절대 경로입니다
+                    var realPath = getPathFromUri(it)
+                    //val realPath = getAbsolutePath(applicationContext, it)
+                    webView.evaluateJavascript(
+                        "javascript:handleImagePath('$realPath')",
+                        null
+                    )
+                }
+                println("@@@@ resultCode : " + resultCode)
+                println(data)
                 fileUploadCallback?.onReceiveValue(
                     WebChromeClient.FileChooserParams.parseResult(resultCode, data)
                 )
@@ -108,5 +122,33 @@ class MainActivity : AppCompatActivity() {
             }
             fileUploadCallback = null
         }
+    }
+    private fun getPathFromUri(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+
+        cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            return it.getString(columnIndex)
+        }
+        return null
+    }
+
+    // 절대 경로를 가져오는 새로운 함수 추가
+    private fun getAbsolutePath(context: Context, uri: Uri): String? {
+        // 외부 저장소 경로인 경우
+        if (uri.path?.startsWith("/external/") == true || uri.path?.startsWith("/media/") == true) {
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = context.contentResolver.query(uri, projection, null, null, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                    return it.getString(columnIndex)
+                }
+            }
+        }
+        // 앱 내부 저장소 경로인 경우
+        return context.filesDir.absolutePath + File.separator + uri.lastPathSegment
     }
 }

@@ -10,6 +10,7 @@ function tab4_readFile(fileName){
     }
 }
 
+let realImgPath;
 function tab4_createLiTag(locInfo){
     let visitList = document.getElementById("tab4_list");
 
@@ -49,20 +50,34 @@ function tab4_createLiTag(locInfo){
         fileInput.type = 'file';
         fileInput.id = "tab4_input" + i;
         fileInput.onchange = function() {
-            let preview = document.getElementById('tab4_img'+i);
+            let existingDelBtn = document.getElementById('tab4_delBtn' + i);
+            if (existingDelBtn) {
+                existingDelBtn.remove();
+            }
 
+            let preview = document.getElementById('tab4_img'+i);
             if (this.files && this.files[0]) {
                 let reader = new FileReader();
                 let file = this.files[0];
-
-                let existingDelBtn = document.getElementById('tab4_delBtn' + i);
-                if (existingDelBtn) {
-                    existingDelBtn.remove();
-                }
-
                 reader.onload = function(e) {
-                    preview.src = e.target.result;
+                    //preview.src = e.target.result;
+                    //preview.src = realImgPath;
 
+                    //base64 resize
+                    const image = new Image();
+                    image.src = e.target.result;
+                    image.onload = (e) => {
+                        const $canvas = document.createElement(`canvas`);
+                        const ctx = $canvas.getContext(`2d`);
+
+                        $canvas.width = e.target.width;
+                        $canvas.height = e.target.height;
+
+                        ctx.drawImage(e.target, 0, 0);
+
+                        $canvas.remove();
+                    }
+                    preview.src = image.src;
                     fileDiv.dataset.imgPath = preview.src;
 
                     let param = {}
@@ -71,28 +86,28 @@ function tab4_createLiTag(locInfo){
                     Android.showToast("저장되었습니다.")
                 }
                 reader.readAsDataURL(file);
-
-                let delFile = document.createElement('button');
-                delFile.className = 'tab4-delete-btn';
-                delFile.id = 'tab4_delBtn'+i;
-                delFile.innerHTML = '삭제';
-
-                delFile.onclick = function(){
-                    preview.src = '';
-                    delFile.remove();
-                    fileInput.value = '';
-
-                    fileDiv.dataset.imgPath = '';
-
-                    let param = {}
-                    param.data = fileDiv.dataset;
-
-                    Android.updateFile(JSON.stringify(param))
-                    Android.showToast("삭제되었습니다.")
-                }
-
-                fileInput.parentNode.insertBefore(delFile, fileInput.nextSibling);
             }
+
+            let delFile = document.createElement('button');
+            delFile.className = 'tab4-delete-btn';
+            delFile.id = 'tab4_delBtn'+i;
+            delFile.innerHTML = '삭제';
+
+            delFile.onclick = function(){
+                preview.src = '';
+                delFile.remove();
+                fileInput.value = '';
+
+                fileDiv.dataset.imgPath = '';
+
+                let param = {}
+                param.data = fileDiv.dataset;
+
+                Android.updateFile(JSON.stringify(param))
+                Android.showToast("삭제되었습니다.")
+            }
+
+            fileInput.parentNode.insertBefore(delFile, fileInput.nextSibling);
         };
 
         let fileLabel = document.createElement('label');
@@ -114,8 +129,6 @@ function tab4_createLiTag(locInfo){
         let imgFile = document.createElement('img');
         imgFile.className = 'tab4-img';
         imgFile.id = 'tab4_img' + i;
-
-        imgDiv.appendChild(imgFile);
 
         // 저장된 이미지 경로 불러오기
         if(locInfo[i].imgPath){
@@ -141,7 +154,13 @@ function tab4_createLiTag(locInfo){
             }
             fileInput.parentNode.insertBefore(delFile, fileInput.nextSibling);
         }
+        imgDiv.appendChild(imgFile);
     }
+}
+
+function handleImagePath(path){
+    realImgPath = path;
+    console.log("### realImgPath : ", realImgPath);
 }
 
 function tab4_handleInput(el,value) {
@@ -208,4 +227,3 @@ function tab4_appendHistory(items, dayList) {
         }
     });
 }
-
