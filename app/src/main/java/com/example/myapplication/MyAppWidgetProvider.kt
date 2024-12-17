@@ -10,8 +10,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.Toast
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -116,39 +118,61 @@ class MyAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun handleSaveLocation(context: Context, appWidgetManager: AppWidgetManager, remoteViews: RemoteViews, type: String) {
-        if(type == "1") {
-            remoteViews.setViewVisibility(R.id.saveProgressBar, View.VISIBLE)
-            remoteViews.setViewVisibility(R.id.saveButton, View.INVISIBLE)
-        }else{
-            remoteViews.setViewVisibility(R.id.stopProgressBar, View.VISIBLE)
-            remoteViews.setViewVisibility(R.id.stopButton, View.INVISIBLE)
-        }
-
-        appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
-
-        Thread {
-            val webAppInterface = WebAppInterface(context, FileIO())
-            val jsonData = JSONObject().apply {
-                put("data", JSONObject().apply {
-                    put("time", SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
-                    if(type == "1") {
-                        put("memo", "홈 위젯 저장")
-                    }
-                })
-                put("type", type)
-            }
-            val returnValue = webAppInterface.save(jsonData.toString())
-
-            if(type == "1") {
-                remoteViews.setViewVisibility(R.id.saveProgressBar, View.GONE)
-                remoteViews.setViewVisibility(R.id.saveButton, View.VISIBLE)
-            }else{
-                remoteViews.setViewVisibility(R.id.stopProgressBar, View.GONE)
-                remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
+        try {
+            if (type == "1") {
+                remoteViews.setViewVisibility(R.id.saveProgressBar, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.saveButton, View.INVISIBLE)
+            } else {
+                remoteViews.setViewVisibility(R.id.stopProgressBar, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.stopButton, View.INVISIBLE)
             }
 
             appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
 
-        }.start()
+            Thread {
+                try {
+                    val webAppInterface = WebAppInterface(context, FileIO())
+                    val jsonData = JSONObject().apply {
+                        put("data", JSONObject().apply {
+                            put("time", SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
+                            if (type == "1") {
+                                put("memo", "홈 위젯 저장")
+                            }
+                        })
+                        put("type", type)
+                    }
+                    val returnValue = webAppInterface.save(jsonData.toString())
+                } catch (e: Exception) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(context, "위치 저장 실패", Toast.LENGTH_SHORT).show()
+                    }
+                    Log.e("WidgetError", "Error saving data : ${e.message}")
+                } finally {
+                    if (type == "1") {
+                        remoteViews.setViewVisibility(R.id.saveProgressBar, View.GONE)
+                        remoteViews.setViewVisibility(R.id.saveButton, View.VISIBLE)
+                    } else {
+                        remoteViews.setViewVisibility(R.id.stopProgressBar, View.GONE)
+                        remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
+                    }
+                    appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
+                }
+            }.start()
+        } catch (e: Exception) {
+            Log.e("WidgetError", "Error in widget update: ${e.message}")
+            // Reset UI state in case of error
+            if(type == "1") {
+                remoteViews.setViewVisibility(R.id.saveProgressBar, View.GONE)
+                remoteViews.setViewVisibility(R.id.saveButton, View.VISIBLE)
+            } else {
+                remoteViews.setViewVisibility(R.id.stopProgressBar, View.GONE)
+                remoteViews.setViewVisibility(R.id.stopButton, View.VISIBLE)
+            }
+            appWidgetManager.updateAppWidget(ComponentName(context, MyAppWidgetProvider::class.java), remoteViews)
+
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(context, "위치 저장 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
