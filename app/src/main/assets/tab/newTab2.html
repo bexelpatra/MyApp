@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../css/main.css"/>
     <link rel="stylesheet" href="../css/tab2.css"/>
     <!-- 로컬 테스트 용 JS Start-->
-    <!--<script src="../js/localTest.js"></script>-->
+<!--    <script src="../js/localTest.js"></script>-->
     <!-- 로컬 테스트 용 JS End-->
     <script src="../js/location.js"></script>
     <script src="../js/tab2.js"></script>
@@ -23,6 +23,9 @@
     window.onload = function() {
         tab2_readFile();
         if(tab2_map != undefined)tab2_map.invalidateSize();
+        setTimeout(function(){
+            document.body.style.overflow = 'hidden';
+        },500)
     }
 </script>
 <body class="page-rewards">
