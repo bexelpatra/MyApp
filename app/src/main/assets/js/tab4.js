@@ -1,10 +1,6 @@
 let tab4_map;
 tab4_initFg = true;
 
-/*function tab4_initMap(){
-    if(tab4_map != undefined)tab4_map.invalidateSize();
-}*/
-
 function tab4_readFile(fileName){
     let returnData = Android.readFile(fileName, 1);
     //console.log("##### tab returnData : ", returnData);
@@ -28,7 +24,7 @@ function tab4_createLiTag(locInfo){
     for(let i=0; i<locLength; i++){
         let visit = '<div>' +
                         '<a style="font-weight: bold; display: flex; align-items: center;">' +
-                            '<img id="tab4_img'+i+'" src="../image/img_map_marker_p.png" style="margin: 0px 5px 0px 0px; width: 30px;" onclick="tab4_showMap('+locInfo[i].lat+','+locInfo[i].lon+', '+i+', this)">' +
+                            '<img id="tab4_locImg'+i+'" src="../image/img_map_marker_p.png" style="margin: 0px 5px 0px 0px; width: 30px;" onclick="tab4_showMap('+locInfo[i].lat+','+locInfo[i].lon+', '+i+', this)">' +
                             '<span>방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )</span>' +
                         '</a>' +
                         //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
@@ -72,24 +68,7 @@ function tab4_createLiTag(locInfo){
                 let reader = new FileReader();
                 let file = this.files[0];
                 reader.onload = function(e) {
-                    //preview.src = e.target.result;
                     preview.src = realImgPath;
-
-                    //base64 resize
-                    /*let image = new Image();
-                    image.src = e.target.result;
-                    image.onload = (e) => {
-                        let $canvas = document.createElement(`canvas`);
-                        let ctx = $canvas.getContext(`2d`);
-
-                        $canvas.width = e.target.width;
-                        $canvas.height = e.target.height;
-
-                        ctx.drawImage(e.target, 0, 0);
-
-                        $canvas.remove();
-                    }
-                    preview.src = image.src;*/
                     fileDiv.dataset.imgPath = preview.src;
 
                     let param = {}
@@ -251,10 +230,10 @@ function tab4_showMap(lat, lon, num, e) {
 
     let coordi = 0;
     for(let i=0; i<num; i++){
-        coordi += document.getElementById('tab4_li'+i).offsetHeight + 13.815;
+        coordi += document.getElementById('tab4_li'+i).getBoundingClientRect().height + 15;
     }
 
-    let topLength = 8 + day.offsetHeight + back.offsetHeight + coordi + 20.420;
+    let topLength = 8 + day.offsetHeight + back.offsetHeight + coordi + 22;
 
     map.style.top =  topLength + 'px';
     map.style.left = '50%';
@@ -272,7 +251,6 @@ function tab4_showMap(lat, lon, num, e) {
             [lat, lon]  // 북동쪽 경계
         );
         tab4_map.setMaxBounds(bounds);
-        //tab4_map.options.setMaxBoundsViscosity(1.0);
         tab4_map.dragging.disable();
 
         tab4_map.setMinZoom(18);
@@ -288,5 +266,4 @@ function tab4_closeMap() {
             }
         });
     document.getElementById("tab4_map").style.display = 'none';
-    //document.querySelector('.tab4-popup-overlay').style.display = 'none';
 }

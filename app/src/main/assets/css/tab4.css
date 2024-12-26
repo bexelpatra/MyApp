@@ -6,9 +6,11 @@
 .tab4-li {
     border-radius: 35px;
     border: solid 2px #654e9fb2;
-    padding: 2dvh;
-    margin-bottom: 1.5dvh;
+    padding: 20px;
+    margin-bottom: 15px;
     box-shadow: 0px 0px 10px 10px #654e9f15;
+    font-family: "Stylish", serif;
+    font-style: normal;
 }
 .tab4-img {
     max-width: 100%;
@@ -134,7 +136,7 @@ section {
     margin: 4px 2px;
     transition-duration: 0.2s;
     cursor: pointer;
-    border-radius: 12px; /* 둥근 모서리 */
+    border-radius: 12px;
     box-shadow: 0 0 5px 5px #654e9f23;
 }
 .tab4-button:active {
