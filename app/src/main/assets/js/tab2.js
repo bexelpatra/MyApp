@@ -85,9 +85,9 @@ function tab2_createLiTag(locInfo){
         li.className = 'tab2_li';
         li.innerHTML = visit;
         li.onclick = function() {
-            /*let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
+            let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
             tab2_markers.push(tab2_marker);
-            tab2_removeMarker(i, tab2_marker);*/
+            tab2_removeMarker(i, tab2_marker);
 
             tab2_map.setView([locInfo[i].lat, locInfo[i].lon], '18');
         };
