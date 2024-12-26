@@ -213,6 +213,7 @@ function tab4_search() {
 }
 
 function tab4_appendHistory(items, dayList) {
+    tab4_closeMap();
     dayList.innerHTML = "";
 
     items.forEach((item, index) => {
@@ -228,6 +229,7 @@ function tab4_appendHistory(items, dayList) {
             let li = document.createElement('li');
             li.className = 'tab4-day-li';
             li.onclick = function() {
+                tab4_closeMap();
                 tab4_readFile(fileName);
             };
             li.innerHTML = item
