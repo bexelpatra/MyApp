@@ -104,9 +104,10 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val uri = data?.data
                 uri?.let {
-                    // realPath가 파일의 절대 경로입니다
+                    val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    this.contentResolver.takePersistableUriPermission(it,flag)
+
                     var realPath = getPathFromUri(it)
-                    //val realPath = getAbsolutePath(applicationContext, it)
                     webView.evaluateJavascript(
                         "javascript:handleImagePath('$realPath')",
                         null
@@ -133,22 +134,5 @@ class MainActivity : AppCompatActivity() {
             return it.getString(columnIndex)
         }
         return null
-    }
-
-    // 절대 경로를 가져오는 새로운 함수 추가
-    private fun getAbsolutePath(context: Context, uri: Uri): String? {
-        // 외부 저장소 경로인 경우
-        if (uri.path?.startsWith("/external/") == true || uri.path?.startsWith("/media/") == true) {
-            val projection = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor = context.contentResolver.query(uri, projection, null, null, null)
-            cursor?.use {
-                if (it.moveToFirst()) {
-                    val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                    return it.getString(columnIndex)
-                }
-            }
-        }
-        // 앱 내부 저장소 경로인 경우
-        return context.filesDir.absolutePath + File.separator + uri.lastPathSegment
     }
 }

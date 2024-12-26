@@ -1,5 +1,11 @@
-function tab4_readFile(fileName){
+let tab4_map;
+tab4_initFg = true;
 
+/*function tab4_initMap(){
+    if(tab4_map != undefined)tab4_map.invalidateSize();
+}*/
+
+function tab4_readFile(fileName){
     let returnData = Android.readFile(fileName, 1);
     //console.log("##### tab returnData : ", returnData);
     let locInfo = JSON.parse(returnData);
@@ -20,12 +26,18 @@ function tab4_createLiTag(locInfo){
 
     locLength = locInfo.length;
     for(let i=0; i<locLength; i++){
-        let visit = '<div><a style="font-weight: bold;">방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )</a>'
-                    //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
-                    + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>')+ '<br></div>';
+        let visit = '<div>' +
+                        '<a style="font-weight: bold; display: flex; align-items: center;">' +
+                            '<img id="tab4_img'+i+'" src="../image/img_map_marker_p.png" style="margin: 0px 5px 0px 0px; width: 30px;" onclick="tab4_showMap('+locInfo[i].lat+','+locInfo[i].lon+', '+i+', this)">' +
+                            '<span>방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )</span>' +
+                        '</a>' +
+                        //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
+                        '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>')+ '<br>' +
+                    '</div>';
 
         let li = document.createElement('li');
         li.className = 'tab4-li';
+        li.id = 'tab4_li' + i;
         li.onclick = function() {
             //console.log(i, " : li onclick !!!!!!!!!!!!!!!!!!!!!!");
         };
@@ -61,10 +73,10 @@ function tab4_createLiTag(locInfo){
                 let file = this.files[0];
                 reader.onload = function(e) {
                     //preview.src = e.target.result;
-                    //preview.src = realImgPath;
+                    preview.src = realImgPath;
 
                     //base64 resize
-                    let image = new Image();
+                    /*let image = new Image();
                     image.src = e.target.result;
                     image.onload = (e) => {
                         let $canvas = document.createElement(`canvas`);
@@ -77,7 +89,7 @@ function tab4_createLiTag(locInfo){
 
                         $canvas.remove();
                     }
-                    preview.src = image.src;
+                    preview.src = image.src;*/
                     fileDiv.dataset.imgPath = preview.src;
 
                     let param = {}
@@ -160,7 +172,7 @@ function tab4_createLiTag(locInfo){
 
 function handleImagePath(path){
     realImgPath = path;
-    console.log("### realImgPath : ", realImgPath);
+    //console.log("### realImgPath : ", realImgPath);
 }
 
 function tab4_handleInput(el,value) {
@@ -173,7 +185,6 @@ function tab4_handleInput(el,value) {
     }
 
     list = tab4_search()
-    // list=['2024-11-18-1-.txt','2024-11-19-1-.txt']
     let dayList = document.getElementById('tab4_dayWrapper');
     let locList = document.getElementById('tab4_list');
     if(list != ""){
@@ -226,4 +237,54 @@ function tab4_appendHistory(items, dayList) {
             ul.appendChild(li);
         }
     });
+}
+
+// 팝업 열기
+function tab4_showMap(lat, lon, num, e) {
+    tab4_closeMap()
+
+    let map = document.getElementById('tab4_map');
+    let back = document.getElementById('tab4_back');
+    let day = document.getElementById('tab4_dayListDiv');
+
+    let coordi = 0;
+    for(let i=0; i<num; i++){
+        coordi += document.getElementById('tab4_li'+i).offsetHeight + 13.815;
+    }
+
+    let topLength = 8 + day.offsetHeight + back.offsetHeight + coordi + 20.420;
+
+    map.style.top =  topLength + 'px';
+    map.style.left = '50%';
+    map.style.transform = 'translateX(-50%)';
+
+    document.getElementById("tab4_map").style.display = 'block';
+    setTimeout(function(){
+        tab4_map.invalidateSize();
+
+        tab4_map.setView([lat, lon], '18');
+        L.marker([lat, lon]).addTo(tab4_map);
+
+        let bounds = L.latLngBounds(
+            [lat, lon], // 남서쪽 경계
+            [lat, lon]  // 북동쪽 경계
+        );
+        tab4_map.setMaxBounds(bounds);
+        //tab4_map.options.setMaxBoundsViscosity(1.0);
+        tab4_map.dragging.disable();
+
+        tab4_map.setMinZoom(18);
+        tab4_map.setMaxZoom(18);
+    },500)
+}
+
+// 팝업 닫기
+function tab4_closeMap() {
+    tab4_map.eachLayer((layer) => {
+            if (layer instanceof L.Marker) {
+                tab4_map.removeLayer(layer);
+            }
+        });
+    document.getElementById("tab4_map").style.display = 'none';
+    //document.querySelector('.tab4-popup-overlay').style.display = 'none';
 }

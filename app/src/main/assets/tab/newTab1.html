@@ -22,7 +22,12 @@
 <script>
     window.onload = function() {
         tab1_markMap()
+
         if(tab1_map != undefined)tab1_map.invalidateSize();
+
+        setTimeout(function(){
+            document.body.style.overflow = 'hidden';
+        },500)
 
         let chk = document.getElementById('tab1_toggle');
         if(Android.isServiceRunning()){

@@ -6,11 +6,13 @@
     <title>Display Visit Location on Map</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Stylish&display=swap"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <link rel="stylesheet" href="../css/main.css"/>
     <link rel="stylesheet" href="../css/tab4.css"/>
     <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <!-- 로컬 테스트 용 JS Start-->
     <!--<script src="../js/localTest.js"></script>-->
     <!-- 로컬 테스트 용 JS End-->
@@ -19,11 +21,14 @@
 </head>
 <script>
     window.onload = function() {
-        //tab4_readFile()
+        if(tab4_initFg){
+            tab4_map = initMap('tab4_map',18);
+            tab4_initFg = false;
+        }
     }
 </script>
-<body class="page-rewards" style="position:absolute">
-<div>
+<body class="page-rewards">
+<div id="tab4_back">
     <a href="../main.html" class="a_back">
         <img src="../image/img_back_p.png" class="img_back">
     </a>
@@ -44,6 +49,9 @@
 </div>
 <div id="tab4_locationListDiv">
     <ul class="tab4-ul" id="tab4_list"></ul>
+</div>
+<div id="tab4_map">
+    <button class="tab4-button" onclick="tab4_closeMap()">닫기</button>
 </div>
 </body>
 <script>
