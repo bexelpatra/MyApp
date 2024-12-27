@@ -74,16 +74,33 @@ function tab2_createLiTag(locInfo){
 
     locLength = locInfo.length;
     for(let i=0; i<locLength; i++){
-        let visit = '<a style="font-weight: bold;">방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )</a>'
-                    //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
-                    + '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>');
+        let content = '<div>' +
+                          '<a style="font-weight: bold;">방문 장소 ' + (i + 1) + ' ( ' + locInfo[i].time + ' )</a>' +
+                          //+ '<br>위도 : ' + locInfo[i].lat + ' / 경도 : ' + locInfo[i].lon
+                          '<br>메모 : ' + locInfo[i].memo.replaceAll('\n', '<br>') +
+                      '</div>';
+
+        let visit = document.createElement('div');
+        visit.innerHTML = content;
+
+        let popupBtnDiv = document.createElement('div');
+        let popupBtn = document.createElement('button');
+        popupBtn.className = 'tab2-mod-button';
+        popupBtn.id = 'tab2_mBt';
+        popupBtn.innerText = '수정';
+        popupBtn.onclick = function() {
+            tab4_popupOpen(locInfo[i], i);
+        }
+        popupBtnDiv.appendChild(popupBtn);
+        visit.appendChild(popupBtnDiv);
 
         let tab2_markerAll = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
         tab2_markersAll.push(tab2_markerAll);
 
         let li = document.createElement('li');
-        li.className = 'tab2_li';
-        li.innerHTML = visit;
+        li.className = 'tab2-li';
+        li.id = 'tab2_li' + i ;
+        li.innerHTML = content;
         li.onclick = function() {
             let tab2_marker = L.marker([locInfo[i].lat, locInfo[i].lon]).addTo(tab2_map).bindPopup(visit).openPopup();
             tab2_markers.push(tab2_marker);
@@ -156,4 +173,36 @@ function tab2_view(){
         padding: [50, 50],
         maxZoom: maxZoom
     });
+}
+
+let popupInfo = "";
+let selLiNum;
+function tab4_popupOpen(locInfo, num){
+    let pop = document.getElementById('tab4_popupContainer');
+    pop.style.display = 'block';
+
+    let text = document.getElementById('tab2_popupMemo');
+    text.innerHTML = locInfo.memo;
+    text.focus();
+
+    popupInfo = "";
+    popupInfo = locInfo;
+    selLiNum = num;
+}
+
+function tab2_popupSave(){
+    let text = document.getElementById('tab2_popupMemo').value;
+    popupInfo.memo = text;
+
+    let saveData = {};
+    saveData.data = popupInfo;
+    saveData.type = 1;
+    let saveReturnData = Android.updateFile(JSON.stringify(saveData));
+    tab2_popupClose();
+    Android.showToast("저장되었습니다.");
+    window.location.href="./newTab2.html";
+}
+
+function tab2_popupClose(){
+    document.getElementById('tab4_popupContainer').style.display = 'none';
 }

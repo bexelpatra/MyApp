@@ -50,7 +50,6 @@
     justify-content: right;
 }
 
-
 /* Hamburger */
 .tab2-hamburger {
     position:relative;
@@ -104,7 +103,7 @@
     right: 25%;
 }
 
-.tab2_li:active {
+.tab2-li:active {
     background-color: #654e9fb2;
     color: white;
 }
@@ -114,3 +113,69 @@
     z-index: 2002;
     right: 1%;
 }
+
+.tab2-mod-button {
+    background-color: #654e9fb2;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    margin: 10px 0px 0px 0px;
+    transition-duration: 0.2s;
+    border-radius: 12px;
+    box-shadow: 0 0 5px 5px #654e9f23;
+}
+
+.tab4-popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 105%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2003;
+}
+
+.tab4-popup {
+    position: absolute;
+    top: 250px;
+    left: 50%;
+    right: -25%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 12px;
+    z-index: 2004;
+}
+
+.tab2-popTextarea {
+    width: 95%;
+    height: 330px;
+    border-radius: 7px;
+    border: solid 2px #654e9fb2;
+    transition: width 0.3s ease, height 0.3s ease;
+    outline-color: #58438d;
+    resize: none;
+    box-shadow: 0 0 5px 5px #654e9f23;
+}
+.tab2-popTextarea:focus {
+    width: 95%;
+    height: 330px;
+    font-size: 1.2rem;
+}
+.tab2-popTextarea::placeholder {
+    color: #654e9fb2;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.2rem;
+    padding-top: 3px;  /* 수직 중앙 정렬 */
+    padding-left: 10px;  /* 왼쪽 여백 */
+},
