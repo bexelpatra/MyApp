@@ -154,13 +154,15 @@ function handleImagePath(path){
     //console.log("### realImgPath : ", realImgPath);
 }
 
-function tab4_handleInput(el,value) {
-    let cleanValue = value.replace(/[^0-9]/g, '');
-    if(cleanValue.length>8){
-        cleanValue = cleanValue.substr(0,8)
-    }
-    if (value !== cleanValue) {
-        el.value = cleanValue
+function tab4_handleInput(el,value, fg) {
+    if(fg){
+        let cleanValue = value.replace(/[^0-9]/g, '');
+        if(cleanValue.length>8){
+            cleanValue = cleanValue.substr(0,8)
+        }
+        if (value !== cleanValue) {
+            el.value = cleanValue
+        }
     }
 
     list = tab4_search()
@@ -185,7 +187,8 @@ function tab4_search() {
         }
     }
     let param = {
-        searchTerm:date
+        searchTerm:date,
+        tabFg:"4"
     }
     let list = Android.reqSearch(JSON.stringify(param))
     return JSON.parse(list)

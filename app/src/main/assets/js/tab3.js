@@ -104,7 +104,8 @@ function tab3_search() {
         }
     }
     let param = {
-        searchTerm:date
+        searchTerm:date,
+        tabFg:"3"
     }
     let list = Android.reqSearch(JSON.stringify(param))
     return JSON.parse(list)

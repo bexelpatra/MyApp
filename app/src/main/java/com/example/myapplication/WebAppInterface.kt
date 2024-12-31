@@ -35,7 +35,13 @@ class WebAppInterface(private val context:Context, io :FileIO) {
     fun reqSearch(data: String) :String {
         // Handle data received from JavaScript
         var json = JSONObject(data)
-        var searchTerm = json.getString("searchTerm").ifEmpty { "9" }
+        var searchTerm = ""
+
+        if(json.getString("tabFg") == "4"){
+            searchTerm = json.getString("searchTerm")
+        }else{
+            searchTerm = json.getString("searchTerm").ifEmpty { "9" }
+        }
 
         var allFiles = ArrayList<File>()
         fileIo.findAllFiles(fileIo.rootDir,allFiles)

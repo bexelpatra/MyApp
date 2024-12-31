@@ -25,6 +25,7 @@
             tab4_map = initMap('tab4_map',18);
             tab4_initFg = false;
         }
+        tab4_handleInput('','',false);
     }
 </script>
 <body class="page-rewards">
@@ -37,7 +38,7 @@
     <input type="text"
            id="searchTerm"
            placeholder="날짜 (YYYYMMDD)"
-           oninput="tab4_handleInput(this,this.value)">
+           oninput="tab4_handleInput(this,this.value,true)">
     <section>
         <div class="slider">
             <div class="swiper-container">

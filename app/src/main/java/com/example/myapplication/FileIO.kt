@@ -250,6 +250,7 @@ class FileIO {
                 fileList.add(file)
             }
         }
+        fileList.sortByDescending { it.name }
     }
 
     fun copyFileWithModification(originalFile: File, content: String, order:Int) {
